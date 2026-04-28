@@ -30,17 +30,35 @@ export const POST: APIRoute = async ({ request }) => {
             body: JSON.stringify({
                 email,
                 source: "wardrobe",
-                mailingLists: { wardrobe: true },
+                // List ID for 'wardrobe' list in Loops (cmohny3qv29e70i3f87zvcz1k)
+                // Loops API accepts list IDs in mailingLists, not list names.
+                mailingLists: { "cmohny3qv29e70i3f87zvcz1k": true },
             }),
         });
         if (!res.ok) {
-            return jsonError("Loops error", 500);
+            const errorBody = await res.text().catch(() => "unknown");
+            console.error("Loops API error:", {
+                status: res.status,
+                body: errorBody,
+            });
+            const isDev = import.meta.env.DEV;
+            return new Response(
+                JSON.stringify({
+                    error: `Signup failed (${res.status})`,
+                    detail: isDev ? errorBody : undefined,
+                }),
+                {
+                    status: 500,
+                    headers: { "Content-Type": "application/json" },
+                },
+            );
         }
         return new Response(JSON.stringify({ ok: true }), {
             status: 200,
             headers: { "Content-Type": "application/json" },
         });
-    } catch {
+    } catch (err) {
+        console.error("Loops fetch failed:", err);
         return jsonError("Network error", 500);
     }
 };
