@@ -10,7 +10,6 @@ import EmailSignup from "../components/shared/EmailSignup.astro";
 >
     <main class="wrap">
         <section class="hero">
-            <p class="eyebrow">WARDROBE — V0.1</p>
             <h1 class="h1">Themes for vibe-coded apps.</h1>
             <p class="lede">
                 Stop shipping the same purple landing page. Drop one of these into
@@ -31,7 +30,6 @@ import EmailSignup from "../components/shared/EmailSignup.astro";
         <section class="block" id="themes">
             <div class="block__head">
                 <h2 class="h2">Themes</h2>
-                <span class="muted">3 of 4 ready</span>
             </div>
 
             <div class="grid">
@@ -490,17 +488,46 @@ import EmailSignup from "../components/shared/EmailSignup.astro";
     .brk-btn--green::after { background: #00853e; }
 
     .theme-card__meta {
-        padding: 20px 24px 24px;
+        padding: 22px 24px 24px;
         background: #ffffff;
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: 10px;
     }
     .theme-card__name {
         font-size: 17px;
         font-weight: 600;
         color: #0a0a0a;
     }
+
+    /* Per-theme: name in the theme's own display voice */
+    .theme-card--hyper .theme-card__name {
+        font-family: "Anton", "Impact", "Arial Narrow", sans-serif;
+        font-size: 40px;
+        font-weight: 400;
+        line-height: 0.9;
+        letter-spacing: -0.01em;
+        text-transform: uppercase;
+        color: #3a1e1e;
+    }
+    .theme-card--hyper .theme-card__name::after { content: "."; }
+    .theme-card--system .theme-card__name {
+        font-family: "Space Grotesk", -apple-system, sans-serif;
+        font-size: 36px;
+        font-weight: 300;
+        line-height: 1;
+        letter-spacing: -1.5px;
+        color: #0d0d0d;
+    }
+    .theme-card--brick .theme-card__name {
+        font-family: "Inter", -apple-system, sans-serif;
+        font-size: 34px;
+        font-weight: 600;
+        line-height: 1;
+        letter-spacing: -0.04em;
+        color: #1a1a1a;
+    }
+
     .theme-card__vibe {
         font-size: 14px;
         color: #525252;
