@@ -1,18 +1,19 @@
 ---
 import "../components/hyper/globals.css";
+import "../components/system/globals.css";
 
 interface Props {
     title: string;
     description?: string;
-    system?: "hyper" | null;
-    chrome?: "neutral" | "hyper" | "hidden";
+    system?: "hyper" | "system" | null;
+    chrome?: "neutral" | "hyper" | "system" | "hidden";
 }
 
 const {
     title,
     description = "Wardrobe — themes for vibe-coded apps. Made by Martin Ibsen. MIT.",
     system = null,
-    chrome = system === "hyper" ? "hyper" : "neutral",
+    chrome = system === "hyper" ? "hyper" : system === "system" ? "system" : "neutral",
 } = Astro.props;
 
 const GITHUB_URL = "https://github.com/martinibsen/wardrobe";
@@ -20,9 +21,20 @@ const MARTIN_URL = "https://martinibsen.dk";
 
 const path = Astro.url.pathname.replace(/\/+$/, "") || "/";
 
+// Hyper nav active states
 const isHyperInstall = path === "/hyper/install";
 const isHyperDemo = path.startsWith("/hyper/marathon-club");
 const isHyperHome = path === "/hyper";
+
+// System nav active states
+const isSystemInstall = path === "/system/install";
+const isSystemDemo = path.startsWith("/system/sequence");
+const isSystemHome = path === "/system";
+
+// "Built with..." pill — depends on which sphere we're in when chrome="hidden"
+const builtWith = system === "system"
+    ? { href: "/system", label: "← BUILT WITH SYSTEM", cls: "built--system" }
+    : { href: "/hyper", label: "← Built with Hyper", cls: "built--hyper" };
 ---
 
 <!DOCTYPE html>
@@ -75,9 +87,38 @@ const isHyperHome = path === "/hyper";
         </header>
     )}
 
+    {chrome === "system" && (
+        <header class="nav nav--system">
+            <a class="nav__brand nav__brand--system" href="/">
+                WARDROBE / SYSTEM
+            </a>
+            <nav class="nav__links nav__links--system" aria-label="System">
+                <a
+                    href="/system/install"
+                    class:list={[isSystemInstall && "is-active"]}
+                >
+                    INSTALL
+                </a>
+                <a
+                    href="/system/sequence"
+                    class:list={[isSystemDemo && "is-active"]}
+                >
+                    DEMO
+                </a>
+                <a
+                    href="/system"
+                    class:list={[isSystemHome && "is-active"]}
+                >
+                    OVERVIEW
+                </a>
+                <a href={GITHUB_URL} rel="noopener">GITHUB</a>
+            </nav>
+        </header>
+    )}
+
     {chrome === "hidden" && (
-        <a class="built built--hyper" href="/hyper">
-            ← Built with Hyper
+        <a class:list={["built", builtWith.cls]} href={builtWith.href}>
+            {builtWith.label}
         </a>
     )}
 
@@ -94,7 +135,8 @@ const isHyperHome = path === "/hyper";
     </footer>
 
     <style is:global>
-        body[data-system="hyper"] {
+        body[data-system="hyper"],
+        body[data-system="system"] {
             margin: 0;
         }
         body:not([data-system]) {
@@ -170,6 +212,31 @@ const isHyperHome = path === "/hyper";
         }
         .nav--hyper .nav__links a { font-size: 13px; }
 
+        /* ===== Sphere B — system ===== */
+        .nav--system {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: saturate(140%) blur(8px);
+            -webkit-backdrop-filter: saturate(140%) blur(8px);
+            color: #0d0d0d;
+            border-bottom: 1px solid #eeeeee;
+            font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .nav__brand--system {
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+        }
+        .nav--system .nav__links a {
+            font-size: 12px;
+            color: #0d0d0d;
+        }
+        .nav--system .nav__links a.is-active {
+            border-bottom-width: 2px;
+            border-bottom-color: #0d0d0d;
+        }
+
         /* ===== Built-with pill — chrome="hidden" ===== */
         .built {
             position: fixed;
@@ -196,6 +263,21 @@ const isHyperHome = path === "/hyper";
         .built--hyper:hover {
             background: var(--color-fg, #3a1e1e);
             color: var(--color-bg, #efff71);
+        }
+        .built--system {
+            background: #ffffff;
+            color: #0d0d0d;
+            border: 1px solid #0d0d0d;
+            border-radius: 2px;
+            padding: 7px 12px;
+            font-family: "JetBrains Mono", ui-monospace, monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 10px;
+        }
+        .built--system:hover {
+            background: #0d0d0d;
+            color: #ffffff;
         }
 
         /* ===== FOOTER ===== */
@@ -225,19 +307,36 @@ const isHyperHome = path === "/hyper";
             font-family: var(--font-body, "Georgia", serif);
             opacity: 0.75;
         }
+        .foot--system {
+            border-top: 1px solid #eeeeee;
+            color: #888888;
+            font-family: "Space Grotesk", -apple-system, sans-serif;
+            font-size: 11px;
+        }
+        .foot--system .foot__sep { color: #bbb; }
         .foot--hidden {
+            /* For chrome="hidden" pages — pick footer style based on body data-system */
             border-top: 1px solid var(--color-fg, #3a1e1e);
             color: var(--color-fg, #3a1e1e);
             font-family: var(--font-body, "Georgia", serif);
             opacity: 0.75;
+        }
+        body[data-system="system"] .foot--hidden {
+            border-top: 1px solid #eeeeee;
+            color: #888888;
+            font-family: "Space Grotesk", -apple-system, sans-serif;
+            font-size: 11px;
+            opacity: 1;
         }
 
         @media (max-width: 540px) {
             .nav { padding: 12px 18px; }
             .nav__links { gap: 14px; }
             .nav--hyper .nav__links a { font-size: 12px; }
+            .nav--system .nav__links a { font-size: 11px; }
             .built { top: 12px; right: 12px; }
             .built--hyper { padding: 6px 12px; font-size: 10px; }
+            .built--system { padding: 6px 10px; font-size: 9px; }
         }
     </style>
 
