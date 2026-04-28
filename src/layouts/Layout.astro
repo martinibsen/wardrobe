@@ -1,0 +1,260 @@
+---
+import "../components/hyper/globals.css";
+
+interface Props {
+    title: string;
+    description?: string;
+    system?: "hyper" | null;
+    chrome?: "neutral" | "hyper" | "hidden";
+}
+
+const {
+    title,
+    description = "Wardrobe — themes for vibe-coded apps. Made by Martin Ibsen. MIT.",
+    system = null,
+    chrome = system === "hyper" ? "hyper" : "neutral",
+} = Astro.props;
+
+const GITHUB_URL = "https://github.com/martinibsen/wardrobe";
+const MARTIN_URL = "https://martinibsen.dk";
+
+const path = Astro.url.pathname.replace(/\/+$/, "") || "/";
+
+const isHyperInstall = path === "/hyper/install";
+const isHyperDemo = path.startsWith("/hyper/marathon-club");
+const isHyperHome = path === "/hyper";
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+</head>
+<body data-system={system ?? undefined}>
+    {chrome === "neutral" && (
+        <header class="nav nav--neutral">
+            <a class="nav__brand" href="/">Wardrobe</a>
+            <nav class="nav__links" aria-label="Wardrobe">
+                <a href="/#themes">Themes</a>
+                <a href={GITHUB_URL} rel="noopener">GitHub</a>
+            </nav>
+        </header>
+    )}
+
+    {chrome === "hyper" && (
+        <header class="nav nav--hyper">
+            <a class="nav__brand nav__brand--hyper" href="/">
+                WARDROBE / HYPER.
+            </a>
+            <nav class="nav__links nav__links--hyper" aria-label="Hyper">
+                <a
+                    href="/hyper/install"
+                    class:list={[isHyperInstall && "is-active"]}
+                >
+                    INSTALL
+                </a>
+                <a
+                    href="/hyper/marathon-club"
+                    class:list={[isHyperDemo && "is-active"]}
+                >
+                    DEMO
+                </a>
+                <a
+                    href="/hyper"
+                    class:list={[isHyperHome && "is-active"]}
+                >
+                    SYSTEM
+                </a>
+                <a href={GITHUB_URL} rel="noopener">GITHUB</a>
+            </nav>
+        </header>
+    )}
+
+    {chrome === "hidden" && (
+        <a class="built built--hyper" href="/hyper">
+            ← Built with Hyper
+        </a>
+    )}
+
+    <slot />
+
+    <footer class:list={["foot", `foot--${chrome}`]}>
+        <span>Built by <a href={MARTIN_URL} target="_blank" rel="noopener">Martin Ibsen</a></span>
+        <span class="foot__sep" aria-hidden="true">·</span>
+        <a href={MARTIN_URL} target="_blank" rel="noopener">martinibsen.dk</a>
+        <span class="foot__sep" aria-hidden="true">·</span>
+        <a href={GITHUB_URL} rel="noopener">GitHub</a>
+        <span class="foot__sep" aria-hidden="true">·</span>
+        <span>MIT</span>
+    </footer>
+
+    <style is:global>
+        body[data-system="hyper"] {
+            margin: 0;
+        }
+        body:not([data-system]) {
+            margin: 0;
+            background: #ffffff;
+            color: #0a0a0a;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                "Helvetica Neue", Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            min-height: 100vh;
+        }
+
+        /* ===== STICKY NAV — shared ===== */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 80;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 24px;
+            line-height: 1;
+        }
+        .nav__brand {
+            font-size: 16px;
+            font-weight: 600;
+            color: inherit;
+            text-decoration: none;
+            letter-spacing: -0.01em;
+        }
+        .nav__links {
+            display: flex;
+            gap: 22px;
+            align-items: center;
+        }
+        .nav__links a {
+            color: inherit;
+            text-decoration: none;
+            font-size: 14px;
+            border-bottom: 1px solid transparent;
+            padding: 2px 0;
+            transition: border-color 120ms ease, opacity 120ms ease;
+        }
+        .nav__links a:hover { border-bottom-color: currentColor; }
+        .nav__links a.is-active { border-bottom-color: currentColor; }
+
+        /* ===== Sphere A — neutral ===== */
+        .nav--neutral {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: saturate(140%) blur(8px);
+            -webkit-backdrop-filter: saturate(140%) blur(8px);
+            color: #0a0a0a;
+            border-bottom: 1px solid #e5e5e5;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .nav--neutral .nav__links a:not(.is-active) { color: #525252; }
+        .nav--neutral .nav__links a:hover { color: #0a0a0a; }
+
+        /* ===== Sphere B — hyper ===== */
+        .nav--hyper {
+            background: var(--color-bg, #efff71);
+            color: var(--color-fg, #3a1e1e);
+            border-bottom: 1px solid var(--color-fg, #3a1e1e);
+            font-family: var(--font-display, "Anton", "Impact", sans-serif);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .nav__brand--hyper {
+            font-size: 18px;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+        }
+        .nav--hyper .nav__links a { font-size: 13px; }
+
+        /* ===== Built-with pill — chrome="hidden" ===== */
+        .built {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            z-index: 90;
+            display: inline-flex;
+            align-items: center;
+            line-height: 1;
+            text-decoration: none;
+            transition: background 120ms ease, color 120ms ease;
+        }
+        .built--hyper {
+            background: var(--color-surface, #ffffff);
+            color: var(--color-fg, #3a1e1e);
+            border: 1px solid var(--color-fg, #3a1e1e);
+            border-radius: var(--radius-pill, 32px);
+            padding: 7px 14px;
+            font-family: var(--font-display, "Anton", "Impact", sans-serif);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 11px;
+        }
+        .built--hyper:hover {
+            background: var(--color-fg, #3a1e1e);
+            color: var(--color-bg, #efff71);
+        }
+
+        /* ===== FOOTER ===== */
+        .foot {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            padding: 24px;
+            font-size: 12px;
+            line-height: 1.4;
+            text-align: center;
+            flex-wrap: wrap;
+        }
+        .foot a { color: inherit; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 120ms ease; }
+        .foot a:hover { border-bottom-color: currentColor; }
+        .foot__sep { opacity: 0.5; }
+
+        .foot--neutral {
+            border-top: 1px solid #e5e5e5;
+            color: #525252;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .foot--hyper {
+            border-top: 1px solid var(--color-fg, #3a1e1e);
+            color: var(--color-fg, #3a1e1e);
+            font-family: var(--font-body, "Georgia", serif);
+            opacity: 0.75;
+        }
+        .foot--hidden {
+            border-top: 1px solid var(--color-fg, #3a1e1e);
+            color: var(--color-fg, #3a1e1e);
+            font-family: var(--font-body, "Georgia", serif);
+            opacity: 0.75;
+        }
+
+        @media (max-width: 540px) {
+            .nav { padding: 12px 18px; }
+            .nav__links { gap: 14px; }
+            .nav--hyper .nav__links a { font-size: 12px; }
+            .built { top: 12px; right: 12px; }
+            .built--hyper { padding: 6px 12px; font-size: 10px; }
+        }
+    </style>
+
+    <script is:inline>
+        // Lightweight PostHog event helper if window.posthog is available.
+        window.wardrobeTrack = function (event, props) {
+            try {
+                if (window.posthog && typeof window.posthog.capture === "function") {
+                    window.posthog.capture(event, props || {});
+                }
+                if (typeof console !== "undefined") {
+                    console.debug("[wardrobe]", event, props || {});
+                }
+            } catch (e) {
+                /* noop */
+            }
+        };
+    </script>
+</body>
+</html>
