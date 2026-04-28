@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import EmailSignup from "../components/shared/EmailSignup.astro";
 ---
 
 <Layout
@@ -15,6 +16,16 @@ import Layout from "../layouts/Layout.astro";
                 Stop shipping the same purple landing page. Drop one of these into
                 your AI session and ship something with character.
             </p>
+
+            <div class="hero__cta">
+                <EmailSignup
+                    variant="neutral"
+                    size="hero"
+                    placement="hero"
+                />
+                <a class="hero__secondary" href="#themes">or browse themes →</a>
+            </div>
+
             <p class="sub">
                 Made by <a href="https://martinibsen.dk" target="_blank" rel="noopener">Martin Ibsen</a>
                 — drop-in ready for Claude Code, Cursor, v0, Lovable, your shadcn project, whatever.
@@ -102,28 +113,6 @@ import Layout from "../layouts/Layout.astro";
                 </li>
             </ol>
         </section>
-
-        <section class="block signup-block">
-            <div class="block__head">
-                <h2 class="h2">Get notified when next theme drops</h2>
-            </div>
-            <form id="wardrobe-signup" class="signup">
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="you@something.dev"
-                    required
-                    class="signup__input"
-                    aria-label="Email"
-                />
-                <button type="submit" class="signup__btn">Notify me</button>
-            </form>
-            <p class="signup__msg" id="signup-msg" aria-live="polite"></p>
-            <p class="muted small">
-                One email per drop. Unsubscribe one click. MIT means MIT.
-            </p>
-        </section>
-
     </main>
 </Layout>
 
@@ -156,7 +145,24 @@ import Layout from "../layouts/Layout.astro";
         font-size: 22px;
         line-height: 1.45;
         color: #0a0a0a;
-        margin: 0 0 16px;
+        margin: 0 0 32px;
+    }
+    .hero__cta {
+        margin: 0 0 32px;
+        max-width: 540px;
+    }
+    .hero__secondary {
+        display: inline-block;
+        margin-top: 14px;
+        font-size: 14px;
+        color: #525252;
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition: color 120ms ease, border-color 120ms ease;
+    }
+    .hero__secondary:hover {
+        color: #0a0a0a;
+        border-bottom-color: #0a0a0a;
     }
     .sub {
         font-size: 15px;
@@ -167,6 +173,7 @@ import Layout from "../layouts/Layout.astro";
     .sub a { color: #0a0a0a; text-decoration: underline; }
 
     .block { margin-bottom: 96px; }
+    .block:last-child { margin-bottom: 0; }
     .block__head {
         display: flex;
         justify-content: space-between;
@@ -183,7 +190,6 @@ import Layout from "../layouts/Layout.astro";
         letter-spacing: -0.01em;
     }
     .muted { color: #525252; font-size: 13px; }
-    .small { font-size: 13px; margin-top: 12px; }
 
     .grid {
         display: grid;
@@ -315,45 +321,6 @@ import Layout from "../layouts/Layout.astro";
         padding-top: 4px;
     }
 
-    .signup-block { padding-top: 8px; }
-    .signup {
-        display: flex;
-        gap: 12px;
-        max-width: 480px;
-        flex-wrap: wrap;
-    }
-    .signup__input {
-        flex: 1;
-        min-width: 220px;
-        font: inherit;
-        padding: 12px 14px;
-        border: 1px solid #e5e5e5;
-        border-radius: 8px;
-        background: #ffffff;
-        color: #0a0a0a;
-        font-size: 15px;
-    }
-    .signup__input:focus { outline: 2px solid #0a0a0a; outline-offset: -2px; }
-    .signup__btn {
-        font: inherit;
-        padding: 12px 20px;
-        background: #0a0a0a;
-        color: #ffffff;
-        border: 1px solid #0a0a0a;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 15px;
-    }
-    .signup__btn:hover { background: #2a2a2a; }
-    .signup__msg {
-        margin: 12px 0 0;
-        font-size: 14px;
-        color: #525252;
-        min-height: 1em;
-    }
-    .signup__msg.is-success { color: #197b3a; }
-    .signup__msg.is-error { color: #b91c1c; }
-
     @media (max-width: 640px) {
         .wrap { padding: 32px 20px 64px; }
         .hero { margin-bottom: 64px; }
@@ -367,38 +334,4 @@ import Layout from "../layouts/Layout.astro";
     if (typeof window !== "undefined") {
         (window as any).wardrobeTrack?.("wardrobe_view");
     }
-
-    const form = document.getElementById("wardrobe-signup") as HTMLFormElement | null;
-    const msg = document.getElementById("signup-msg") as HTMLElement | null;
-
-    form?.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const formData = new FormData(form);
-        const email = String(formData.get("email") ?? "");
-        if (!email || !msg) return;
-        msg.textContent = "Sending…";
-        msg.className = "signup__msg";
-        try {
-            const res = await fetch("/api/signup", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email }),
-            });
-            if (res.ok) {
-                msg.textContent = "You're on the list. Watch your inbox.";
-                msg.className = "signup__msg is-success";
-                form.reset();
-                (window as any).wardrobeTrack?.("wardrobe_signup", { source: "wardrobe" });
-            } else {
-                const data = await res.json().catch(() => ({}));
-                msg.textContent = data?.error
-                    ? `Couldn't sign up: ${data.error}`
-                    : "Couldn't sign up. Try again.";
-                msg.className = "signup__msg is-error";
-            }
-        } catch {
-            msg.textContent = "Couldn't sign up. Try again.";
-            msg.className = "signup__msg is-error";
-        }
-    });
 </script>

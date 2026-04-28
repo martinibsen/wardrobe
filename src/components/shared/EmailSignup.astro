@@ -1,0 +1,486 @@
+---
+/**
+ * EmailSignup — single shared signup component used everywhere on Wardrobe.
+ *
+ * Renders a form with inline success state. All instances on a page are wired
+ * by one is:inline script that finds [data-signup-form] elements. The form
+ * posts to /api/signup and reports `wardrobe_signup` to PostHog with the
+ * `placement` property.
+ *
+ * Variants pick the visual sphere; sizes pick the density. Copy can be
+ * overridden per instance.
+ */
+type Variant = "neutral" | "hyper" | "system";
+type Size = "compact" | "default" | "hero";
+type Placement = "hero" | "sticky" | "install" | "footer";
+
+interface Props {
+    variant: Variant;
+    size: Size;
+    placement: Placement;
+    heading?: string;
+    subheading?: string;
+    helper?: string;
+    ctaLabel?: string;
+    placeholder?: string;
+    id?: string;
+}
+
+const {
+    variant,
+    size,
+    placement,
+    heading,
+    subheading,
+    helper = "No spam. ~1 email per theme drop. Maybe one extra when I ship something interesting.",
+    ctaLabel,
+    placeholder = "you@something.dev",
+    id,
+} = Astro.props;
+
+// Sensible defaults per placement
+const defaultHeading: Record<Placement, string> = {
+    hero: "Get theme drops + builder notes.",
+    sticky: "Liked this? Get the next theme drop →",
+    install: "Got it working?",
+    footer: "Get notified",
+};
+const defaultCta: Record<Placement, string> = {
+    hero: "Get drops",
+    sticky: "Subscribe",
+    install: "Get drops",
+    footer: "Notify me",
+};
+const resolvedHeading = heading ?? defaultHeading[placement];
+const resolvedCta = ctaLabel ?? defaultCta[placement];
+
+// Per-instance unique form id so forms can coexist on a single page
+const uid = `signup-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+<div
+    class:list={[
+        "es",
+        `es--${variant}`,
+        `es--${size}`,
+        `es--p-${placement}`,
+    ]}
+    data-signup-form
+    data-placement={placement}
+    id={id}
+>
+    {resolvedHeading && size !== "compact" && (
+        <p class="es__heading">{resolvedHeading}</p>
+    )}
+    {subheading && size !== "compact" && (
+        <p class="es__subheading">{subheading}</p>
+    )}
+
+    <form class="es__form" data-form-id={uid} novalidate>
+        <label class="es__visually-hidden" for={`${uid}-email`}>Email</label>
+        <input
+            id={`${uid}-email`}
+            class="es__input"
+            type="email"
+            name="email"
+            placeholder={placeholder}
+            autocomplete="email"
+            required
+        />
+        <button type="submit" class="es__btn">
+            <span class="es__btn-label">{resolvedCta}</span>
+            <span class="es__btn-loading" aria-hidden="true">…</span>
+        </button>
+    </form>
+
+    <p class="es__msg" data-msg role="status" aria-live="polite"></p>
+
+    {helper && size !== "compact" && (
+        <p class="es__helper">{helper}</p>
+    )}
+    {helper && size === "compact" && variant !== "neutral" && (
+        <p class="es__helper es__helper--compact">{helper}</p>
+    )}
+</div>
+
+<style>
+    .es { display: flex; flex-direction: column; }
+    .es__visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+    .es__form {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    .es__input {
+        flex: 1;
+        min-width: 200px;
+        font: inherit;
+        line-height: 1;
+    }
+    .es__btn {
+        font: inherit;
+        cursor: pointer;
+        border: none;
+        line-height: 1;
+        position: relative;
+    }
+    .es__btn-loading { display: none; }
+    .es[data-loading="true"] .es__btn-label { visibility: hidden; }
+    .es[data-loading="true"] .es__btn-loading {
+        display: inline-block;
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .es[data-loading="true"] .es__btn,
+    .es[data-loading="true"] .es__input {
+        opacity: 0.7;
+        pointer-events: none;
+    }
+    .es__msg {
+        margin: 12px 0 0;
+        font-size: 13px;
+        line-height: 1.4;
+        min-height: 1em;
+    }
+    .es[data-state="success"] .es__form { display: none; }
+    .es[data-state="success"] .es__msg { font-weight: 500; }
+    .es__helper {
+        margin: 12px 0 0;
+        font-size: 13px;
+        line-height: 1.5;
+        opacity: 0.75;
+    }
+
+    /* ===========================
+       NEUTRAL VARIANT (forsiden / footer-on-neutral)
+       =========================== */
+    .es--neutral .es__heading {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 14px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: #525252;
+        margin: 0 0 12px;
+    }
+    .es--neutral .es__subheading {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 15px;
+        line-height: 1.5;
+        color: #525252;
+        margin: -4px 0 16px;
+    }
+    .es--neutral .es__input {
+        padding: 14px 16px;
+        border: 1px solid #d4d4d4;
+        border-radius: 8px;
+        background: #ffffff;
+        color: #0a0a0a;
+        font-size: 15px;
+        transition: border-color 120ms ease;
+    }
+    .es--neutral .es__input:focus {
+        outline: 2px solid #0a0a0a;
+        outline-offset: -2px;
+        border-color: #0a0a0a;
+    }
+    .es--neutral .es__btn {
+        padding: 14px 22px;
+        background: #0a0a0a;
+        color: #ffffff;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 500;
+        transition: background 120ms ease;
+    }
+    .es--neutral .es__btn:hover { background: #2a2a2a; }
+    .es--neutral .es__msg { color: #525252; }
+    .es--neutral .es__msg.is-success { color: #197b3a; }
+    .es--neutral .es__msg.is-error { color: #b91c1c; }
+    .es--neutral .es__helper {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        color: #737373;
+    }
+
+    /* hero size */
+    .es--neutral.es--hero .es__heading {
+        font-size: 13px;
+        letter-spacing: 0.06em;
+        margin: 0 0 14px;
+    }
+    .es--neutral.es--hero .es__input { padding: 18px 20px; font-size: 17px; }
+    .es--neutral.es--hero .es__btn { padding: 18px 28px; font-size: 16px; }
+
+    /* compact size — footer */
+    .es--neutral.es--compact .es__form { gap: 6px; }
+    .es--neutral.es--compact .es__input {
+        padding: 9px 12px;
+        font-size: 13px;
+        border-radius: 6px;
+        min-width: 180px;
+    }
+    .es--neutral.es--compact .es__btn {
+        padding: 9px 14px;
+        font-size: 13px;
+        border-radius: 6px;
+    }
+
+    /* ===========================
+       HYPER VARIANT
+       =========================== */
+    .es--hyper .es__heading {
+        font-family: var(--font-display, "Anton", "Impact", sans-serif);
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        color: var(--color-fg, #3a1e1e);
+        margin: 0 0 12px;
+        font-size: 18px;
+        line-height: 1.05;
+    }
+    .es--hyper .es__subheading {
+        font-family: var(--font-body, Georgia, serif);
+        font-size: 16px;
+        line-height: 1.5;
+        color: var(--color-fg, #3a1e1e);
+        margin: -2px 0 18px;
+    }
+    .es--hyper .es__input {
+        padding: 14px 18px;
+        background: var(--color-surface, #ffffff);
+        border: 1px solid var(--color-fg, #3a1e1e);
+        border-radius: var(--radius-pill, 32px);
+        color: var(--color-fg, #3a1e1e);
+        font-family: var(--font-body, Georgia, serif);
+        font-size: 15px;
+    }
+    .es--hyper .es__input:focus {
+        outline: none;
+        box-shadow: var(--shadow-hard-sm, 2px 2px 0 var(--color-fg, #3a1e1e));
+    }
+    .es--hyper .es__input::placeholder {
+        color: var(--color-fg, #3a1e1e);
+        opacity: 0.55;
+    }
+    .es--hyper .es__btn {
+        padding: 14px 22px;
+        background: var(--color-fg, #3a1e1e);
+        color: var(--color-bg, #efff71);
+        border: 1px solid var(--color-fg, #3a1e1e);
+        border-radius: var(--radius-pill, 32px);
+        font-family: var(--font-display, "Anton", sans-serif);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        font-size: 14px;
+        transition: transform 120ms ease, box-shadow 120ms ease;
+    }
+    .es--hyper .es__btn:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: var(--shadow-hard-sm, 2px 2px 0 var(--color-fg, #3a1e1e));
+    }
+    .es--hyper .es__btn:active {
+        transform: translate(0, 0);
+        box-shadow: none;
+    }
+    .es--hyper .es__msg {
+        font-family: var(--font-body, Georgia, serif);
+        color: var(--color-fg, #3a1e1e);
+    }
+    .es--hyper .es__msg.is-success {
+        color: var(--color-fg, #3a1e1e);
+        background: var(--color-green, #c3ff8b);
+        display: inline-block;
+        padding: 6px 12px;
+        border: 1px solid var(--color-fg, #3a1e1e);
+        border-radius: var(--radius-pill, 32px);
+        margin-top: 8px;
+    }
+    .es--hyper .es__msg.is-error { color: var(--color-danger, #ff4b4b); }
+    .es--hyper .es__helper {
+        font-family: var(--font-body, Georgia, serif);
+        color: var(--color-fg, #3a1e1e);
+        opacity: 0.7;
+    }
+
+    .es--hyper.es--hero .es__heading { font-size: 22px; }
+    .es--hyper.es--hero .es__input { padding: 16px 22px; font-size: 16px; }
+    .es--hyper.es--hero .es__btn { padding: 16px 26px; font-size: 15px; }
+
+    .es--hyper.es--compact .es__form { gap: 6px; }
+    .es--hyper.es--compact .es__input {
+        padding: 9px 14px;
+        font-size: 13px;
+    }
+    .es--hyper.es--compact .es__btn {
+        padding: 9px 16px;
+        font-size: 12px;
+    }
+
+    /* ===========================
+       SYSTEM VARIANT
+       =========================== */
+    .es--system .es__heading {
+        font-family: var(--font-mono, "JetBrains Mono", monospace);
+        text-transform: uppercase;
+        letter-spacing: var(--label-letter-spacing, 1.5px);
+        font-size: 11px;
+        color: var(--color-fg-muted, #888);
+        margin: 0 0 14px;
+    }
+    .es--system .es__subheading {
+        font-family: var(--font-body, "Space Grotesk", sans-serif);
+        font-size: 17px;
+        line-height: 1.5;
+        color: var(--color-fg, #0d0d0d);
+        font-weight: var(--weight-light, 300);
+        letter-spacing: -0.01em;
+        margin: 0 0 20px;
+    }
+    .es--system .es__input {
+        padding: 14px 16px;
+        background: var(--color-card, #ffffff);
+        border: none;
+        border-bottom: 1px solid var(--color-fg-faint, #bbb);
+        border-radius: 0;
+        color: var(--color-fg, #0d0d0d);
+        font-family: var(--font-body, "Space Grotesk", sans-serif);
+        font-size: 15px;
+        transition: border-color 120ms ease;
+    }
+    .es--system .es__input:focus {
+        outline: none;
+        border-bottom-color: var(--color-fg, #0d0d0d);
+    }
+    .es--system .es__input::placeholder {
+        color: var(--color-fg-faint, #bbb);
+    }
+    .es--system .es__btn {
+        padding: 14px 22px;
+        background: var(--color-fg, #0d0d0d);
+        color: var(--color-card, #fff);
+        border-radius: var(--radius-md, 2px);
+        font-family: var(--font-mono, "JetBrains Mono", monospace);
+        text-transform: uppercase;
+        letter-spacing: var(--button-letter-spacing, 1px);
+        font-size: 12px;
+        transition: background 120ms ease;
+    }
+    .es--system .es__btn:hover { background: #000; }
+    .es--system .es__msg {
+        font-family: var(--font-mono, "JetBrains Mono", monospace);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--color-fg-muted, #888);
+    }
+    .es--system .es__msg.is-success {
+        color: var(--color-fg, #0d0d0d);
+    }
+    .es--system .es__msg.is-success::before {
+        content: "✓ ";
+        color: var(--color-accent, #6cefa0);
+        font-weight: 600;
+    }
+    .es--system .es__msg.is-error { color: var(--color-fail, #ff6b6b); }
+    .es--system .es__helper {
+        font-family: var(--font-mono, "JetBrains Mono", monospace);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--color-fg-muted, #888);
+    }
+
+    .es--system.es--hero .es__input { padding: 16px 18px; font-size: 16px; }
+    .es--system.es--hero .es__btn { padding: 16px 26px; font-size: 13px; }
+
+    .es--system.es--compact .es__form { gap: 6px; }
+    .es--system.es--compact .es__input { padding: 8px 10px; font-size: 12px; }
+    .es--system.es--compact .es__btn { padding: 8px 14px; font-size: 11px; }
+
+    /* ===========================
+       PLACEMENT-SPECIFIC TWEAKS
+       =========================== */
+    /* Sticky placement should always render in a single row */
+    .es--p-sticky .es__form { flex-wrap: nowrap; }
+    .es--p-sticky .es__input { min-width: 0; flex: 1 1 200px; }
+    @media (max-width: 540px) {
+        .es--p-sticky .es__form { flex-wrap: wrap; }
+    }
+
+    @media (max-width: 540px) {
+        .es__input { min-width: 0; flex: 1 1 100%; }
+        .es__btn { flex: 1 1 100%; }
+    }
+</style>
+
+<script is:inline>
+    // Wire up every signup form on the page once.
+    (function () {
+        if (window.__wardrobeSignupWired) return;
+        window.__wardrobeSignupWired = true;
+
+        function wireForm(wrapper) {
+            const form = wrapper.querySelector("form");
+            const msg = wrapper.querySelector("[data-msg]");
+            const placement = wrapper.dataset.placement || "unknown";
+            if (!form || !msg) return;
+
+            form.addEventListener("submit", async function (e) {
+                e.preventDefault();
+                const fd = new FormData(form);
+                const email = String(fd.get("email") || "").trim();
+                if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+                    msg.textContent = "Please enter a valid email.";
+                    msg.className = "es__msg is-error";
+                    return;
+                }
+                wrapper.dataset.loading = "true";
+                msg.textContent = "";
+                msg.className = "es__msg";
+                try {
+                    const res = await fetch("/api/signup", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ email: email }),
+                    });
+                    if (res.ok) {
+                        wrapper.dataset.state = "success";
+                        msg.textContent = "✓ You're in. Check your inbox for a hello.";
+                        msg.className = "es__msg is-success";
+                        if (window.wardrobeTrack) {
+                            window.wardrobeTrack("wardrobe_signup", {
+                                source: "wardrobe",
+                                placement: placement,
+                            });
+                        }
+                    } else {
+                        let data = {};
+                        try { data = await res.json(); } catch (_) {}
+                        msg.textContent = data && data.error
+                            ? "Couldn't sign up: " + data.error
+                            : "Couldn't sign up. Try again.";
+                        msg.className = "es__msg is-error";
+                    }
+                } catch (_) {
+                    msg.textContent = "Couldn't sign up. Try again.";
+                    msg.className = "es__msg is-error";
+                } finally {
+                    wrapper.dataset.loading = "false";
+                }
+            });
+        }
+
+        document.querySelectorAll("[data-signup-form]").forEach(wireForm);
+    })();
+</script>

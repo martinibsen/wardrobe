@@ -1,5 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import EmailSignup from "../../components/shared/EmailSignup.astro";
 import { generateFullInstallPrompt } from "../../utils/generate-prompts";
 
 const prompts = {
@@ -86,6 +87,18 @@ const prompts = {
                 Want to see what it looks like in the wild?{" "}
                 <a href="/system/sequence">Sequence →</a>
             </p>
+        </section>
+
+        <section class="section signup-section">
+            <div class="signup-box">
+                <EmailSignup
+                    variant="system"
+                    size="default"
+                    placement="install"
+                    heading="Got it working?"
+                    subheading="Drop your email — I'll send you the next theme + occasional builder notes."
+                />
+            </div>
         </section>
     </main>
 </Layout>
@@ -203,6 +216,15 @@ const prompts = {
         line-height: 1.6;
         margin: 0 0 24px;
         overflow-x: auto;
+    }
+
+    .signup-section { padding-top: 48px; }
+    .signup-box {
+        background: var(--color-card);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-soft);
+        padding: 32px 28px;
+        max-width: 540px;
     }
 </style>
 

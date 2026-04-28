@@ -1,6 +1,7 @@
 ---
 import "../components/hyper/globals.css";
 import "../components/system/globals.css";
+import EmailSignup from "../components/shared/EmailSignup.astro";
 
 interface Props {
     title: string;
@@ -31,10 +32,32 @@ const isSystemInstall = path === "/system/install";
 const isSystemDemo = path.startsWith("/system/sequence");
 const isSystemHome = path === "/system";
 
+// Sticky CTA: only on the "browsing" pages where someone is reading a system
+// or considering an install. Not on the forsiden (hero already covers it) and
+// not on demos (immersion).
+const stickyRoutes = ["/hyper", "/system", "/hyper/install", "/system/install"];
+const showStickyCta = stickyRoutes.includes(path);
+const stickyVariant: "hyper" | "system" = path.startsWith("/system") ? "system" : "hyper";
+
 // "Built with..." pill — depends on which sphere we're in when chrome="hidden"
 const builtWith = system === "system"
-    ? { href: "/system", label: "← BUILT WITH SYSTEM", cls: "built--system" }
-    : { href: "/hyper", label: "← Built with Hyper", cls: "built--hyper" };
+    ? {
+        href: "/system#signup",
+        label: "← BUILT WITH SYSTEM",
+        suffix: "/ GET DROPS",
+        cls: "built--system",
+    }
+    : {
+        href: "/hyper#signup",
+        label: "← Built with Hyper",
+        suffix: "· get drops →",
+        cls: "built--hyper",
+    };
+
+// Footer signup is shown on every chrome except "hidden" (demo immersion).
+const showFooterSignup = chrome !== "hidden";
+const footerSignupVariant: "neutral" | "hyper" | "system" =
+    chrome === "hyper" ? "hyper" : chrome === "system" ? "system" : "neutral";
 ---
 
 <!DOCTYPE html>
@@ -118,20 +141,59 @@ const builtWith = system === "system"
 
     {chrome === "hidden" && (
         <a class:list={["built", builtWith.cls]} href={builtWith.href}>
-            {builtWith.label}
+            <span class="built__main">{builtWith.label}</span>
+            <span class="built__sep" aria-hidden="true"></span>
+            <span class="built__suffix">{builtWith.suffix}</span>
         </a>
     )}
 
     <slot />
 
+    {showStickyCta && (
+        <div
+            class:list={["sticky-cta", `sticky-cta--${stickyVariant}`]}
+            data-sticky-cta
+            hidden
+        >
+            <button
+                type="button"
+                class="sticky-cta__close"
+                data-sticky-close
+                aria-label="Dismiss"
+            >×</button>
+            <p class="sticky-cta__copy">Liked this? Get the next theme drop →</p>
+            <div class="sticky-cta__form">
+                <EmailSignup
+                    variant={stickyVariant}
+                    size="compact"
+                    placement="sticky"
+                    helper=""
+                />
+            </div>
+        </div>
+    )}
+
     <footer class:list={["foot", `foot--${chrome}`]}>
-        <span>Built by <a href={MARTIN_URL} target="_blank" rel="noopener">Martin Ibsen</a></span>
-        <span class="foot__sep" aria-hidden="true">·</span>
-        <a href={MARTIN_URL} target="_blank" rel="noopener">martinibsen.dk</a>
-        <span class="foot__sep" aria-hidden="true">·</span>
-        <a href={GITHUB_URL} rel="noopener">GitHub</a>
-        <span class="foot__sep" aria-hidden="true">·</span>
-        <span>MIT</span>
+        {showFooterSignup && (
+            <div class="foot__signup" id="signup">
+                <EmailSignup
+                    variant={footerSignupVariant}
+                    size="compact"
+                    placement="footer"
+                    placeholder="you@something.dev"
+                />
+                <p class="foot__signup-helper">Theme drops + builder notes.</p>
+            </div>
+        )}
+        <div class="foot__line">
+            <span>Built by <a href={MARTIN_URL} target="_blank" rel="noopener">Martin Ibsen</a></span>
+            <span class="foot__sep" aria-hidden="true">·</span>
+            <a href={MARTIN_URL} target="_blank" rel="noopener">martinibsen.dk</a>
+            <span class="foot__sep" aria-hidden="true">·</span>
+            <a href={GITHUB_URL} rel="noopener">GitHub</a>
+            <span class="foot__sep" aria-hidden="true">·</span>
+            <span>MIT</span>
+        </div>
     </footer>
 
     <style is:global>
@@ -249,6 +311,10 @@ const builtWith = system === "system"
             text-decoration: none;
             transition: background 120ms ease, color 120ms ease;
         }
+        .built__sep {
+            display: inline-block;
+            width: 6px;
+        }
         .built--hyper {
             background: var(--color-surface, #ffffff);
             color: var(--color-fg, #3a1e1e);
@@ -258,6 +324,12 @@ const builtWith = system === "system"
             font-family: var(--font-display, "Anton", "Impact", sans-serif);
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            font-size: 11px;
+        }
+        .built--hyper .built__suffix {
+            font-family: var(--font-body, Georgia, serif);
+            text-transform: none;
+            letter-spacing: 0;
             font-size: 11px;
         }
         .built--hyper:hover {
@@ -280,16 +352,120 @@ const builtWith = system === "system"
             color: #ffffff;
         }
 
+        /* ===== STICKY CTA ===== */
+        .sticky-cta {
+            position: fixed;
+            left: 16px;
+            right: 16px;
+            bottom: 16px;
+            z-index: 70;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 16px 14px 22px;
+            border-radius: 12px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+            transform: translateY(20px);
+            opacity: 0;
+            transition: transform 240ms ease, opacity 240ms ease;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+        .sticky-cta[data-visible="true"] {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .sticky-cta__close {
+            position: absolute;
+            top: 4px;
+            right: 6px;
+            background: transparent;
+            border: none;
+            color: inherit;
+            font-size: 18px;
+            line-height: 1;
+            cursor: pointer;
+            padding: 4px 8px;
+            opacity: 0.7;
+        }
+        .sticky-cta__close:hover { opacity: 1; }
+        .sticky-cta__copy {
+            margin: 0;
+            line-height: 1.3;
+            flex: 0 1 auto;
+        }
+        .sticky-cta__form {
+            flex: 1 1 240px;
+            min-width: 200px;
+        }
+
+        .sticky-cta--hyper {
+            background: var(--color-bg, #efff71);
+            color: var(--color-fg, #3a1e1e);
+            border: 1px solid var(--color-fg, #3a1e1e);
+            border-radius: var(--radius-pill, 32px);
+            padding: 12px 16px 12px 22px;
+        }
+        .sticky-cta--hyper .sticky-cta__copy {
+            font-family: var(--font-display, "Anton", sans-serif);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            font-size: 13px;
+        }
+
+        .sticky-cta--system {
+            background: #ffffff;
+            color: #0d0d0d;
+            border: 1px solid #eeeeee;
+            border-radius: 2px;
+        }
+        .sticky-cta--system .sticky-cta__copy {
+            font-family: "JetBrains Mono", ui-monospace, monospace;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 11px;
+        }
+
+        @media (max-width: 720px) {
+            .sticky-cta {
+                flex-wrap: wrap;
+                gap: 10px;
+                padding: 14px 16px;
+            }
+            .sticky-cta__copy { flex: 1 1 100%; padding-right: 24px; }
+            .sticky-cta__form { flex: 1 1 100%; min-width: 0; }
+        }
+
         /* ===== FOOTER ===== */
         .foot {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+            padding: 32px 24px;
+            font-size: 12px;
+            line-height: 1.4;
+            text-align: center;
+        }
+        .foot__signup {
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 6px;
+        }
+        .foot__signup-helper {
+            margin: 0;
+            font-size: 11px;
+            opacity: 0.7;
+            text-align: center;
+        }
+        .foot__line {
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 8px;
-            padding: 24px;
-            font-size: 12px;
-            line-height: 1.4;
-            text-align: center;
             flex-wrap: wrap;
         }
         .foot a { color: inherit; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 120ms ease; }
@@ -305,8 +481,8 @@ const builtWith = system === "system"
             border-top: 1px solid var(--color-fg, #3a1e1e);
             color: var(--color-fg, #3a1e1e);
             font-family: var(--font-body, "Georgia", serif);
-            opacity: 0.75;
         }
+        .foot--hyper .foot__line { opacity: 0.75; }
         .foot--system {
             border-top: 1px solid #eeeeee;
             color: #888888;
@@ -315,7 +491,6 @@ const builtWith = system === "system"
         }
         .foot--system .foot__sep { color: #bbb; }
         .foot--hidden {
-            /* For chrome="hidden" pages — pick footer style based on body data-system */
             border-top: 1px solid var(--color-fg, #3a1e1e);
             color: var(--color-fg, #3a1e1e);
             font-family: var(--font-body, "Georgia", serif);
@@ -336,12 +511,13 @@ const builtWith = system === "system"
             .nav--system .nav__links a { font-size: 11px; }
             .built { top: 12px; right: 12px; }
             .built--hyper { padding: 6px 12px; font-size: 10px; }
+            .built--hyper .built__suffix { font-size: 10px; }
             .built--system { padding: 6px 10px; font-size: 9px; }
         }
     </style>
 
     <script is:inline>
-        // Lightweight PostHog event helper if window.posthog is available.
+        // PostHog event helper
         window.wardrobeTrack = function (event, props) {
             try {
                 if (window.posthog && typeof window.posthog.capture === "function") {
@@ -354,6 +530,46 @@ const builtWith = system === "system"
                 /* noop */
             }
         };
+
+        // Sticky CTA: appear after 50% scroll, dismissible, persists for the session.
+        (function () {
+            const sticky = document.querySelector("[data-sticky-cta]");
+            if (!sticky) return;
+
+            const STORAGE_KEY = "wardrobe-sticky-dismissed";
+            try {
+                if (sessionStorage.getItem(STORAGE_KEY) === "1") {
+                    sticky.remove();
+                    return;
+                }
+            } catch (_) { /* sessionStorage may be unavailable */ }
+
+            sticky.hidden = false;
+
+            function checkScroll() {
+                const docH = document.documentElement.scrollHeight - window.innerHeight;
+                if (docH <= 0) return;
+                const ratio = window.scrollY / docH;
+                if (ratio >= 0.5) {
+                    sticky.dataset.visible = "true";
+                } else {
+                    sticky.dataset.visible = "false";
+                }
+            }
+
+            window.addEventListener("scroll", checkScroll, { passive: true });
+            window.addEventListener("resize", checkScroll, { passive: true });
+            checkScroll();
+
+            const closeBtn = sticky.querySelector("[data-sticky-close]");
+            if (closeBtn) {
+                closeBtn.addEventListener("click", function () {
+                    sticky.dataset.visible = "false";
+                    setTimeout(function () { sticky.remove(); }, 240);
+                    try { sessionStorage.setItem(STORAGE_KEY, "1"); } catch (_) {}
+                });
+            }
+        })();
     </script>
 </body>
 </html>
