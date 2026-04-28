@@ -1,20 +1,27 @@
 ---
 import "../components/hyper/globals.css";
 import "../components/system/globals.css";
+import "../components/brick/globals.css";
 import EmailSignup from "../components/shared/EmailSignup.astro";
 
 interface Props {
     title: string;
     description?: string;
-    system?: "hyper" | "system" | null;
-    chrome?: "neutral" | "hyper" | "system" | "hidden";
+    system?: "hyper" | "system" | "brick" | null;
+    chrome?: "neutral" | "hyper" | "system" | "brick" | "hidden";
 }
 
 const {
     title,
     description = "Wardrobe — themes for vibe-coded apps. Made by Martin Ibsen. MIT.",
     system = null,
-    chrome = system === "hyper" ? "hyper" : system === "system" ? "system" : "neutral",
+    chrome = system === "hyper"
+        ? "hyper"
+        : system === "system"
+          ? "system"
+          : system === "brick"
+            ? "brick"
+            : "neutral",
 } = Astro.props;
 
 const GITHUB_URL = "https://github.com/martinibsen/wardrobe";
@@ -32,32 +39,62 @@ const isSystemInstall = path === "/system/install";
 const isSystemDemo = path.startsWith("/system/sequence");
 const isSystemHome = path === "/system";
 
+// Brick nav active states
+const isBrickInstall = path === "/brick/install";
+const isBrickDemo = path.startsWith("/brick/baustein");
+const isBrickHome = path === "/brick";
+
 // Sticky CTA: only on the "browsing" pages where someone is reading a system
 // or considering an install. Not on the forsiden (hero already covers it) and
 // not on demos (immersion).
-const stickyRoutes = ["/hyper", "/system", "/hyper/install", "/system/install"];
+const stickyRoutes = [
+    "/hyper",
+    "/system",
+    "/brick",
+    "/hyper/install",
+    "/system/install",
+    "/brick/install",
+];
 const showStickyCta = stickyRoutes.includes(path);
-const stickyVariant: "hyper" | "system" = path.startsWith("/system") ? "system" : "hyper";
+const stickyVariant: "hyper" | "system" | "brick" = path.startsWith("/system")
+    ? "system"
+    : path.startsWith("/brick")
+      ? "brick"
+      : "hyper";
 
 // "Built with..." pill — depends on which sphere we're in when chrome="hidden"
-const builtWith = system === "system"
-    ? {
-        href: "/system#signup",
-        label: "← BUILT WITH SYSTEM",
-        suffix: "/ GET DROPS",
-        cls: "built--system",
-    }
-    : {
-        href: "/hyper#signup",
-        label: "← Built with Hyper",
-        suffix: "· get drops →",
-        cls: "built--hyper",
-    };
+const builtWith =
+    system === "system"
+        ? {
+              href: "/system#signup",
+              label: "← BUILT WITH SYSTEM",
+              suffix: "/ GET DROPS",
+              cls: "built--system",
+          }
+        : system === "brick"
+          ? {
+                href: "/brick#signup",
+                label: "[ ← BUILT WITH BRICK ]",
+                suffix: "/ GET DROPS",
+                cls: "built--brick",
+            }
+          : {
+                href: "/hyper#signup",
+                label: "← Built with Hyper",
+                suffix: "· get drops →",
+                cls: "built--hyper",
+            };
 
 // Footer signup is shown on every chrome except "hidden" (demo immersion).
 const showFooterSignup = chrome !== "hidden";
-const footerSignupVariant: "neutral" | "hyper" | "system" =
-    chrome === "hyper" ? "hyper" : chrome === "system" ? "system" : "neutral";
+const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" =
+    chrome === "hyper"
+        ? "hyper"
+        : chrome === "system"
+          ? "system"
+          : chrome === "brick"
+            ? "brick"
+            : "neutral";
 ---
 
 <!DOCTYPE html>
@@ -135,6 +172,35 @@ const footerSignupVariant: "neutral" | "hyper" | "system" =
                     OVERVIEW
                 </a>
                 <a href={GITHUB_URL} rel="noopener">GITHUB</a>
+            </nav>
+        </header>
+    )}
+
+    {chrome === "brick" && (
+        <header class="nav nav--brick">
+            <a class="nav__brand nav__brand--brick" href="/">
+                WARDROBE / BRICK
+            </a>
+            <nav class="nav__links nav__links--brick" aria-label="Brick">
+                <a
+                    href="/brick/install"
+                    class:list={[isBrickInstall && "is-active"]}
+                >
+                    [ INSTALL ]
+                </a>
+                <a
+                    href="/brick/baustein"
+                    class:list={[isBrickDemo && "is-active"]}
+                >
+                    [ BAUSTEIN ]
+                </a>
+                <a
+                    href="/brick"
+                    class:list={[isBrickHome && "is-active"]}
+                >
+                    [ BRICK ]
+                </a>
+                <a href={GITHUB_URL} rel="noopener">[ GITHUB ]</a>
             </nav>
         </header>
     )}
@@ -299,6 +365,42 @@ const footerSignupVariant: "neutral" | "hyper" | "system" =
             border-bottom-color: #0d0d0d;
         }
 
+        /* ===== Sphere B — brick (embossed) ===== */
+        .nav--brick {
+            background: var(--color-casing, #e3e4df);
+            color: var(--color-fg, #1a1a1a);
+            border-bottom: 1px solid var(--panel-gap-dark, rgba(0, 0, 0, 0.15));
+            box-shadow: 0 1px 0 var(--panel-gap-light, rgba(255, 255, 255, 0.8));
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        .nav__brand--brick {
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+        .nav--brick .nav__links {
+            font-family: "JetBrains Mono", ui-monospace, monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .nav--brick .nav__links a {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--color-fg, #1a1a1a);
+        }
+        .nav--brick .nav__links a.is-active {
+            color: var(--color-fg, #1a1a1a);
+            border-bottom-color: var(--color-fg, #1a1a1a);
+        }
+        .nav--brick .nav__links a:not(.is-active) {
+            color: var(--color-fg-muted, #555);
+        }
+        .nav--brick .nav__links a:hover {
+            color: var(--color-fg, #1a1a1a);
+            border-bottom-color: var(--color-fg, #1a1a1a);
+        }
+
         /* ===== Built-with pill — chrome="hidden" ===== */
         .built {
             position: fixed;
@@ -350,6 +452,32 @@ const footerSignupVariant: "neutral" | "hyper" | "system" =
         .built--system:hover {
             background: #0d0d0d;
             color: #ffffff;
+        }
+
+        .built--brick {
+            background: var(--color-casing-button, #e8e8e4);
+            color: var(--color-fg, #1a1a1a);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-top-color: rgba(255, 255, 255, 0.8);
+            border-left-color: rgba(255, 255, 255, 0.8);
+            border-radius: 4px;
+            padding: 7px 12px;
+            font-family: "JetBrains Mono", ui-monospace, monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 10px;
+            font-weight: 700;
+            box-shadow: inset 1px 1px 1px rgba(255, 255, 255, 0.5),
+                        0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .built--brick:active {
+            transform: translateY(1px);
+            box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .built--brick .built__suffix {
+            font-family: "JetBrains Mono", ui-monospace, monospace;
+            font-size: 10px;
+            color: var(--color-fg-muted, #555);
         }
 
         /* ===== STICKY CTA ===== */
@@ -426,6 +554,22 @@ const footerSignupVariant: "neutral" | "hyper" | "system" =
             font-size: 11px;
         }
 
+        .sticky-cta--brick {
+            background: var(--color-casing, #e3e4df);
+            color: var(--color-fg, #1a1a1a);
+            border-radius: 8px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18),
+                        inset 1px 1px 2px rgba(255, 255, 255, 0.7),
+                        inset -1px -1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .sticky-cta--brick .sticky-cta__copy {
+            font-family: "JetBrains Mono", ui-monospace, monospace;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 11px;
+        }
+
         @media (max-width: 720px) {
             .sticky-cta {
                 flex-wrap: wrap;
@@ -490,6 +634,16 @@ const footerSignupVariant: "neutral" | "hyper" | "system" =
             font-size: 11px;
         }
         .foot--system .foot__sep { color: #bbb; }
+        .foot--brick {
+            border-top: 1px solid var(--panel-gap-dark, rgba(0, 0, 0, 0.15));
+            box-shadow: 0 1px 0 var(--panel-gap-light, rgba(255, 255, 255, 0.8)) inset;
+            color: var(--color-fg-muted, #555);
+            font-family: "JetBrains Mono", ui-monospace, monospace;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .foot--brick .foot__sep { color: var(--color-fg-label, #6a6b66); }
         .foot--hidden {
             border-top: 1px solid var(--color-fg, #3a1e1e);
             color: var(--color-fg, #3a1e1e);
@@ -501,6 +655,16 @@ const footerSignupVariant: "neutral" | "hyper" | "system" =
             color: #888888;
             font-family: "Space Grotesk", -apple-system, sans-serif;
             font-size: 11px;
+            opacity: 1;
+        }
+        body[data-system="brick"] .foot--hidden {
+            border-top: 1px solid var(--panel-gap-dark, rgba(0, 0, 0, 0.15));
+            box-shadow: 0 1px 0 var(--panel-gap-light, rgba(255, 255, 255, 0.8)) inset;
+            color: var(--color-fg-muted, #555);
+            font-family: "JetBrains Mono", ui-monospace, monospace;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
             opacity: 1;
         }
 

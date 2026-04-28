@@ -1,0 +1,310 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import EmailSignup from "../../components/shared/EmailSignup.astro";
+import { generateFullInstallPrompt } from "../../utils/generate-prompts";
+
+const prompts = {
+    "claude-code": generateFullInstallPrompt("claude-code", "brick"),
+    v0: generateFullInstallPrompt("v0", "brick"),
+    lovable: generateFullInstallPrompt("lovable", "brick"),
+};
+---
+
+<Layout
+    title="Install Brick — Wardrobe"
+    description="One paste. 30 seconds. Brick everywhere."
+    system="brick"
+    chrome="brick"
+>
+    <main class="wrap">
+        <section class="hero">
+            <div class="hero__head">
+                <span class="hero__eyebrow">WARDROBE / BRICK / INSTALL</span>
+                <span class="hero__model">SET-UP / 30 SEC</span>
+            </div>
+            <h1 class="hero__title">Install Brick<br/>in 30 seconds.</h1>
+            <p class="hero__sub">
+                Pick your AI. Hit copy. Paste it into a fresh chat in your project.
+                Watch the panels arrive embossed.
+            </p>
+        </section>
+
+        <section class="section">
+            <div class="targets-row" role="tablist">
+                <button
+                    type="button"
+                    role="tab"
+                    class="target target--active"
+                    data-target="claude-code"
+                    aria-selected="true"
+                >
+                    [ CLAUDE CODE / CURSOR ]
+                </button>
+                <button
+                    type="button"
+                    role="tab"
+                    class="target"
+                    data-target="v0"
+                    aria-selected="false"
+                >
+                    [ V0 ]
+                </button>
+                <button
+                    type="button"
+                    role="tab"
+                    class="target"
+                    data-target="lovable"
+                    aria-selected="false"
+                >
+                    [ LOVABLE ]
+                </button>
+            </div>
+
+            <div class="copy-bar">
+                <button type="button" id="copy-full" class="brk-btn brk-btn--primary brk-btn--lg">
+                    [ COPY ENTIRE PROMPT ]
+                </button>
+                <span id="copy-status" class="copy-status"></span>
+            </div>
+
+            <div class="prompt-pane" data-pane="claude-code" data-active="true">
+                <pre><code>{prompts["claude-code"]}</code></pre>
+            </div>
+            <div class="prompt-pane" data-pane="v0">
+                <pre><code>{prompts.v0}</code></pre>
+            </div>
+            <div class="prompt-pane" data-pane="lovable">
+                <pre><code>{prompts.lovable}</code></pre>
+            </div>
+        </section>
+
+        <section class="section foot">
+            <p class="foot__lede">Once it's installed, wrap whichever section you want themed:</p>
+            <pre class="foot__snippet"><code>{`<div data-system="brick">
+    <Button>[ EXECUTE ]</Button>
+    <Card variant="device">…</Card>
+</div>`}</code></pre>
+            <p class="foot__lede">
+                Want to see what it looks like in the wild?{" "}
+                <a href="/brick/baustein">Baustein →</a>
+            </p>
+        </section>
+
+        <section class="section signup-section">
+            <div class="signup-box">
+                <EmailSignup
+                    variant="brick"
+                    size="default"
+                    placement="install"
+                    heading="Got it working?"
+                    subheading="Drop your email — I'll send you the next theme + occasional builder notes."
+                />
+            </div>
+        </section>
+    </main>
+</Layout>
+
+<style>
+    .wrap {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 48px 24px 96px;
+        font-family: var(--font-body);
+        color: var(--color-fg);
+    }
+    .hero {
+        padding: 32px 0 56px;
+        border-bottom: 1px solid var(--panel-gap-dark);
+        box-shadow: 0 1px 0 var(--panel-gap-light);
+    }
+    .hero__head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin: 0 0 24px;
+    }
+    .hero__eyebrow,
+    .hero__model {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: var(--label-letter-spacing);
+        font-size: 11px;
+        color: var(--color-fg-muted);
+    }
+    .hero__title {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: clamp(40px, 7vw, 72px);
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+        margin: 0 0 24px;
+    }
+    .hero__sub {
+        font-family: var(--font-body);
+        font-size: 18px;
+        line-height: 1.55;
+        max-width: 560px;
+        margin: 0;
+        color: var(--color-fg-muted);
+    }
+
+    .section {
+        padding: 56px 0;
+        border-bottom: 1px solid var(--panel-gap-dark);
+        box-shadow: 0 1px 0 var(--panel-gap-light);
+    }
+    .section:last-of-type { border-bottom: none; box-shadow: none; }
+
+    .targets-row {
+        display: inline-flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 28px;
+        max-width: 100%;
+    }
+    .target {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-size: 11px;
+        padding: 10px 16px;
+        background: var(--color-casing-button);
+        color: var(--color-fg);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-top-color: rgba(255, 255, 255, 0.8);
+        border-left-color: rgba(255, 255, 255, 0.8);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        line-height: 1;
+        box-shadow: var(--shadow-button-secondary);
+    }
+    .target:hover { background: #EEEFEA; }
+    .target--active {
+        background: var(--color-fg);
+        color: #FFFFFF;
+        border-color: var(--color-fg);
+        box-shadow: var(--shadow-button-raised);
+    }
+
+    .copy-bar {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 18px;
+        flex-wrap: wrap;
+    }
+    .copy-status {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-size: 11px;
+        color: var(--color-fg-muted);
+    }
+
+    .prompt-pane { display: none; }
+    .prompt-pane[data-active="true"] { display: block; }
+    .prompt-pane pre {
+        background: var(--color-terminal);
+        color: var(--color-fg);
+        border-radius: var(--radius-md);
+        padding: 22px 24px;
+        margin: 0;
+        max-height: 540px;
+        overflow: auto;
+        font-family: var(--font-mono);
+        font-size: 12.5px;
+        line-height: 1.65;
+        white-space: pre-wrap;
+        word-break: break-word;
+        box-shadow: var(--shadow-inset-deep);
+    }
+
+    .foot__lede {
+        font-family: var(--font-body);
+        font-size: 16px;
+        margin: 0 0 16px;
+        color: var(--color-fg-muted);
+    }
+    .foot__lede a {
+        color: var(--color-fg);
+        border-bottom: 1px solid var(--color-fg);
+        text-decoration: none;
+    }
+    .foot__snippet {
+        background: var(--color-terminal);
+        border-radius: var(--radius-md);
+        padding: 18px;
+        font-family: var(--font-mono);
+        font-size: 13px;
+        line-height: 1.6;
+        margin: 0 0 24px;
+        overflow-x: auto;
+        box-shadow: var(--shadow-inset-deep);
+    }
+
+    .signup-section { padding-top: 48px; }
+    .signup-box {
+        background: var(--color-casing);
+        border-radius: var(--radius-md);
+        padding: 32px 28px;
+        max-width: 540px;
+        box-shadow: var(--shadow-tile);
+    }
+</style>
+
+<script>
+    if (typeof window !== "undefined") {
+        (window as any).wardrobeTrack?.("wardrobe_install_view", { system: "brick" });
+    }
+
+    const targets = document.querySelectorAll<HTMLButtonElement>(".target");
+    const panes = document.querySelectorAll<HTMLElement>(".prompt-pane");
+    let activeTarget = "claude-code";
+
+    targets.forEach((t) => {
+        t.addEventListener("click", () => {
+            activeTarget = t.dataset.target ?? "claude-code";
+            targets.forEach((tt) => {
+                const isActive = tt === t;
+                tt.classList.toggle("target--active", isActive);
+                tt.setAttribute("aria-selected", String(isActive));
+            });
+            panes.forEach((p) => {
+                p.dataset.active = String(p.dataset.pane === activeTarget);
+            });
+        });
+    });
+
+    const copyBtn = document.getElementById("copy-full") as HTMLButtonElement | null;
+    const copyStatus = document.getElementById("copy-status") as HTMLElement | null;
+
+    copyBtn?.addEventListener("click", async () => {
+        const activePane = document.querySelector<HTMLElement>(
+            `.prompt-pane[data-pane="${activeTarget}"]`,
+        );
+        const text = activePane?.querySelector("code")?.textContent ?? "";
+        try {
+            await navigator.clipboard.writeText(text);
+        } catch {
+            const tmp = document.createElement("textarea");
+            tmp.value = text;
+            document.body.appendChild(tmp);
+            tmp.select();
+            document.execCommand("copy");
+            document.body.removeChild(tmp);
+        }
+        if (copyStatus) {
+            copyStatus.textContent = "[ COPIED ✓ ]";
+            setTimeout(() => {
+                if (copyStatus) copyStatus.textContent = "";
+            }, 2200);
+        }
+        (window as any).wardrobeTrack?.("wardrobe_copy_install_full", {
+            system: "brick",
+            target: activeTarget,
+        });
+    });
+</script>

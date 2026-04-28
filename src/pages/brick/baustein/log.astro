@@ -1,0 +1,239 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+
+type Status = "ok" | "proc" | "wait" | "archive";
+const entries: Array<{ ts: string; ord: string; spec: string; qty: string; status: Status; statusLabel: string }> = [
+    { ts: "2026.04.27 14:22", ord: "#RX-8821", spec: "3001-R", qty: "1,200", status: "ok", statusLabel: "DELIVERED" },
+    { ts: "2026.04.27 09:15", ord: "#RX-8819", spec: "3004-G", qty: "4,500", status: "ok", statusLabel: "DELIVERED" },
+    { ts: "2026.04.28 18:44", ord: "#RX-8902", spec: "3002-B", qty: "500", status: "proc", statusLabel: "IN_TRANSIT" },
+    { ts: "2026.04.28 08:02", ord: "#RX-8945", spec: "3005-W", qty: "2,000", status: "wait", statusLabel: "QUEUED" },
+    { ts: "2026.04.28 11:30", ord: "#RX-8951", spec: "3001-R", qty: "10,000", status: "wait", statusLabel: "QUEUED" },
+    { ts: "2026.04.25 16:22", ord: "#RX-8701", spec: "3003-Y", qty: "150", status: "archive", statusLabel: "ARCHIVED" },
+    { ts: "2026.04.24 12:44", ord: "#RX-8655", spec: "3004-G", qty: "3,200", status: "archive", statusLabel: "ARCHIVED" },
+];
+---
+
+<Layout
+    title="Baustein — Requisition Log"
+    description="Inset terminal log of the fictional requisition system. Wardrobe / Brick end-to-end."
+    system="brick"
+    chrome="hidden"
+>
+    <main class="bs-wrap">
+        <div class="device-panel">
+            <header class="panel-header">
+                <a href="/brick" class="bs-brand">SYSTEM / BRICK</a>
+                <span class="bs-model">LOG_ACCESS.01</span>
+            </header>
+
+            <section class="log-frame-wrap">
+                <div class="terminal">
+                    <div class="terminal__head">
+                        <span>REQUISITION_HISTORY_BUFFER_V1</span>
+                        <span>004,092_ENTRIES</span>
+                    </div>
+                    <table class="log-table">
+                        <thead>
+                            <tr>
+                                <th class="hide-sm">TIMESTAMP</th>
+                                <th>ORD_ID</th>
+                                <th>SPEC_REF</th>
+                                <th>QTY</th>
+                                <th>STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {entries.map((e) => (
+                                <tr>
+                                    <td class="hide-sm">{e.ts}</td>
+                                    <td>{e.ord}</td>
+                                    <td>{e.spec}</td>
+                                    <td>{e.qty}</td>
+                                    <td>
+                                        <span class:list={["brk-badge", `brk-badge--${e.status}`]}>
+                                            {e.statusLabel}
+                                        </span>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="nav-row">
+                <a href="/brick/baustein" class="brk-btn brk-btn--secondary brk-btn--md">[ RETURN_TO_CATALOG ]</a>
+                <button type="button" class="brk-btn brk-btn--secondary brk-btn--md" data-export>[ EXPORT_LOG ]</button>
+            </section>
+
+            <footer class="panel-footer">
+                <span class="bs-foot-text">System Log / Readout</span>
+                <span class="bs-model">BR-68 / LOG</span>
+            </footer>
+        </div>
+
+        <nav class="bs-bottom-nav" aria-label="Baustein navigation">
+            <a href="/brick/baustein" class="bs-bottom-nav__item">[ CATALOG ]</a>
+            <a href="/brick/baustein/cart" class="bs-bottom-nav__item">[ CART ]</a>
+            <a href="/brick/baustein/log" class="bs-bottom-nav__item is-active">[ LOG ]</a>
+        </nav>
+    </main>
+</Layout>
+
+<style>
+    .bs-wrap {
+        padding: 64px 24px 120px;
+        max-width: 920px;
+        margin: 0 auto;
+    }
+    .device-panel {
+        background: var(--color-casing);
+        border-radius: var(--radius-device);
+        box-shadow: var(--shadow-device);
+        overflow: hidden;
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        padding: 32px 40px 24px;
+        border-bottom: 1px solid var(--panel-gap-dark);
+        box-shadow: 0 1px 0 var(--panel-gap-light);
+    }
+    .bs-brand {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 14px;
+        letter-spacing: -0.02em;
+        color: var(--color-fg);
+        text-decoration: none;
+    }
+    .bs-model {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--color-fg-muted);
+    }
+
+    .log-frame-wrap {
+        padding: 28px 40px 0;
+        background: rgba(0, 0, 0, 0.02);
+    }
+    .terminal {
+        background: var(--color-terminal);
+        border-radius: var(--radius-sm);
+        padding: 22px;
+        box-shadow: var(--shadow-inset-deep), inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+        max-height: 480px;
+        overflow-y: auto;
+    }
+    .terminal__head {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--color-fg-label);
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px dashed rgba(0, 0, 0, 0.15);
+        padding-bottom: 10px;
+        margin-bottom: 14px;
+    }
+    .log-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: var(--font-mono);
+        font-size: 11px;
+    }
+    .log-table th {
+        text-align: left;
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--color-fg-label);
+        padding: 8px 8px 8px 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    .log-table td {
+        padding: 12px 8px 12px 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+        color: var(--color-fg);
+    }
+
+    .nav-row {
+        display: flex;
+        gap: 14px;
+        padding: 28px 40px;
+        flex-wrap: wrap;
+    }
+
+    .panel-footer {
+        padding: 0 40px 32px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    .bs-foot-text {
+        font-family: var(--font-display);
+        font-weight: 500;
+        font-size: 16px;
+        letter-spacing: -0.02em;
+        color: var(--color-fg);
+    }
+
+    .bs-bottom-nav {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: inline-flex;
+        gap: 4px;
+        padding: 8px;
+        background: var(--color-casing);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-device);
+        z-index: 60;
+    }
+    .bs-bottom-nav__item {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 8px 14px;
+        color: var(--color-fg-muted);
+        text-decoration: none;
+        border-radius: var(--radius-sm);
+    }
+    .bs-bottom-nav__item.is-active {
+        background: var(--color-fg);
+        color: #FFFFFF;
+        box-shadow: var(--shadow-button-raised);
+    }
+
+    @media (max-width: 600px) {
+        .bs-wrap { padding: 32px 16px 110px; }
+        .panel-header, .log-frame-wrap, .nav-row, .panel-footer { padding-left: 24px; padding-right: 24px; }
+        .hide-sm { display: none; }
+    }
+</style>
+
+<script>
+    if (typeof window !== "undefined") {
+        (window as any).wardrobeTrack?.("wardrobe_demo_view", {
+            system: "brick",
+            page: "log",
+        });
+    }
+    document.querySelector<HTMLButtonElement>("[data-export]")?.addEventListener("click", () => {
+        window.print();
+    });
+</script>

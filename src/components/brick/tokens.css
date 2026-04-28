@@ -1,0 +1,116 @@
+/* =========================================================
+   Wardrobe — BRICK tokens
+   Hardware/skeumorphic. Embossed panels, raised buttons,
+   multi-layer shadows. Activate via data-system="brick".
+   ========================================================= */
+
+:where([data-system="brick"]) {
+    /* ---- Surface ---- */
+    --color-bg: #C8C9C4;            /* outside the device */
+    --color-casing: #E3E4DF;        /* device panel surface */
+    --color-casing-tint: #DADBD4;   /* slightly darker casing for inputs / inset wells */
+    --color-casing-button: #E8E8E4; /* secondary button surface */
+    --color-terminal: #DCDDDA;      /* inset display screens */
+    --color-recess: rgba(0, 0, 0, 0.03);
+    --color-fg: #1A1A1A;
+    --color-fg-muted: #555555;
+    --color-fg-label: #6A6B66;
+    --color-hole: #1C1C1A;          /* dark accents / punched holes */
+
+    /* ---- Primary palette (LEGO-style functional colors) ---- */
+    --color-red: #D03027;
+    --color-red-shade: #9B1C15;
+    --color-blue: #0055A4;
+    --color-blue-shade: #00366D;
+    --color-yellow: #F2A900;
+    --color-yellow-shade: #B88000;
+    --color-green: #00853E;
+    --color-green-shade: #005B2A;
+    --color-white: #F4F4F2;
+    --color-white-shade: #BDBDBD;
+
+    /* ---- Status (badges) ---- */
+    --color-status-ok: var(--color-green);
+    --color-status-proc: var(--color-blue);
+    --color-status-wait: var(--color-yellow);
+    --color-status-archive: var(--color-fg-muted);
+    --color-status-bg: #D1D2CD;
+
+    /* ---- Panel gaps + highlights (kritisk for embossed effekt) ---- */
+    --highlight: rgba(255, 255, 255, 0.7);
+    --panel-gap-dark: rgba(0, 0, 0, 0.15);
+    --panel-gap-light: rgba(255, 255, 255, 0.8);
+
+    /* ---- Multi-layer shadows (signaturen) ---- */
+    --shadow-device: 0 20px 50px rgba(0, 0, 0, 0.15),
+                     0 5px 15px rgba(0, 0, 0, 0.05),
+                     inset 1px 1px 2px var(--highlight),
+                     inset -1px -1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-button-raised: 0 4px 8px rgba(0, 0, 0, 0.2);
+    --shadow-button-secondary: inset 1px 1px 1px rgba(255, 255, 255, 0.5);
+    --shadow-button-pressed: inset 1px 1px 2px rgba(0, 0, 0, 0.1);
+    --shadow-inset-deep: inset 2px 2px 5px rgba(0, 0, 0, 0.05);
+    --shadow-inset-input: inset 1px 1px 2px rgba(0, 0, 0, 0.1);
+    --shadow-tile: 4px 4px 10px rgba(0, 0, 0, 0.08),
+                   inset 2px 2px 4px rgba(0, 0, 0, 0.05),
+                   inset -2px -2px 4px rgba(255, 255, 255, 0.5);
+    --shadow-stud: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-swatch: inset 0 4px 8px rgba(255, 255, 255, 0.3),
+                     inset 0 -4px 8px rgba(0, 0, 0, 0.2),
+                     0 4px 10px rgba(0, 0, 0, 0.15);
+
+    /* ---- Radius ---- */
+    --radius-xs: 2px;
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-lg: 8px;
+    --radius-device: 12px;
+    --radius-full: 9999px;
+
+    /* ---- Typography ---- */
+    --font-display: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+    --text-micro: 10px;
+    --text-xs: 11px;
+    --text-sm: 12px;
+    --text-base: 13px;
+    --text-md: 14px;
+    --text-lg: 16px;
+    --text-xl: 18px;
+    --text-2xl: 24px;
+    --text-3xl: 32px;
+
+    --label-letter-spacing: 0.1em;
+    --brand-letter-spacing: -0.02em;
+
+    --weight-regular: 400;
+    --weight-medium: 500;
+    --weight-semibold: 600;
+    --weight-bold: 700;
+
+    /* ---- Spacing ---- */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+    --space-12: 48px;
+
+    /* ---- Motion ---- */
+    --duration-fast: 100ms;
+    --duration-base: 200ms;
+    --easing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-system="brick"] {
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}

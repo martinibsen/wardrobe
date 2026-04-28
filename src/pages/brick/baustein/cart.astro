@@ -1,0 +1,427 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+
+const cart = [
+    { id: "3001-R", color: "red", spec: "2x4 Standard Baustein", qty: 12, total: 96 },
+    { id: "3002-B", color: "blue", spec: "2x3 Standard Baustein", qty: 8, total: 48 },
+    { id: "3003-Y", color: "yellow", spec: "2x2 Standard Baustein", qty: 4, total: 16 },
+    { id: "3004-G", color: "green", spec: "1x2 Standard Baustein", qty: 15, total: 30 },
+    { id: "3005-W", color: "white", spec: "1x4 Standard Baustein", qty: 2, total: 8 },
+];
+
+const summary = [
+    { label: "RED", count: 12, color: "red" },
+    { label: "BLUE", count: 8, color: "blue" },
+    { label: "YEL", count: 4, color: "yellow" },
+    { label: "GRN", count: 15, color: "green" },
+    { label: "WHT", count: 2, color: "white" },
+];
+
+const grandTotal = cart.reduce((acc, c) => acc + c.total, 0);
+---
+
+<Layout
+    title="Baustein — Requisition Cart"
+    description="Cart view of the fictional modular block requisition system, built with Wardrobe / Brick."
+    system="brick"
+    chrome="hidden"
+>
+    <main class="bs-wrap">
+        <div class="device-panel">
+            <header class="panel-header">
+                <a href="/brick" class="bs-brand">WARDROBE / BRICK · BAUSTEIN</a>
+                <span class="bs-model">REQ.01-B</span>
+            </header>
+
+            <p class="bs-breadcrumb">
+                <a href="/brick/baustein">[ CATALOG ]</a> / REQUISITION CART
+            </p>
+
+            <section class="summary-grid">
+                {summary.map((s) => (
+                    <div class="summary-card">
+                        <span class="summary-card__label">{s.label}</span>
+                        <span class:list={["summary-card__val", `summary-card__val--${s.color}`]}>
+                            {String(s.count).padStart(2, "0")}
+                        </span>
+                    </div>
+                ))}
+            </section>
+
+            <section class="inventory">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Ident Nr.</th>
+                            <th class="hide-sm">Specification</th>
+                            <th class="col-qty">Quantity</th>
+                            <th class="col-subtotal">Total Units</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {cart.map((row) => (
+                            <tr>
+                                <td class="col-id">
+                                    <span class={`brk-stud swatch--${row.color}`}></span>
+                                    {row.id}
+                                </td>
+                                <td class="col-spec hide-sm">{row.spec}</td>
+                                <td class="col-qty">
+                                    <div class="qty-control">
+                                        <button class="qty-btn" aria-label="Decrease">−</button>
+                                        <span>{String(row.qty).padStart(2, "0")}</span>
+                                        <button class="qty-btn" aria-label="Increase">+</button>
+                                    </div>
+                                </td>
+                                <td class="col-subtotal">{row.total}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </section>
+
+            <footer class="checkout-footer">
+                <div class="total-readout">
+                    <span class="total-readout__label">Aggregate Unit Count</span>
+                    <span class="total-readout__amount">{grandTotal}</span>
+                </div>
+
+                <div class="confirm">
+                    <span class="confirm__label">Execute Order</span>
+                    <button class="hardware-btn" aria-label="Confirm requisition">
+                        <span class="btn-well">
+                            <span class="btn-cap"></span>
+                        </span>
+                    </button>
+                </div>
+            </footer>
+
+            <div class="panel-divider"></div>
+            <div class="panel-bottom">
+                <span class="bs-model">STATION-ID: 44-09</span>
+                <span class="bs-model">BR-68 / REV-C</span>
+            </div>
+        </div>
+
+        <nav class="bs-bottom-nav" aria-label="Baustein navigation">
+            <a href="/brick/baustein" class="bs-bottom-nav__item">[ CATALOG ]</a>
+            <a href="/brick/baustein/cart" class="bs-bottom-nav__item is-active">[ CART ]</a>
+            <a href="/brick/baustein/log" class="bs-bottom-nav__item">[ LOG ]</a>
+        </nav>
+    </main>
+</Layout>
+
+<style>
+    .bs-wrap {
+        padding: 64px 24px 120px;
+        max-width: 920px;
+        margin: 0 auto;
+    }
+    .device-panel {
+        background: var(--color-casing);
+        border-radius: var(--radius-device);
+        box-shadow: var(--shadow-device);
+        overflow: hidden;
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        padding: 32px 40px 20px;
+    }
+    .bs-brand {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 14px;
+        letter-spacing: -0.02em;
+        color: var(--color-fg);
+        text-decoration: none;
+    }
+    .bs-model {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--color-fg-muted);
+    }
+    .bs-breadcrumb {
+        padding: 0 40px 24px;
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--color-fg-label);
+        margin: 0;
+    }
+    .bs-breadcrumb a {
+        color: var(--color-fg-muted);
+        text-decoration: none;
+    }
+
+    .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 16px;
+        padding: 16px 40px 32px;
+    }
+    .summary-card {
+        background: var(--color-recess);
+        border: 1px solid var(--panel-gap-dark);
+        border-radius: var(--radius-md);
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+    }
+    .summary-card__label {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--color-fg-label);
+    }
+    .summary-card__val {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 18px;
+    }
+    .summary-card__val--red { color: var(--color-red); }
+    .summary-card__val--blue { color: var(--color-blue); }
+    .summary-card__val--yellow { color: var(--color-yellow); }
+    .summary-card__val--green { color: var(--color-green); }
+    .summary-card__val--white {
+        color: var(--color-white);
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+    }
+
+    .inventory {
+        padding: 0 40px 32px;
+    }
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: var(--font-mono);
+        font-size: 12px;
+    }
+    .data-table th {
+        text-align: left;
+        padding-bottom: 16px;
+        font-family: var(--font-mono);
+        font-weight: 500;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--color-fg-label);
+        border-bottom: 1px solid var(--panel-gap-dark);
+        box-shadow: 0 1px 0 var(--panel-gap-light);
+    }
+    .data-table td {
+        padding: 16px 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        vertical-align: middle;
+    }
+    .col-id { font-weight: 700; width: 24%; }
+    .col-id .brk-stud {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-right: 8px;
+        vertical-align: middle;
+        box-shadow: var(--shadow-stud);
+    }
+    .swatch--red { background: var(--color-red); }
+    .swatch--blue { background: var(--color-blue); }
+    .swatch--yellow { background: var(--color-yellow); }
+    .swatch--green { background: var(--color-green); }
+    .swatch--white { background: var(--color-white); border: 1px solid var(--color-white-shade); }
+    .col-spec { color: var(--color-fg-muted); width: 36%; }
+    .col-qty { text-align: center; width: 22%; }
+    .col-subtotal { text-align: right; width: 18%; font-weight: 700; }
+
+    .qty-control {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--color-casing-tint);
+        padding: 4px 8px;
+        border-radius: var(--radius-sm);
+        box-shadow: var(--shadow-inset-input);
+    }
+    .qty-btn {
+        width: 22px;
+        height: 22px;
+        background: var(--color-white);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-top-color: rgba(255, 255, 255, 0.8);
+        border-left-color: rgba(255, 255, 255, 0.8);
+        font-family: var(--font-mono);
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--radius-xs);
+        line-height: 1;
+        color: var(--color-fg);
+    }
+    .qty-btn:active {
+        box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.15);
+    }
+
+    .checkout-footer {
+        background: rgba(255, 255, 255, 0.1);
+        border-top: 2px solid var(--panel-gap-dark);
+        padding: 32px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+    .total-readout {
+        font-family: var(--font-mono);
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+    .total-readout__label {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--color-fg-label);
+    }
+    .total-readout__amount {
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--color-fg);
+    }
+
+    .confirm {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+    .confirm__label {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--color-fg-label);
+    }
+    .hardware-btn {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        outline: none;
+    }
+    .btn-well {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: var(--color-casing-tint);
+        box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.18),
+                    inset -3px -3px 6px rgba(255, 255, 255, 0.85);
+        position: relative;
+    }
+    .btn-cap {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        position: absolute;
+        top: -4px;
+        background: var(--color-green);
+        box-shadow: inset 0 3px 3px rgba(255, 255, 255, 0.4),
+                    inset 0 -2px 4px rgba(0, 0, 0, 0.2),
+                    0 8px 0 var(--color-green-shade),
+                    0 12px 15px rgba(0, 0, 0, 0.3);
+        transition: top 0.1s cubic-bezier(0.25, 1, 0.5, 1),
+                    box-shadow 0.1s cubic-bezier(0.25, 1, 0.5, 1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .btn-cap::after {
+        content: 'START';
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.95);
+        letter-spacing: 0.1em;
+    }
+    .hardware-btn:active .btn-cap {
+        top: 4px;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3),
+                    0 0 0 var(--color-green-shade),
+                    0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .panel-divider {
+        height: 2px;
+        background: var(--panel-gap-dark);
+        border-bottom: 1px solid var(--panel-gap-light);
+    }
+    .panel-bottom {
+        display: flex;
+        justify-content: space-between;
+        padding: 18px 40px 28px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .bs-bottom-nav {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: inline-flex;
+        gap: 4px;
+        padding: 8px;
+        background: var(--color-casing);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-device);
+        z-index: 60;
+    }
+    .bs-bottom-nav__item {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 8px 14px;
+        color: var(--color-fg-muted);
+        text-decoration: none;
+        border-radius: var(--radius-sm);
+    }
+    .bs-bottom-nav__item.is-active {
+        background: var(--color-fg);
+        color: #FFFFFF;
+        box-shadow: var(--shadow-button-raised);
+    }
+
+    @media (max-width: 600px) {
+        .bs-wrap { padding: 32px 16px 110px; }
+        .panel-header, .bs-breadcrumb, .summary-grid, .inventory, .checkout-footer, .panel-bottom { padding-left: 24px; padding-right: 24px; }
+        .summary-grid { grid-template-columns: repeat(3, 1fr); padding-bottom: 24px; }
+        .hide-sm { display: none; }
+    }
+</style>
+
+<script>
+    if (typeof window !== "undefined") {
+        (window as any).wardrobeTrack?.("wardrobe_demo_view", {
+            system: "brick",
+            page: "cart",
+        });
+    }
+</script>

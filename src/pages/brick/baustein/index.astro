@@ -1,0 +1,317 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+
+const tiles = [
+    { id: "3001-R", color: "red", spec: "2x4 STANDARD", size: "2x4" },
+    { id: "3002-B", color: "blue", spec: "2x3 STANDARD", size: "2x3" },
+    { id: "3003-Y", color: "yellow", spec: "2x2 STANDARD", size: "2x2" },
+    { id: "3004-G", color: "green", spec: "1x2 STANDARD", size: "1x2" },
+    { id: "3005-W", color: "white", spec: "1x4 STANDARD", size: "1x4" },
+    { id: "3010-R", color: "red", spec: "4x4 HEAVY", size: "2x4" },
+    { id: "3011-B", color: "blue", spec: "1x1 PIVOT", size: "2x2" },
+    { id: "3012-G", color: "green", spec: "2x8 SUPPORT", size: "2x4" },
+];
+
+const filters = [
+    { id: "all", label: "ALL_SIZES" },
+    { id: "1x2", label: "1×2" },
+    { id: "2x2", label: "2×2" },
+    { id: "2x3", label: "2×3" },
+    { id: "2x4", label: "2×4" },
+    { id: "1x4", label: "1×4" },
+];
+---
+
+<Layout
+    title="Baustein — Catalog Index"
+    description="A fictional modular block requisition system using Wardrobe / Brick end-to-end."
+    system="brick"
+    chrome="hidden"
+>
+    <main class="bs-wrap">
+        <div class="device-panel">
+            <header class="panel-header">
+                <a href="/brick" class="bs-brand">WARDROBE / BRICK · BAUSTEIN</a>
+                <span class="bs-model">VOL.01 / INDEX</span>
+            </header>
+
+            <section class="bs-toolbar">
+                <span class="bs-toolbar__label">FILTER · SIZE</span>
+                <div class="bs-tabs" role="tablist" aria-label="Size filter">
+                    {filters.map((f, i) => (
+                        <button
+                            type="button"
+                            role="tab"
+                            class:list={["bs-tab", i === 0 && "bs-tab--active"]}
+                            data-filter={f.id}
+                            aria-selected={String(i === 0)}
+                        >
+                            [ {f.label} ]
+                        </button>
+                    ))}
+                </div>
+            </section>
+
+            <section class="catalog-mosaic">
+                {tiles.map((t) => (
+                    <article class="tile" data-size={t.size}>
+                        <div class:list={["swatch", `swatch--${t.color}`]} aria-hidden="true"></div>
+                        <div class="tile__info">
+                            <span class="tile__id">{t.id}</span>
+                            <span class="tile__spec">{t.spec}</span>
+                        </div>
+                        <a href={`/brick/baustein/blocks/3001-r`} class="brk-btn brk-btn--secondary brk-btn--sm tile__action">
+                            [ REQUISITION ]
+                        </a>
+                    </article>
+                ))}
+            </section>
+
+            <footer class="panel-footer">
+                <span class="bs-foot">Archive Reference: BR-68 // Grid Map Enabled</span>
+                <span class="bs-model">MODULAR BLOCK SYSTEM</span>
+            </footer>
+        </div>
+
+        <nav class="bs-bottom-nav" aria-label="Baustein navigation">
+            <a href="/brick/baustein" class="bs-bottom-nav__item is-active">[ CATALOG ]</a>
+            <a href="/brick/baustein/cart" class="bs-bottom-nav__item">[ CART ]</a>
+            <a href="/brick/baustein/log" class="bs-bottom-nav__item">[ LOG ]</a>
+        </nav>
+    </main>
+</Layout>
+
+<style>
+    .bs-wrap {
+        padding: 64px 24px 120px;
+        max-width: 1280px;
+        margin: 0 auto;
+    }
+    .device-panel {
+        background: var(--color-casing);
+        border-radius: var(--radius-device);
+        box-shadow: var(--shadow-device);
+        overflow: hidden;
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        padding: 32px 40px;
+        border-bottom: 2px solid var(--panel-gap-dark);
+        box-shadow: 0 1px 0 var(--panel-gap-light);
+    }
+    .bs-brand {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 14px;
+        letter-spacing: -0.02em;
+        color: var(--color-fg);
+        text-decoration: none;
+    }
+    .bs-model {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--color-fg-muted);
+    }
+
+    .bs-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding: 24px 40px;
+        background: rgba(0, 0, 0, 0.02);
+        border-bottom: 1px solid var(--panel-gap-dark);
+        flex-wrap: wrap;
+    }
+    .bs-toolbar__label {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--color-fg-label);
+    }
+    .bs-tabs {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+    .bs-tab {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 10px;
+        padding: 8px 12px;
+        background: var(--color-casing-button);
+        color: var(--color-fg);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-top-color: rgba(255, 255, 255, 0.8);
+        border-left-color: rgba(255, 255, 255, 0.8);
+        border-radius: var(--radius-sm);
+        box-shadow: var(--shadow-button-secondary);
+        cursor: pointer;
+        line-height: 1;
+    }
+    .bs-tab--active {
+        background: var(--color-fg);
+        color: #FFFFFF;
+        border-color: var(--color-fg);
+        box-shadow: var(--shadow-button-raised);
+    }
+    .bs-tab[hidden] { display: none; }
+
+    .catalog-mosaic {
+        padding: 40px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 24px;
+        background: rgba(0, 0, 0, 0.02);
+    }
+
+    .tile {
+        background: var(--color-casing-tint);
+        border-radius: var(--radius-lg);
+        padding: 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        box-shadow: var(--shadow-tile);
+        transition: transform 200ms ease;
+    }
+    .tile:hover { transform: translateY(-3px); }
+    .swatch {
+        aspect-ratio: 1;
+        border-radius: var(--radius-md);
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--shadow-swatch);
+    }
+    .swatch::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4) 0%, transparent 70%);
+    }
+    .swatch--red { background: var(--color-red); }
+    .swatch--blue { background: var(--color-blue); }
+    .swatch--yellow { background: var(--color-yellow); }
+    .swatch--green { background: var(--color-green); }
+    .swatch--white { background: var(--color-white); }
+
+    .tile__info {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+    .tile__id {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 14px;
+        color: var(--color-fg);
+    }
+    .tile__spec {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--color-fg-muted);
+    }
+    .tile__action {
+        margin-top: auto;
+        width: 100%;
+    }
+
+    .panel-footer {
+        padding: 28px 40px;
+        border-top: 2px solid var(--panel-gap-dark);
+        box-shadow: inset 0 1px 0 var(--panel-gap-light);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    .bs-foot {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--color-fg-label);
+    }
+
+    .bs-bottom-nav {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: inline-flex;
+        gap: 4px;
+        padding: 8px;
+        background: var(--color-casing);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-device);
+        z-index: 60;
+    }
+    .bs-bottom-nav__item {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 8px 14px;
+        color: var(--color-fg-muted);
+        text-decoration: none;
+        border-radius: var(--radius-sm);
+    }
+    .bs-bottom-nav__item.is-active {
+        background: var(--color-fg);
+        color: #FFFFFF;
+        box-shadow: var(--shadow-button-raised);
+    }
+    .bs-bottom-nav__item:hover:not(.is-active) {
+        background: var(--color-casing-button);
+        color: var(--color-fg);
+    }
+
+    @media (max-width: 600px) {
+        .bs-wrap { padding: 32px 16px 100px; }
+        .panel-header, .bs-toolbar, .panel-footer { padding-left: 24px; padding-right: 24px; }
+        .catalog-mosaic { padding: 24px; gap: 18px; }
+    }
+</style>
+
+<script>
+    if (typeof window !== "undefined") {
+        (window as any).wardrobeTrack?.("wardrobe_demo_view", {
+            system: "brick",
+            page: "catalog",
+        });
+    }
+
+    // Filter logic
+    const tabs = document.querySelectorAll<HTMLButtonElement>(".bs-tab");
+    const tiles = document.querySelectorAll<HTMLElement>(".tile");
+    tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+            tabs.forEach((t) => {
+                t.classList.toggle("bs-tab--active", t === tab);
+                t.setAttribute("aria-selected", String(t === tab));
+            });
+            const filter = tab.dataset.filter;
+            tiles.forEach((tile) => {
+                if (!filter || filter === "all" || tile.dataset.size === filter) {
+                    tile.style.display = "";
+                } else {
+                    tile.style.display = "none";
+                }
+            });
+        });
+    });
+</script>

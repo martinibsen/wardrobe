@@ -1,0 +1,675 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import CopyBlock from "../../components/shared/CopyBlock.astro";
+import ComponentShowcase from "../../components/shared/ComponentShowcase.astro";
+import EmailSignup from "../../components/shared/EmailSignup.astro";
+import {
+    BRICK_COMPONENTS,
+    getComponentCode,
+    generateComponentPrompt,
+    generateThemeBlock,
+} from "../../utils/generate-prompts";
+
+import {
+    ButtonDemo,
+    InputDemo,
+    TextareaDemo,
+    SelectDemo,
+    CardDemo,
+    BadgeDemo,
+    DialogDemo,
+    TabsDemo,
+    SwitchDemo,
+    ToastDemo,
+} from "../../components/brick/demos";
+
+type ComponentName = (typeof BRICK_COMPONENTS)[number];
+
+const blurbs: Record<ComponentName, string> = {
+    Button:
+        "Bracketed JBM CAPS. Primary is solid black with a raised drop-shadow. Secondary is a casing-tinted button with embossed border. Press translates 1px down.",
+    Input:
+        "Inset well, no outer border. JBM. Focus pulls a 1px bottom-border to fg. Placeholder reads as a CAPS hint.",
+    Textarea:
+        "Same well treatment as Input — taller. Inset shadow, JBM body.",
+    Select:
+        "Inset well plus chevron-svg. Caps the value, sharp 4px corners.",
+    Card:
+        "Default = casing tile with multi-layer shadow. Recessed = inset gap. Device = the full hardware frame.",
+    Badge:
+        "Status-code chip. Tinted background, JBM bold CAPS, 2px corners. ok/proc/wait/archive picks the text color.",
+    Dialog:
+        "Full device-panel. Embossed header divider. Title in Inter, model-number JBM. Backdrop is half-black.",
+    Tabs:
+        "Mechanical key-row. Inactive tabs are casing-tinted with embossed border. Active is solid fg + drop shadow — feels pressed.",
+    Switch:
+        "Physical toggle: inset track, raised thumb. Checked = green track and the thumb slides 20px.",
+    Toast:
+        "Slide-in status display. White card, multi-layer tile shadow, color-coded left border. JBM CAPS title in brackets, JBM timestamp top-right.",
+};
+
+const themeBlock = generateThemeBlock("brick");
+
+const componentBlocks = BRICK_COMPONENTS.map((name) => ({
+    name,
+    code: getComponentCode(name, "brick"),
+    prompt: generateComponentPrompt(name, "brick"),
+    blurb: blurbs[name],
+}));
+---
+
+<Layout
+    title="Brick — Wardrobe"
+    description="Hardware aesthetics for software builds. Embossed panels. Raised buttons. Tactile feel."
+    system="brick"
+    chrome="brick"
+>
+    <main class="wrap">
+        <section class="hero">
+            <div class="hero__head">
+                <span class="hero__eyebrow">WARDROBE / BRICK</span>
+                <span class="hero__model">BR-68 / MK-1</span>
+            </div>
+            <h1 class="hero__title">Brick</h1>
+            <p class="hero__sub">
+                Hardware aesthetics for software builds. Embossed panels.
+                Raised buttons. Tactile feel.
+            </p>
+            <div class="hero__cta">
+                <a class="brk-btn brk-btn--primary brk-btn--lg" href="/brick/install">
+                    [ INSTALL IN 30 SEC → ]
+                </a>
+                <a class="brk-btn brk-btn--secondary brk-btn--lg" href="/brick/baustein">
+                    [ SEE BAUSTEIN → ]
+                </a>
+                <a
+                    class="brk-btn brk-btn--secondary brk-btn--lg"
+                    href="https://github.com/martinibsen/wardrobe"
+                    rel="noopener"
+                    data-track-github
+                >
+                    [ GITHUB ]
+                </a>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">TOKENS<span class="section-title__model">REV-A</span></h2>
+
+            <h3 class="sub-title">Casing + ground</h3>
+            <div class="chip-grid">
+                <div class="chip"><span class="swatch" style="background:#C8C9C4"></span><div><strong>--color-bg</strong><span>#C8C9C4 — outside the device</span></div></div>
+                <div class="chip"><span class="swatch" style="background:#E3E4DF"></span><div><strong>--color-casing</strong><span>#E3E4DF — panel surface</span></div></div>
+                <div class="chip"><span class="swatch" style="background:#DCDDDA"></span><div><strong>--color-terminal</strong><span>#DCDDDA — inset display</span></div></div>
+                <div class="chip"><span class="swatch" style="background:#1A1A1A"></span><div><strong>--color-fg</strong><span>#1A1A1A — primary text + button fill</span></div></div>
+            </div>
+
+            <h3 class="sub-title">Functional palette (ABS-style studs)</h3>
+            <div class="stud-grid">
+                <div class="stud-cell">
+                    <span class="stud-swatch" style="background:#D03027"></span>
+                    <strong>--color-red</strong>
+                    <span>#D03027</span>
+                </div>
+                <div class="stud-cell">
+                    <span class="stud-swatch" style="background:#0055A4"></span>
+                    <strong>--color-blue</strong>
+                    <span>#0055A4</span>
+                </div>
+                <div class="stud-cell">
+                    <span class="stud-swatch" style="background:#F2A900"></span>
+                    <strong>--color-yellow</strong>
+                    <span>#F2A900</span>
+                </div>
+                <div class="stud-cell">
+                    <span class="stud-swatch" style="background:#00853E"></span>
+                    <strong>--color-green</strong>
+                    <span>#00853E</span>
+                </div>
+                <div class="stud-cell">
+                    <span class="stud-swatch" style="background:#F4F4F2"></span>
+                    <strong>--color-white</strong>
+                    <span>#F4F4F2</span>
+                </div>
+            </div>
+
+            <h3 class="sub-title">Typography</h3>
+            <div class="type-grid">
+                <div class="type-cell">
+                    <span class="type-cell__label">DISPLAY · INTER 600</span>
+                    <div class="type-cell__display">
+                        Modular block<br/>requisition system.
+                    </div>
+                </div>
+                <div class="type-cell">
+                    <span class="type-cell__label">MONO · JETBRAINS MONO 700</span>
+                    <div class="type-cell__mono">
+                        STATION-44-09<br/>
+                        STATUS · DELIVERED<br/>
+                        ID · 3001-R
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="sub-title">Shadows (multi-layer is the signature)</h3>
+            <div class="shadow-grid">
+                <div class="shadow-cell">
+                    <div class="shadow-proof shadow-proof--device"></div>
+                    <strong>--shadow-device</strong>
+                    <span>Drop + inset highlight + inset shadow. Used on the full panel frame.</span>
+                </div>
+                <div class="shadow-cell">
+                    <div class="shadow-proof shadow-proof--tile"></div>
+                    <strong>--shadow-tile</strong>
+                    <span>Drop + double inset. Used on cards and catalog tiles.</span>
+                </div>
+                <div class="shadow-cell">
+                    <div class="shadow-proof shadow-proof--button"></div>
+                    <strong>--shadow-button-raised</strong>
+                    <span>Single drop. Primary buttons sit above the surface.</span>
+                </div>
+                <div class="shadow-cell">
+                    <div class="shadow-proof shadow-proof--inset"></div>
+                    <strong>--shadow-inset-input</strong>
+                    <span>Inverted shadow. Inputs feel like they sink into the casing.</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">COMPONENTS<span class="section-title__model">10 / 10</span></h2>
+
+            {componentBlocks.map((c) => (
+                <ComponentShowcase
+                    name={c.name}
+                    title={c.name}
+                    blurb={c.blurb}
+                >
+                    <Fragment slot="preview">
+                        {c.name === "Button" && <ButtonDemo client:load />}
+                        {c.name === "Input" && <InputDemo client:load />}
+                        {c.name === "Textarea" && <TextareaDemo client:load />}
+                        {c.name === "Select" && <SelectDemo client:load />}
+                        {c.name === "Card" && <CardDemo client:load />}
+                        {c.name === "Badge" && <BadgeDemo client:load />}
+                        {c.name === "Dialog" && <DialogDemo client:load />}
+                        {c.name === "Tabs" && <TabsDemo client:load />}
+                        {c.name === "Switch" && <SwitchDemo client:load />}
+                        {c.name === "Toast" && <ToastDemo client:load />}
+                    </Fragment>
+                    <Fragment slot="copy">
+                        <CopyBlock
+                            code={c.code}
+                            prompt={c.prompt}
+                            theme={themeBlock}
+                            label={`${c.name}.tsx`}
+                            component={c.name}
+                            system="brick"
+                            defaultTab="prompt"
+                        />
+                    </Fragment>
+                </ComponentShowcase>
+            ))}
+        </section>
+
+        <section class="section install-tease">
+            <h2 class="section-title">INSTALL<span class="section-title__model">30 SEC</span></h2>
+            <p class="lede">
+                One paste. Brick lands in your project complete with tokens,
+                fonts, and all 10 components — ready to wear hardware.
+            </p>
+            <a class="brk-btn brk-btn--primary brk-btn--lg big-install" href="/brick/install">
+                [ BIG GREEN INSTALL BUTTON → ]
+            </a>
+        </section>
+
+        <section class="section mcp-tease">
+            <h2 class="section-title">MCP_COMING_SOON<span class="section-title__model">v0.NEXT</span></h2>
+            <p class="lede">
+                The Wardrobe MCP server is on the bench. Soon you'll just say
+                "install Brick" and the requisition completes itself.
+            </p>
+            <div class="mcp-signup">
+                <EmailSignup
+                    variant="brick"
+                    size="default"
+                    placement="install"
+                    heading="Get the MCP drop"
+                    subheading="Theme drops + builder notes. ~1 email per drop."
+                    helper=""
+                />
+            </div>
+        </section>
+
+        <section class="section see-live">
+            <h2 class="section-title">SEE_IT_LIVE<span class="section-title__model">BAUSTEIN</span></h2>
+            <p class="lede">
+                Baustein — a fictional modular block requisition system. Brick
+                end-to-end across catalog, detail, cart, and log.
+            </p>
+
+            <div class="live-grid">
+                <a class="live-card" href="/brick/baustein">
+                    <div class="live-card__art live-card__art--catalog">
+                        <span class="live-card__display">CATALOG</span>
+                        <span class="live-card__id">VOL.01 / INDEX</span>
+                    </div>
+                    <div class="live-card__meta">
+                        <span class="live-card__name">Catalog mosaic</span>
+                        <span class="live-card__sub">Filter tabs, color tiles, requisition buttons.</span>
+                    </div>
+                </a>
+                <a class="live-card" href="/brick/baustein/blocks/3001-r">
+                    <div class="live-card__art live-card__art--detail">
+                        <span class="live-card__display">3001-R</span>
+                        <span class="live-card__id">2x4 STANDARD</span>
+                    </div>
+                    <div class="live-card__meta">
+                        <span class="live-card__name">Block detail</span>
+                        <span class="live-card__sub">Spec grid, qty stepper, color variants.</span>
+                    </div>
+                </a>
+                <a class="live-card" href="/brick/baustein/cart">
+                    <div class="live-card__art live-card__art--cart">
+                        <span class="live-card__display">CART</span>
+                        <span class="live-card__id">REQ.01-B</span>
+                    </div>
+                    <div class="live-card__meta">
+                        <span class="live-card__name">Requisition cart</span>
+                        <span class="live-card__sub">Summary, data table, hardware start button.</span>
+                    </div>
+                </a>
+                <a class="live-card" href="/brick/baustein/log">
+                    <div class="live-card__art live-card__art--log">
+                        <span class="live-card__display">LOG</span>
+                        <span class="live-card__id">LOG_ACCESS.01</span>
+                    </div>
+                    <div class="live-card__meta">
+                        <span class="live-card__name">Requisition log</span>
+                        <span class="live-card__sub">Inset terminal, status badges, history buffer.</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+    </main>
+</Layout>
+
+<style>
+    .wrap {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 48px 24px 96px;
+        font-family: var(--font-body);
+        color: var(--color-fg);
+    }
+
+    .hero {
+        padding: 32px 0 64px;
+        border-bottom: 1px solid var(--panel-gap-dark);
+        box-shadow: 0 1px 0 var(--panel-gap-light);
+    }
+    .hero__head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin: 0 0 28px;
+    }
+    .hero__eyebrow {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: var(--label-letter-spacing);
+        font-size: 11px;
+        color: var(--color-fg-label);
+    }
+    .hero__model {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: var(--label-letter-spacing);
+        font-size: 11px;
+        color: var(--color-fg-muted);
+    }
+    .hero__title {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: clamp(56px, 12vw, 144px);
+        line-height: 0.95;
+        letter-spacing: -0.04em;
+        margin: 0 0 24px;
+    }
+    .hero__sub {
+        font-family: var(--font-body);
+        font-size: 19px;
+        line-height: 1.5;
+        max-width: 560px;
+        margin: 0 0 32px;
+        color: var(--color-fg-muted);
+    }
+    .hero__cta {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .section {
+        padding: 64px 0;
+        border-bottom: 1px solid var(--panel-gap-dark);
+        box-shadow: 0 1px 0 var(--panel-gap-light);
+    }
+    .section:last-of-type { border-bottom: none; box-shadow: none; }
+
+    .section-title {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: var(--label-letter-spacing);
+        font-size: 13px;
+        margin: 0 0 32px;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        color: var(--color-fg);
+    }
+    .section-title__model {
+        font-size: 11px;
+        color: var(--color-fg-muted);
+    }
+
+    .sub-title {
+        font-family: var(--font-mono);
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 11px;
+        margin: 32px 0 16px;
+        color: var(--color-fg-label);
+    }
+    .sub-title:first-of-type { margin-top: 0; }
+
+    .chip-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 14px;
+    }
+    .chip {
+        background: var(--color-casing);
+        border-radius: var(--radius-md);
+        padding: 14px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-family: var(--font-mono);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        box-shadow: var(--shadow-tile);
+    }
+    .chip strong {
+        display: block;
+        font-weight: 700;
+        color: var(--color-fg);
+    }
+    .chip span {
+        display: block;
+        color: var(--color-fg-muted);
+        margin-top: 2px;
+    }
+    .swatch {
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius-sm);
+        flex-shrink: 0;
+        box-shadow: var(--shadow-stud);
+    }
+
+    .stud-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 14px;
+    }
+    .stud-cell {
+        background: var(--color-casing);
+        border-radius: var(--radius-md);
+        padding: 24px 18px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        box-shadow: var(--shadow-tile);
+        font-family: var(--font-mono);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    .stud-swatch {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        box-shadow: var(--shadow-swatch);
+        position: relative;
+        margin-bottom: 6px;
+    }
+    .stud-swatch::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4) 0%, transparent 60%);
+    }
+    .stud-cell strong { color: var(--color-fg); font-weight: 700; }
+    .stud-cell span { color: var(--color-fg-muted); }
+
+    .type-grid {
+        display: grid;
+        grid-template-columns: 3fr 2fr;
+        gap: 16px;
+    }
+    .type-cell {
+        background: var(--color-casing);
+        border-radius: var(--radius-md);
+        padding: 28px;
+        box-shadow: var(--shadow-tile);
+    }
+    .type-cell__label {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: var(--label-letter-spacing);
+        font-size: 10px;
+        color: var(--color-fg-label);
+        display: block;
+        margin-bottom: 18px;
+    }
+    .type-cell__display {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: clamp(28px, 4vw, 48px);
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+    }
+    .type-cell__mono {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 1.6;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .shadow-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 18px;
+    }
+    .shadow-cell {
+        background: var(--color-casing);
+        border-radius: var(--radius-md);
+        padding: 24px;
+        box-shadow: var(--shadow-tile);
+        font-family: var(--font-mono);
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    .shadow-cell strong { display: block; margin: 14px 0 4px; color: var(--color-fg); font-weight: 700; }
+    .shadow-cell span { display: block; color: var(--color-fg-muted); text-transform: none; letter-spacing: 0; font-size: 11px; }
+    .shadow-proof {
+        height: 80px;
+        background: var(--color-casing);
+        border-radius: var(--radius-md);
+    }
+    .shadow-proof--device {
+        background: var(--color-casing);
+        box-shadow: var(--shadow-device);
+        border-radius: var(--radius-device);
+    }
+    .shadow-proof--tile {
+        background: var(--color-casing-tint);
+        box-shadow: var(--shadow-tile);
+    }
+    .shadow-proof--button {
+        background: var(--color-fg);
+        box-shadow: var(--shadow-button-raised);
+    }
+    .shadow-proof--inset {
+        background: var(--color-casing-tint);
+        box-shadow: var(--shadow-inset-deep);
+    }
+
+    .lede {
+        font-family: var(--font-body);
+        font-size: 17px;
+        line-height: 1.55;
+        max-width: 640px;
+        margin: 0 0 24px;
+        color: var(--color-fg-muted);
+    }
+    .big-install {
+        background: var(--color-green);
+        color: #FFFFFF;
+        font-size: 16px;
+        height: 64px;
+        padding: 0 32px;
+        box-shadow: 0 6px 14px rgba(0, 133, 62, 0.35),
+                    inset 0 1px 2px rgba(255, 255, 255, 0.2);
+    }
+    .big-install:active {
+        transform: translateY(2px);
+        box-shadow: 0 2px 6px rgba(0, 133, 62, 0.35);
+    }
+
+    .mcp-signup {
+        background: var(--color-casing);
+        border-radius: var(--radius-md);
+        padding: 28px;
+        max-width: 540px;
+        box-shadow: var(--shadow-tile);
+    }
+
+    .live-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+    }
+    .live-card {
+        text-decoration: none;
+        color: inherit;
+        background: var(--color-casing);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        box-shadow: var(--shadow-tile);
+        transition: transform 200ms ease, box-shadow 200ms ease;
+    }
+    .live-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 6px 6px 14px rgba(0, 0, 0, 0.12),
+                    inset 2px 2px 4px rgba(0, 0, 0, 0.05),
+                    inset -2px -2px 4px rgba(255, 255, 255, 0.5);
+    }
+    .live-card__art {
+        height: 130px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        background: var(--color-terminal);
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06),
+                    inset 2px 2px 5px rgba(0, 0, 0, 0.05);
+    }
+    .live-card__art--catalog { background: linear-gradient(135deg, var(--color-terminal) 50%, var(--color-casing-tint) 50%); }
+    .live-card__art--detail { background: linear-gradient(135deg, #F4D7D5 0%, var(--color-terminal) 100%); }
+    .live-card__art--cart { background: linear-gradient(135deg, #D7E4F0 0%, var(--color-terminal) 100%); }
+    .live-card__art--log { background: var(--color-terminal); }
+    .live-card__display {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-size: 22px;
+        color: var(--color-fg);
+    }
+    .live-card__id {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--color-fg-muted);
+    }
+    .live-card__meta { padding: 16px 18px; }
+    .live-card__name {
+        display: block;
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 16px;
+        letter-spacing: -0.02em;
+        color: var(--color-fg);
+    }
+    .live-card__sub {
+        display: block;
+        font-family: var(--font-mono);
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--color-fg-muted);
+        margin-top: 4px;
+    }
+
+    @media (max-width: 720px) {
+        .wrap { padding: 32px 20px 64px; }
+        .section { padding: 48px 0; }
+        .type-grid { grid-template-columns: 1fr; }
+        .big-install { font-size: 14px; height: 56px; padding: 0 24px; }
+    }
+</style>
+
+<script>
+    if (typeof window !== "undefined") {
+        (window as any).wardrobeTrack?.("wardrobe_system_view", { system: "brick" });
+    }
+
+    document.querySelectorAll<HTMLAnchorElement>("[data-track-github]").forEach((a) => {
+        a.addEventListener("click", () => {
+            (window as any).wardrobeTrack?.("wardrobe_github_click", { system: "brick" });
+        });
+    });
+
+    document.addEventListener("wardrobe:copy", (e) => {
+        const detail = (e as CustomEvent).detail ?? {};
+        const tab = detail.target;
+        const event =
+            tab === "code"
+                ? "wardrobe_copy_code"
+                : tab === "prompt"
+                  ? "wardrobe_copy_prompt"
+                  : "wardrobe_copy_theme";
+        (window as any).wardrobeTrack?.(event, {
+            component: detail.component,
+            system: detail.system,
+        });
+    });
+</script>

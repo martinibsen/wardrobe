@@ -1,0 +1,458 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+
+const variants = [
+    { color: "red", id: "3001-R", active: true },
+    { color: "blue", id: "3002-B", active: false },
+    { color: "yellow", id: "3003-Y", active: false },
+    { color: "green", id: "3004-G", active: false },
+    { color: "white", id: "3005-W", active: false },
+];
+
+const specs = [
+    { label: "Dimensions", value: "32 × 16 × 11.4 mm" },
+    { label: "Weight", value: "2.32 g / unit" },
+    { label: "Material", value: "ABS · MK-1" },
+    { label: "Clutch power", value: "Standard / 22N" },
+];
+---
+
+<Layout
+    title="Baustein — 3001-R / 2x4 Standard"
+    description="Detail view of a fictional modular block, built with Wardrobe / Brick."
+    system="brick"
+    chrome="hidden"
+>
+    <main class="bs-wrap">
+        <div class="device-panel">
+            <header class="panel-header">
+                <a href="/brick/baustein" class="back-link">[ ← BACK TO INDEX ]</a>
+                <span class="bs-brand">WARDROBE / BRICK · BAUSTEIN</span>
+                <span class="bs-model">ID_3001-R</span>
+            </header>
+
+            <section class="detail">
+                <div class="detail__render">
+                    <div class="render-frame">
+                        <svg viewBox="0 0 220 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <defs>
+                                <linearGradient id="topF" x1="0" x2="1" y1="0" y2="1">
+                                    <stop offset="0" stop-color="#E04438"/>
+                                    <stop offset="1" stop-color="#9B1C15"/>
+                                </linearGradient>
+                                <linearGradient id="leftF" x1="0" x2="1" y1="0" y2="0">
+                                    <stop offset="0" stop-color="#B72219"/>
+                                    <stop offset="1" stop-color="#7E1610"/>
+                                </linearGradient>
+                                <linearGradient id="rightF" x1="0" x2="1" y1="0" y2="0">
+                                    <stop offset="0" stop-color="#A11D14"/>
+                                    <stop offset="1" stop-color="#5C100A"/>
+                                </linearGradient>
+                            </defs>
+                            <!-- left face -->
+                            <polygon points="40,80 110,120 110,150 40,110" fill="url(#leftF)"/>
+                            <!-- right face -->
+                            <polygon points="110,120 180,80 180,110 110,150" fill="url(#rightF)"/>
+                            <!-- top face -->
+                            <polygon points="40,80 110,40 180,80 110,120" fill="url(#topF)"/>
+                            <!-- studs -->
+                            {[0, 1].map((row) =>
+                                [0, 1, 2, 3].map((col) => {
+                                    const sx = 60 + col * 22 - row * 18;
+                                    const sy = 60 + row * 12 + col * 6;
+                                    return (
+                                        <ellipse cx={sx} cy={sy} rx="9" ry="4" fill="#E04438" stroke="#7E1610" stroke-width="1"/>
+                                    );
+                                })
+                            )}
+                        </svg>
+                        <span class="render-frame__caption">ISOMETRIC RENDER · MK-1</span>
+                    </div>
+                </div>
+
+                <div class="detail__info">
+                    <span class="id-tag">SERIES-A / MK-1</span>
+                    <h1 class="detail__title">2×4 Standard Baustein</h1>
+                    <p class="detail__copy">
+                        The reference block. Eight studs in a 2×4 grid, ABS plastic,
+                        compatible with every system in the Baustein archive since
+                        the 1958 revision.
+                    </p>
+
+                    <div class="spec-grid">
+                        {specs.map((s) => (
+                            <div class="spec-cell">
+                                <span class="spec-cell__label">{s.label.toUpperCase()}</span>
+                                <span class="spec-cell__value">{s.value}</span>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div class="cta-row">
+                        <div class="qty-control">
+                            <button class="qty-btn" aria-label="Decrease">−</button>
+                            <span>04</span>
+                            <button class="qty-btn" aria-label="Increase">+</button>
+                        </div>
+                        <a href="/brick/baustein/cart" class="brk-btn brk-btn--primary brk-btn--lg">
+                            [ ADD TO REQUISITION ]
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="variants">
+                <span class="variants__label">VARIANT_COLOR</span>
+                <div class="variant-row">
+                    {variants.map((v) => (
+                        <button
+                            type="button"
+                            class:list={["variant", v.active && "variant--active"]}
+                            aria-label={`${v.id} — ${v.color}`}
+                            aria-pressed={String(v.active)}
+                        >
+                            <span class:list={["variant__swatch", `variant__swatch--${v.color}`]}></span>
+                            <span class="variant__id">{v.id}</span>
+                        </button>
+                    ))}
+                </div>
+            </section>
+
+            <footer class="panel-footer">
+                <span class="bs-model">DATA SHEET: 01-A</span>
+                <span class="bs-model">VER: 2024.04</span>
+            </footer>
+        </div>
+
+        <nav class="bs-bottom-nav" aria-label="Baustein navigation">
+            <a href="/brick/baustein" class="bs-bottom-nav__item">[ CATALOG ]</a>
+            <a href="/brick/baustein/cart" class="bs-bottom-nav__item">[ CART ]</a>
+            <a href="/brick/baustein/log" class="bs-bottom-nav__item">[ LOG ]</a>
+        </nav>
+    </main>
+</Layout>
+
+<style>
+    .bs-wrap {
+        padding: 64px 24px 120px;
+        max-width: 1080px;
+        margin: 0 auto;
+    }
+    .device-panel {
+        background: var(--color-casing);
+        border-radius: var(--radius-device);
+        box-shadow: var(--shadow-device);
+        overflow: hidden;
+    }
+
+    .panel-header {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: baseline;
+        gap: 20px;
+        padding: 28px 40px;
+        border-bottom: 1px solid var(--panel-gap-dark);
+        box-shadow: 0 1px 0 var(--panel-gap-light);
+    }
+    .back-link {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--color-fg-muted);
+        text-decoration: none;
+        justify-self: start;
+    }
+    .bs-brand {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 14px;
+        letter-spacing: -0.02em;
+        color: var(--color-fg);
+        text-align: center;
+    }
+    .bs-model {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--color-fg-muted);
+        justify-self: end;
+    }
+
+    .detail {
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
+        gap: 0;
+        align-items: stretch;
+    }
+    .detail__render {
+        padding: 40px;
+        background: rgba(0, 0, 0, 0.02);
+        border-right: 1px solid var(--panel-gap-dark);
+    }
+    .render-frame {
+        background: var(--color-terminal);
+        border-radius: var(--radius-md);
+        padding: 24px;
+        box-shadow: var(--shadow-inset-deep), inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+    }
+    .render-frame svg { width: 100%; max-width: 340px; height: auto; }
+    .render-frame__caption {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--color-fg-muted);
+    }
+
+    .detail__info {
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+    .id-tag {
+        align-self: flex-start;
+        background: var(--color-fg);
+        color: #FFFFFF;
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 4px 10px;
+        border-radius: var(--radius-xs);
+    }
+    .detail__title {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 32px;
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+        margin: 0;
+    }
+    .detail__copy {
+        font-family: var(--font-body);
+        font-size: 14px;
+        line-height: 1.55;
+        color: var(--color-fg-muted);
+        margin: 0;
+    }
+
+    .spec-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin-top: 6px;
+    }
+    .spec-cell {
+        background: var(--color-casing-tint);
+        border-radius: var(--radius-sm);
+        padding: 12px 14px;
+        box-shadow: var(--shadow-inset-input);
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+    .spec-cell__label {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 9px;
+        letter-spacing: 0.1em;
+        color: var(--color-fg-label);
+    }
+    .spec-cell__value {
+        font-family: var(--font-mono);
+        font-weight: 500;
+        font-size: 12px;
+        color: var(--color-fg);
+    }
+
+    .cta-row {
+        display: flex;
+        gap: 14px;
+        margin-top: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .qty-control {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--color-casing-tint);
+        padding: 6px 10px;
+        border-radius: var(--radius-sm);
+        box-shadow: var(--shadow-inset-input);
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 13px;
+    }
+    .qty-btn {
+        width: 26px;
+        height: 26px;
+        background: var(--color-white);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-top-color: rgba(255, 255, 255, 0.8);
+        border-left-color: rgba(255, 255, 255, 0.8);
+        font-family: var(--font-mono);
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--radius-xs);
+        line-height: 1;
+        color: var(--color-fg);
+    }
+    .qty-btn:active {
+        box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.15);
+    }
+
+    .variants {
+        padding: 28px 40px;
+        border-top: 1px solid var(--panel-gap-dark);
+        box-shadow: 0 1px 0 var(--panel-gap-light);
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        background: rgba(0, 0, 0, 0.02);
+    }
+    .variants__label {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--color-fg-label);
+    }
+    .variant-row {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+    }
+    .variant {
+        background: transparent;
+        border: 2px solid transparent;
+        border-radius: var(--radius-md);
+        padding: 8px;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+    }
+    .variant--active {
+        border-color: var(--color-fg);
+    }
+    .variant__swatch {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        box-shadow: var(--shadow-swatch);
+        position: relative;
+    }
+    .variant__swatch::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4) 0%, transparent 60%);
+    }
+    .variant__swatch--red { background: var(--color-red); }
+    .variant__swatch--blue { background: var(--color-blue); }
+    .variant__swatch--yellow { background: var(--color-yellow); }
+    .variant__swatch--green { background: var(--color-green); }
+    .variant__swatch--white { background: var(--color-white); }
+    .variant__id {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--color-fg-muted);
+    }
+
+    .panel-footer {
+        padding: 24px 40px 32px;
+        border-top: 1px solid var(--panel-gap-dark);
+        box-shadow: 0 1px 0 var(--panel-gap-light);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .bs-bottom-nav {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: inline-flex;
+        gap: 4px;
+        padding: 8px;
+        background: var(--color-casing);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-device);
+        z-index: 60;
+    }
+    .bs-bottom-nav__item {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 8px 14px;
+        color: var(--color-fg-muted);
+        text-decoration: none;
+        border-radius: var(--radius-sm);
+    }
+    .bs-bottom-nav__item.is-active {
+        background: var(--color-fg);
+        color: #FFFFFF;
+        box-shadow: var(--shadow-button-raised);
+    }
+
+    @media (max-width: 720px) {
+        .panel-header {
+            grid-template-columns: 1fr 1fr;
+        }
+        .bs-brand { grid-column: 1 / -1; text-align: left; order: -1; }
+        .detail { grid-template-columns: 1fr; }
+        .detail__render { border-right: none; border-bottom: 1px solid var(--panel-gap-dark); }
+    }
+    @media (max-width: 540px) {
+        .bs-wrap { padding: 32px 16px 110px; }
+        .panel-header, .detail__render, .detail__info, .variants, .panel-footer { padding-left: 24px; padding-right: 24px; }
+        .spec-grid { grid-template-columns: 1fr; }
+        .detail__title { font-size: 24px; }
+    }
+</style>
+
+<script>
+    if (typeof window !== "undefined") {
+        (window as any).wardrobeTrack?.("wardrobe_demo_view", {
+            system: "brick",
+            page: "block-detail",
+        });
+    }
+
+    // Variant select state
+    const variants = document.querySelectorAll<HTMLButtonElement>(".variant");
+    variants.forEach((v) => {
+        v.addEventListener("click", () => {
+            variants.forEach((vv) => {
+                vv.classList.toggle("variant--active", vv === v);
+                vv.setAttribute("aria-pressed", String(vv === v));
+            });
+        });
+    });
+</script>

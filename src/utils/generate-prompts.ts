@@ -31,6 +31,21 @@ import systemCnSrc from "../components/system/cn.ts?raw";
 import systemTokensCssSrc from "../components/system/tokens.css?raw";
 import systemGlobalsCssSrc from "../components/system/globals.css?raw";
 
+// ===== BRICK =====
+import brickButtonSrc from "../components/brick/Button.tsx?raw";
+import brickInputSrc from "../components/brick/Input.tsx?raw";
+import brickTextareaSrc from "../components/brick/Textarea.tsx?raw";
+import brickSelectSrc from "../components/brick/Select.tsx?raw";
+import brickCardSrc from "../components/brick/Card.tsx?raw";
+import brickBadgeSrc from "../components/brick/Badge.tsx?raw";
+import brickDialogSrc from "../components/brick/Dialog.tsx?raw";
+import brickTabsSrc from "../components/brick/Tabs.tsx?raw";
+import brickSwitchSrc from "../components/brick/Switch.tsx?raw";
+import brickToastSrc from "../components/brick/Toast.tsx?raw";
+import brickCnSrc from "../components/brick/cn.ts?raw";
+import brickTokensCssSrc from "../components/brick/tokens.css?raw";
+import brickGlobalsCssSrc from "../components/brick/globals.css?raw";
+
 export type ComponentName =
     | "Button"
     | "Input"
@@ -61,8 +76,10 @@ export type HyperComponentName = ComponentName;
 export const HYPER_COMPONENTS = COMPONENT_NAMES;
 export type SystemComponentName = ComponentName;
 export const SYSTEM_COMPONENTS = COMPONENT_NAMES;
+export type BrickComponentName = ComponentName;
+export const BRICK_COMPONENTS = COMPONENT_NAMES;
 
-export type ThemeName = "hyper" | "system";
+export type ThemeName = "hyper" | "system" | "brick";
 
 type ThemeBundle = {
     name: ThemeName;
@@ -141,7 +158,40 @@ const SYSTEM: ThemeBundle = {
     },
 };
 
-const THEMES: Record<ThemeName, ThemeBundle> = { hyper: HYPER, system: SYSTEM };
+const BRICK: ThemeBundle = {
+    name: "brick",
+    sources: {
+        Button: brickButtonSrc,
+        Input: brickInputSrc,
+        Textarea: brickTextareaSrc,
+        Select: brickSelectSrc,
+        Card: brickCardSrc,
+        Badge: brickBadgeSrc,
+        Dialog: brickDialogSrc,
+        Tabs: brickTabsSrc,
+        Switch: brickSwitchSrc,
+        Toast: brickToastSrc,
+    },
+    cn: brickCnSrc,
+    tokens: brickTokensCssSrc,
+    globals: brickGlobalsCssSrc,
+    fontImport: `@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap");`,
+    activationHint: `<div data-system="brick">`,
+    tokenHints: {
+        Button: ["--color-fg", "--color-casing-button", "--color-red", "--font-mono", "--radius-md", "--shadow-button-raised", "--shadow-button-secondary", "--shadow-button-pressed", "--label-letter-spacing"],
+        Input: ["--color-casing-tint", "--color-fg", "--color-fg-label", "--color-red", "--font-mono", "--radius-sm", "--shadow-inset-input", "--label-letter-spacing"],
+        Textarea: ["--color-casing-tint", "--color-fg", "--font-mono", "--radius-sm", "--shadow-inset-input"],
+        Select: ["--color-casing-tint", "--color-fg", "--font-mono", "--radius-sm", "--shadow-inset-input"],
+        Card: ["--color-casing", "--color-recess", "--radius-lg", "--radius-device", "--shadow-tile", "--shadow-device", "--font-mono", "--label-letter-spacing"],
+        Badge: ["--color-status-bg", "--color-fg", "--color-status-ok", "--color-status-proc", "--color-status-wait", "--color-status-archive", "--font-mono", "--radius-xs"],
+        Dialog: ["--color-casing", "--color-fg", "--font-display", "--radius-device", "--shadow-device", "--panel-gap-dark", "--panel-gap-light"],
+        Tabs: ["--color-casing-button", "--color-fg", "--font-mono", "--radius-sm", "--shadow-button-secondary", "--shadow-button-raised"],
+        Switch: ["--color-fg", "--color-green", "--color-white", "--shadow-inset-input", "--radius-full"],
+        Toast: ["--color-white", "--color-fg", "--color-green", "--color-red", "--font-mono", "--radius-md", "--shadow-tile", "--label-letter-spacing"],
+    },
+};
+
+const THEMES: Record<ThemeName, ThemeBundle> = { hyper: HYPER, system: SYSTEM, brick: BRICK };
 
 function bundle(theme: ThemeName): ThemeBundle {
     return THEMES[theme];
@@ -172,6 +222,10 @@ export function getHyperComponentCode(name: ComponentName): string {
     return getComponentCode(name, "hyper");
 }
 
+export function getBrickComponentCode(name: ComponentName): string {
+    return getComponentCode(name, "brick");
+}
+
 export function generateComponentPrompt(
     name: ComponentName,
     theme: ThemeName = "hyper",
@@ -184,7 +238,7 @@ export function generateComponentPrompt(
         ? hints.map((tok) => `   ${tok}`).join("\n")
         : "   (see full theme block — copy the entire token list)";
 
-    const themeLabel = theme === "hyper" ? "Hyper" : "System";
+    const themeLabel = theme === "hyper" ? "Hyper" : theme === "system" ? "System" : "Brick";
 
     return `Add this Wardrobe ${themeLabel} ${name} to my project.
 
