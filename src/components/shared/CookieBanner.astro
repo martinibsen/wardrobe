@@ -46,6 +46,9 @@
         color: #525252;
         box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.04);
     }
+    /* `display: flex` above out-specifies the browser default for [hidden],
+       so we must explicitly hide the banner when the attribute is set. */
+    .cookie-banner[hidden] { display: none; }
     .cookie-banner__copy {
         margin: 0;
         flex: 1 1 320px;
