@@ -95,6 +95,11 @@ const uid = `signup-${Math.random().toString(36).slice(2, 9)}`;
 
     <p class="es__msg" data-msg role="status" aria-live="polite"></p>
 
+    <p class="es__consent">
+        By signing up, you agree to receive emails about Wardrobe.
+        See <a href="/privacy">Privacy policy</a>.
+    </p>
+
     {helper && size !== "compact" && (
         <p class="es__helper">{helper}</p>
     )}
@@ -163,6 +168,18 @@ const uid = `signup-${Math.random().toString(36).slice(2, 9)}`;
         line-height: 1.5;
         opacity: 0.75;
     }
+    /* Email consent line — appears under submit, above the helper. */
+    .es__consent {
+        margin: 10px 0 0;
+        font-size: 11px;
+        line-height: 1.4;
+        opacity: 0.65;
+    }
+    .es__consent a {
+        color: inherit;
+        text-decoration: underline;
+    }
+    .es__consent a:hover { opacity: 0.85; }
 
     /* ===========================
        NEUTRAL VARIANT (forsiden / footer-on-neutral)
@@ -209,7 +226,8 @@ const uid = `signup-${Math.random().toString(36).slice(2, 9)}`;
     .es--neutral .es__msg { color: #525252; }
     .es--neutral .es__msg.is-success { color: #197b3a; }
     .es--neutral .es__msg.is-error { color: #b91c1c; }
-    .es--neutral .es__helper {
+    .es--neutral .es__helper,
+    .es--neutral .es__consent {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         color: #737373;
     }
@@ -307,7 +325,8 @@ const uid = `signup-${Math.random().toString(36).slice(2, 9)}`;
         margin-top: 8px;
     }
     .es--hyper .es__msg.is-error { color: var(--color-danger, #ff4b4b); }
-    .es--hyper .es__helper {
+    .es--hyper .es__helper,
+    .es--hyper .es__consent {
         font-family: var(--font-body, Georgia, serif);
         color: var(--color-fg, #3a1e1e);
         opacity: 0.7;
@@ -400,6 +419,11 @@ const uid = `signup-${Math.random().toString(36).slice(2, 9)}`;
         letter-spacing: 1px;
         color: var(--color-fg-muted, #888);
     }
+    .es--system .es__consent {
+        font-family: var(--font-mono, "JetBrains Mono", monospace);
+        color: var(--color-fg-muted, #888);
+        letter-spacing: 0.02em;
+    }
 
     .es--system.es--hero .es__input { padding: 16px 18px; font-size: 16px; }
     .es--system.es--hero .es__btn { padding: 16px 26px; font-size: 13px; }
@@ -481,6 +505,11 @@ const uid = `signup-${Math.random().toString(36).slice(2, 9)}`;
         text-transform: uppercase;
         letter-spacing: 0.05em;
         color: var(--color-fg-muted, #555);
+    }
+    .es--brick .es__consent {
+        font-family: var(--font-mono, "JetBrains Mono", monospace);
+        color: var(--color-fg-muted, #555);
+        letter-spacing: 0.02em;
     }
 
     .es--brick.es--hero .es__input { padding: 14px 18px; font-size: 14px; }

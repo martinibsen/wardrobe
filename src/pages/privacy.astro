@@ -1,0 +1,134 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const lastUpdated = "April 28, 2026";
+---
+
+<Layout
+    title="Privacy Policy — Wardrobe"
+    description="What Wardrobe collects, why, and how to opt out. Short and honest."
+    chrome="neutral"
+>
+    <main class="wrap">
+        <article class="prose">
+            <h1>Privacy Policy</h1>
+            <p class="meta"><strong>Last updated:</strong> {lastUpdated}</p>
+
+            <p>Wardrobe is a side project by Martin Ibsen.</p>
+
+            <h2>What we collect</h2>
+
+            <p>
+                <strong>Email addresses</strong>, when you voluntarily sign up
+                via our forms. Stored in Loops
+                (<a href="https://loops.so" target="_blank" rel="noopener">loops.so</a>)
+                and used to send theme drop notifications + occasional builder
+                notes. We don't sell or share with third parties.
+            </p>
+
+            <p>
+                <strong>Anonymous analytics</strong> via PostHog. We track page
+                views, theme preferences, and signup conversions to improve the
+                site. No personal data, no cross-site tracking. Anonymized after
+                30 days.
+            </p>
+
+            <p>
+                <strong>Cookies</strong> — only what's needed to remember your
+                consent choice and PostHog session if you've opted in.
+            </p>
+
+            <h2>What we don't do</h2>
+
+            <ul>
+                <li>No ads</li>
+                <li>No selling data</li>
+                <li>No retargeting pixels</li>
+                <li>No "we may share with partners"</li>
+            </ul>
+
+            <h2>Your rights (GDPR)</h2>
+
+            <p>
+                You can request deletion of your data anytime by replying to any
+                email or emailing
+                <a href="mailto:martin@martinibsen.dk">martin@martinibsen.dk</a>.
+            </p>
+
+            <p>
+                To unsubscribe from emails: click the unsubscribe link in any
+                email, or visit your preferences via the Loops link.
+            </p>
+
+            <h2>Contact</h2>
+
+            <p>
+                <a href="mailto:martin@martinibsen.dk">martin@martinibsen.dk</a>
+            </p>
+
+            <p class="footnote">
+                Built with Wardrobe —
+                <a href="https://wardrobeui.com">wardrobeui.com</a>
+            </p>
+        </article>
+    </main>
+</Layout>
+
+<style>
+    .wrap {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 64px 24px 96px;
+    }
+    .prose {
+        color: #0a0a0a;
+        line-height: 1.6;
+    }
+    .prose h1 {
+        font-size: clamp(36px, 5vw, 48px);
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        font-weight: 600;
+        margin: 0 0 16px;
+    }
+    .prose h2 {
+        font-size: 22px;
+        font-weight: 600;
+        margin: 40px 0 12px;
+        letter-spacing: -0.01em;
+    }
+    .prose p {
+        font-size: 17px;
+        margin: 0 0 16px;
+        color: #262626;
+    }
+    .prose .meta {
+        font-size: 14px;
+        color: #525252;
+        margin: 0 0 32px;
+    }
+    .prose ul {
+        margin: 0 0 16px;
+        padding-left: 22px;
+        font-size: 17px;
+        color: #262626;
+    }
+    .prose ul li { margin: 4px 0; }
+    .prose a {
+        color: #0a0a0a;
+        text-decoration: underline;
+    }
+    .prose a:hover { color: #525252; }
+    .prose .footnote {
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px solid #e5e5e5;
+        font-size: 14px;
+        color: #525252;
+    }
+
+    @media (max-width: 640px) {
+        .wrap { padding: 32px 20px 64px; }
+        .prose p, .prose ul { font-size: 16px; }
+    }
+</style>

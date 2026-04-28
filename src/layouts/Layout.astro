@@ -3,6 +3,7 @@ import "../components/hyper/globals.css";
 import "../components/system/globals.css";
 import "../components/brick/globals.css";
 import EmailSignup from "../components/shared/EmailSignup.astro";
+import CookieBanner from "../components/shared/CookieBanner.astro";
 
 interface Props {
     title: string;
@@ -25,6 +26,18 @@ const {
 } = Astro.props;
 
 const MARTIN_URL = "https://martinibsen.dk";
+const SITE_URL = "https://wardrobeui.com";
+const OG_IMAGE = `${SITE_URL}/og-image.png`;
+const OG_DESCRIPTION =
+    "Stop building purple landing pages. Three themes, drop-in ready for Claude Code, Cursor, v0, Lovable.";
+
+// PostHog (gated by cookie consent — see CookieBanner.astro and the
+// init script at the bottom of this layout). Set PUBLIC_POSTHOG_KEY in
+// your env to enable analytics. Without a key, analytics stay off
+// regardless of consent state.
+const POSTHOG_KEY = import.meta.env.PUBLIC_POSTHOG_KEY ?? "";
+const POSTHOG_HOST =
+    import.meta.env.PUBLIC_POSTHOG_HOST ?? "https://us.i.posthog.com";
 
 const path = Astro.url.pathname.replace(/\/+$/, "") || "/";
 
@@ -103,8 +116,20 @@ const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" =
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
     <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:description" content={OG_DESCRIPTION} />
+    <meta property="og:image" content={OG_IMAGE} />
+    <meta property="og:url" content={SITE_URL} />
+    <meta property="og:type" content="website" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={OG_DESCRIPTION} />
+    <meta name="twitter:image" content={OG_IMAGE} />
 </head>
 <body data-system={system ?? undefined}>
     {chrome === "neutral" && (
@@ -250,8 +275,12 @@ const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" =
             <span>Built by <a href={MARTIN_URL} target="_blank" rel="noopener">Martin Ibsen</a></span>
             <span class="foot__sep" aria-hidden="true">·</span>
             <a href={MARTIN_URL} target="_blank" rel="noopener">martinibsen.dk</a>
+            <span class="foot__sep" aria-hidden="true">·</span>
+            <a href="/privacy">Privacy</a>
         </div>
     </footer>
+
+    <CookieBanner />
 
     <style is:global>
         body[data-system="hyper"],
@@ -671,8 +700,9 @@ const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" =
         }
     </style>
 
-    <script is:inline>
-        // PostHog event helper
+    <script is:inline define:vars={{ posthogKey: POSTHOG_KEY, posthogHost: POSTHOG_HOST }}>
+        // PostHog event helper — silently no-ops if PostHog hasn't been
+        // loaded (no key set, or user declined consent).
         window.wardrobeTrack = function (event, props) {
             try {
                 if (window.posthog && typeof window.posthog.capture === "function") {
@@ -685,6 +715,34 @@ const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" =
                 /* noop */
             }
         };
+
+        // PostHog loader — gated on env key + cookie consent. Loads on
+        // initial page render if consent is "accepted", or when the
+        // CookieBanner dispatches "wardrobe-consent" with accept.
+        (function () {
+            if (!posthogKey) return;
+            const STORAGE_KEY = "wardrobe-cookie-consent";
+
+            function loadPostHog() {
+                if (window.__posthogLoaded) return;
+                window.__posthogLoaded = true;
+                /* Standard PostHog snippet — see https://posthog.com/docs/libraries/js */
+                !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once unregister getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags onFeatureFlags identify setPersonProperties group reset get_distinct_id getGroups get_session_id alias debug".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+                window.posthog.init(posthogKey, {
+                    api_host: posthogHost,
+                    persistence: "localStorage",
+                    capture_pageview: true,
+                });
+            }
+
+            let consent = null;
+            try { consent = localStorage.getItem(STORAGE_KEY); } catch (_) {}
+            if (consent === "accepted") loadPostHog();
+
+            window.addEventListener("wardrobe-consent", function (e) {
+                if (e && e.detail && e.detail.consent === "accepted") loadPostHog();
+            });
+        })();
 
         // Sticky CTA: appear after 50% scroll, dismissible, persists for the session.
         (function () {
