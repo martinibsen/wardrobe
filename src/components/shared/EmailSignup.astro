@@ -508,11 +508,17 @@ const uid = `signup-${Math.random().toString(36).slice(2, 9)}`;
 
 <script is:inline>
     // Wire up every signup form on the page once.
+    // Inline scripts run synchronously where they appear in HTML, but
+    // EmailSignup is rendered multiple times per page (e.g. themes
+    // section + footer). We defer querying to DOMContentLoaded so all
+    // forms exist before we wire them.
     (function () {
         if (window.__wardrobeSignupWired) return;
         window.__wardrobeSignupWired = true;
 
         function wireForm(wrapper) {
+            if (wrapper.__wardrobeWired) return;
+            wrapper.__wardrobeWired = true;
             const form = wrapper.querySelector("form");
             const msg = wrapper.querySelector("[data-msg]");
             const placement = wrapper.dataset.placement || "unknown";
@@ -563,6 +569,13 @@ const uid = `signup-${Math.random().toString(36).slice(2, 9)}`;
             });
         }
 
-        document.querySelectorAll("[data-signup-form]").forEach(wireForm);
+        function init() {
+            document.querySelectorAll("[data-signup-form]").forEach(wireForm);
+        }
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", init);
+        } else {
+            init();
+        }
     })();
 </script>
