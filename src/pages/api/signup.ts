@@ -53,6 +53,34 @@ export const POST: APIRoute = async ({ request }) => {
                 },
             );
         }
+
+        // Send wardrobe_signup event to trigger welcome email loop
+        // (works for both new contacts and existing ones from other lists)
+        try {
+            const eventResponse = await fetch("https://app.loops.so/api/v1/events/send", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${apiKey}`,
+                },
+                body: JSON.stringify({
+                    email,
+                    eventName: "wardrobe_signup",
+                }),
+            });
+            if (!eventResponse.ok) {
+                // Log but don't fail signup — contact is already on the list,
+                // welcome email is bonus, not the critical path.
+                const errorBody = await eventResponse.text().catch(() => "unknown");
+                console.error("Loops event send failed:", {
+                    status: eventResponse.status,
+                    body: errorBody,
+                });
+            }
+        } catch (eventErr) {
+            console.error("Loops event send threw:", eventErr);
+        }
+
         return new Response(JSON.stringify({ ok: true }), {
             status: 200,
             headers: { "Content-Type": "application/json" },
