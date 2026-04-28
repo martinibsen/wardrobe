@@ -76,14 +76,6 @@ const componentBlocks = HYPER_COMPONENTS.map((name) => ({
                 >
                     SEE IT LIVE →
                 </a>
-                <a
-                    class="hyp-btn hyp-btn--secondary hyp-btn--lg"
-                    href="https://github.com/martinibsen/wardrobe"
-                    rel="noopener"
-                    data-track-github
-                >
-                    GITHUB
-                </a>
             </div>
         </section>
 
@@ -483,12 +475,6 @@ const componentBlocks = HYPER_COMPONENTS.map((name) => ({
     if (typeof window !== "undefined") {
         (window as any).wardrobeTrack?.("wardrobe_system_view", { system: "hyper" });
     }
-
-    document.querySelectorAll<HTMLAnchorElement>("[data-track-github]").forEach((a) => {
-        a.addEventListener("click", () => {
-            (window as any).wardrobeTrack?.("wardrobe_github_click", { system: "hyper" });
-        });
-    });
 
     document.addEventListener("wardrobe:copy", (e) => {
         const detail = (e as CustomEvent).detail ?? {};

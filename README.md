@@ -1,13 +1,5 @@
 # Wardrobe
 
-Themes for vibe-coded apps. Drop-in design systems for Claude Code, Cursor, v0, Lovable.
+Wardrobe is built by Martin Ibsen. The themes are distributed via [wardrobeui.com](https://wardrobeui.com) — drop your email to get notified when new ones launch.
 
-Built by Martin Ibsen. MIT licensed.
-
-Live: https://wardrobeui.com
-
-## Themes
-
-- **Hyper** — Acid yellow. Brown borders. Anton CAPS. Athletic maximalism.
-
-More coming.
+This repo is no longer public.

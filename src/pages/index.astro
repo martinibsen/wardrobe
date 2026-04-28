@@ -5,7 +5,7 @@ import EmailSignup from "../components/shared/EmailSignup.astro";
 
 <Layout
     title="Wardrobe — themes for vibe-coded apps"
-    description="Themes for vibe-coded apps. Stop shipping the same purple landing page. Free. MIT."
+    description="Themes for vibe-coded apps. Stop shipping the same purple landing page. Free to use."
     chrome="neutral"
 >
     <main class="wrap">
@@ -24,7 +24,7 @@ import EmailSignup from "../components/shared/EmailSignup.astro";
             <p class="sub">
                 Made by <a href="https://martinibsen.dk" target="_blank" rel="noopener">Martin Ibsen</a>
                 — drop-in ready for Claude Code, Cursor, v0, Lovable, your shadcn project, whatever.
-                Free. MIT.
+                Free to use.
             </p>
         </section>
 
@@ -36,9 +36,13 @@ import EmailSignup from "../components/shared/EmailSignup.astro";
 
             <div class="grid">
                 <a class="theme-card theme-card--hyper" href="/hyper">
-                    <div class="theme-card__preview">
-                        <span class="theme-card__display">HYPER.</span>
-                        <span class="theme-card__sub">acid yellow + brown borders</span>
+                    <div class="theme-card__preview theme-card__preview--hyper">
+                        <div class="hp-card" aria-hidden="true">
+                            <span class="hp-badge">03</span>
+                            <span class="hp-eyebrow">SAT · 09:00</span>
+                            <span class="hp-display">10K.</span>
+                            <span class="hp-pill">JOIN CLUB →</span>
+                        </div>
                     </div>
                     <div class="theme-card__meta">
                         <span class="theme-card__name">Hyper</span>
@@ -50,13 +54,22 @@ import EmailSignup from "../components/shared/EmailSignup.astro";
                 </a>
 
                 <a class="theme-card theme-card--system" href="/system">
-                    <div class="theme-card__preview theme-card__preview--system">
-                        <span class="theme-card__sys-label">SYSTEM // V0.1</span>
-                        <span class="theme-card__sys-display">SYSTEM</span>
-                        <span class="theme-card__sys-row">
-                            <span class="theme-card__sys-dot" aria-hidden="true"></span>
-                            <span class="theme-card__sys-mono">96% efficiency_</span>
-                        </span>
+                    <div class="theme-card__preview theme-card__preview--system" aria-hidden="true">
+                        <div class="sys-row sys-row--top">
+                            <span class="sys-label">PROTOCOL · RUN_07</span>
+                            <span class="sys-status">
+                                <span class="sys-dot"></span>
+                                <span class="sys-mono">LIVE</span>
+                            </span>
+                        </div>
+                        <span class="sys-display">47:23</span>
+                        <div class="sys-bar">
+                            <div class="sys-bar__fill"></div>
+                        </div>
+                        <div class="sys-row sys-row--bot">
+                            <span class="sys-mono">96% EFFICIENCY_</span>
+                            <span class="sys-mono sys-mono--faint">+0.3</span>
+                        </div>
                     </div>
                     <div class="theme-card__meta">
                         <span class="theme-card__name">System</span>
@@ -68,14 +81,19 @@ import EmailSignup from "../components/shared/EmailSignup.astro";
                 </a>
 
                 <a class="theme-card theme-card--brick" href="/brick">
-                    <div class="theme-card__preview theme-card__preview--brick">
-                        <span class="theme-card__brk-label">BR-68 / MK-1</span>
-                        <span class="theme-card__brk-display">BRICK</span>
-                        <span class="theme-card__brk-studs" aria-hidden="true">
-                            <span class="theme-card__brk-stud" style="background:#D03027"></span>
-                            <span class="theme-card__brk-stud" style="background:#0055A4"></span>
-                            <span class="theme-card__brk-stud" style="background:#00853E"></span>
-                        </span>
+                    <div class="theme-card__preview theme-card__preview--brick" aria-hidden="true">
+                        <span class="brk-label">BR-68 / MK-1 · CONTROL</span>
+                        <div class="brk-panel">
+                            <div class="brk-readout">
+                                <span class="brk-readout-mini">VOL</span>
+                                <span class="brk-readout-num">07</span>
+                            </div>
+                            <div class="brk-buttons">
+                                <span class="brk-btn brk-btn--red"></span>
+                                <span class="brk-btn brk-btn--blue"></span>
+                                <span class="brk-btn brk-btn--green"></span>
+                            </div>
+                        </div>
                     </div>
                     <div class="theme-card__meta">
                         <span class="theme-card__name">Brick</span>
@@ -221,19 +239,16 @@ import EmailSignup from "../components/shared/EmailSignup.astro";
         border-color: #0a0a0a;
     }
     .theme-card__preview {
-        background: #efff71;
-        color: #3a1e1e;
-        padding: 48px 24px;
+        padding: 28px 24px;
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        min-height: 180px;
+        min-height: 220px;
     }
     .theme-card__preview--ghost {
         background: #fafafa;
         color: #d4d4d4;
+        align-items: center;
+        justify-content: center;
+        padding: 48px 24px;
     }
     .theme-card__display {
         font-family: "Anton", "Impact", "Arial Narrow", sans-serif;
@@ -242,27 +257,132 @@ import EmailSignup from "../components/shared/EmailSignup.astro";
         letter-spacing: -0.02em;
         text-transform: uppercase;
     }
-    .theme-card__sub {
-        font-family: Georgia, serif;
-        font-size: 13px;
-        opacity: 0.75;
+
+    /* ===== HYPER vignette: a Marathon-Club event card =====
+       Signature Hyper patterns on display: brown 1px border,
+       hard offset shadow, numeric badge poking the corner,
+       Anton CAPS with period, acid-yellow + pill button. */
+    .theme-card__preview--hyper {
+        background: #efff71;
+        color: #3a1e1e;
+        align-items: center;
+        justify-content: center;
+        padding: 32px 28px;
     }
+    .hp-card {
+        position: relative;
+        background: #ffffff;
+        border: 1px solid #3a1e1e;
+        box-shadow: 4px 4px 0 #3a1e1e;
+        padding: 18px 22px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        min-width: 220px;
+    }
+    .hp-badge {
+        position: absolute;
+        top: -14px;
+        right: 18px;
+        width: 28px;
+        height: 28px;
+        background: #ffffff;
+        border: 1px solid #3a1e1e;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Anton", "Impact", sans-serif;
+        font-size: 14px;
+        line-height: 1;
+        color: #3a1e1e;
+    }
+    .hp-eyebrow {
+        font-family: Georgia, serif;
+        font-size: 11px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: #3a1e1e;
+        opacity: 0.7;
+    }
+    .hp-display {
+        font-family: "Anton", "Impact", "Arial Narrow", sans-serif;
+        font-size: 56px;
+        line-height: 0.85;
+        letter-spacing: -0.02em;
+        text-transform: uppercase;
+        color: #3a1e1e;
+        margin-bottom: 4px;
+    }
+    .hp-pill {
+        align-self: flex-start;
+        margin-top: 6px;
+        background: #3a1e1e;
+        color: #efff71;
+        padding: 7px 14px;
+        border-radius: 32px;
+        font-family: "Anton", "Impact", sans-serif;
+        font-size: 12px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+
+    /* ===== SYSTEM vignette: a protocol stat readout =====
+       Big light display number, monospace labels, mint dot,
+       progress bar, faint baseline grid pattern. */
     .theme-card__preview--system {
         background: #f4f4f4;
         color: #0d0d0d;
-        align-items: stretch;
+        flex-direction: column;
         justify-content: space-between;
         gap: 0;
-        padding: 24px;
+        padding: 22px 24px;
+        position: relative;
     }
-    .theme-card__sys-label {
+    .theme-card__preview--system::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: linear-gradient(to right, rgba(0, 0, 0, 0.035) 1px, transparent 1px);
+        background-size: 28px 100%;
+        pointer-events: none;
+    }
+    .theme-card__preview--system > * {
+        position: relative;
+    }
+    .sys-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .sys-label {
         font-family: "JetBrains Mono", ui-monospace, monospace;
         font-size: 10px;
-        letter-spacing: 1.5px;
+        letter-spacing: 0.15em;
         text-transform: uppercase;
         color: #888;
     }
-    .theme-card__sys-display {
+    .sys-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .sys-dot {
+        width: 8px;
+        height: 8px;
+        background: #6cefa0;
+        border-radius: 1px;
+        display: inline-block;
+    }
+    .sys-mono {
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #0d0d0d;
+    }
+    .sys-mono--faint { color: #888; }
+    .sys-display {
         font-family: "Space Grotesk", -apple-system, sans-serif;
         font-size: 56px;
         line-height: 1;
@@ -271,66 +391,103 @@ import EmailSignup from "../components/shared/EmailSignup.astro";
         color: #0d0d0d;
         align-self: flex-start;
     }
-    .theme-card__sys-row {
-        display: flex;
-        align-items: center;
-        gap: 8px;
+    .sys-bar {
+        height: 3px;
+        background: #e0e0e0;
+        position: relative;
     }
-    .theme-card__sys-dot {
-        width: 8px;
-        height: 8px;
-        background: #6cefa0;
-        border-radius: 1px;
-        display: inline-block;
-    }
-    .theme-card__sys-mono {
-        font-family: "JetBrains Mono", ui-monospace, monospace;
-        font-size: 11px;
-        color: #0d0d0d;
-        letter-spacing: 0.02em;
+    .sys-bar__fill {
+        position: absolute;
+        inset: 0 4% 0 0;
+        background: #0d0d0d;
     }
 
+    /* ===== BRICK vignette: hardware control panel =====
+       Embossed casing background, recessed sub-panel, raised
+       buttons with colored LEDs, LCD-style readout. */
     .theme-card__preview--brick {
         background: #e3e4df;
         color: #1a1a1a;
-        align-items: stretch;
-        justify-content: space-between;
-        gap: 0;
-        padding: 24px;
-        position: relative;
+        flex-direction: column;
+        gap: 14px;
+        padding: 22px 22px 24px;
         box-shadow:
             inset 1px 1px 2px rgba(255, 255, 255, 0.7),
             inset -1px -1px 3px rgba(0, 0, 0, 0.08);
     }
-    .theme-card__brk-label {
+    .brk-label {
         font-family: "JetBrains Mono", ui-monospace, monospace;
         font-weight: 700;
         font-size: 10px;
-        letter-spacing: 0.1em;
+        letter-spacing: 0.12em;
         text-transform: uppercase;
-        color: #555;
+        color: #6a6b66;
     }
-    .theme-card__brk-display {
-        font-family: "Inter", -apple-system, sans-serif;
-        font-weight: 600;
-        font-size: 56px;
+    .brk-panel {
+        flex: 1;
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 12px;
+        padding: 12px;
+        background: #dadbd4;
+        border-radius: 4px;
+        box-shadow:
+            inset 1px 1px 2px rgba(0, 0, 0, 0.14),
+            inset -1px -1px 1px rgba(255, 255, 255, 0.5);
+    }
+    .brk-readout {
+        background: #1a1a1a;
+        color: #6cefa0;
+        border-radius: 3px;
+        padding: 10px 14px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.6);
+    }
+    .brk-readout-mini {
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        font-size: 9px;
+        letter-spacing: 0.18em;
+        opacity: 0.55;
+        text-transform: uppercase;
+    }
+    .brk-readout-num {
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        font-size: 36px;
+        font-weight: 700;
         line-height: 1;
-        letter-spacing: -0.04em;
-        color: #1a1a1a;
-        align-self: flex-start;
+        letter-spacing: -0.02em;
+        align-self: flex-end;
     }
-    .theme-card__brk-studs {
-        display: inline-flex;
-        gap: 8px;
+    .brk-buttons {
+        display: grid;
+        grid-template-rows: 1fr 1fr 1fr;
+        gap: 6px;
     }
-    .theme-card__brk-stud {
-        width: 14px;
-        height: 14px;
-        border-radius: 50%;
-        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3),
-                    inset 0 -1px 1px rgba(255, 255, 255, 0.2);
+    .brk-btn {
         position: relative;
+        background: linear-gradient(180deg, #efefea 0%, #e0e0db 100%);
+        border-radius: 5px;
+        box-shadow:
+            inset 1px 1px 1px rgba(255, 255, 255, 0.85),
+            inset -1px -1px 1px rgba(0, 0, 0, 0.08),
+            0 2px 3px rgba(0, 0, 0, 0.18);
     }
+    .brk-btn::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.25);
+    }
+    .brk-btn--red::after { background: #d03027; }
+    .brk-btn--blue::after { background: #0055a4; }
+    .brk-btn--green::after { background: #00853e; }
 
     .theme-card__meta {
         padding: 20px 24px 24px;

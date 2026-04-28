@@ -13,7 +13,7 @@ interface Props {
 
 const {
     title,
-    description = "Wardrobe — themes for vibe-coded apps. Made by Martin Ibsen. MIT.",
+    description = "Wardrobe — themes for vibe-coded apps. Made by Martin Ibsen.",
     system = null,
     chrome = system === "hyper"
         ? "hyper"
@@ -24,7 +24,6 @@ const {
             : "neutral",
 } = Astro.props;
 
-const GITHUB_URL = "https://github.com/martinibsen/wardrobe";
 const MARTIN_URL = "https://martinibsen.dk";
 
 const path = Astro.url.pathname.replace(/\/+$/, "") || "/";
@@ -113,7 +112,6 @@ const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" =
             <a class="nav__brand" href="/">Wardrobe</a>
             <nav class="nav__links" aria-label="Wardrobe">
                 <a href="/#themes">Themes</a>
-                <a href={GITHUB_URL} rel="noopener">GitHub</a>
             </nav>
         </header>
     )}
@@ -142,7 +140,6 @@ const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" =
                 >
                     SYSTEM
                 </a>
-                <a href={GITHUB_URL} rel="noopener">GITHUB</a>
             </nav>
         </header>
     )}
@@ -171,7 +168,6 @@ const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" =
                 >
                     OVERVIEW
                 </a>
-                <a href={GITHUB_URL} rel="noopener">GITHUB</a>
             </nav>
         </header>
     )}
@@ -200,7 +196,6 @@ const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" =
                 >
                     [ BRICK ]
                 </a>
-                <a href={GITHUB_URL} rel="noopener">[ GITHUB ]</a>
             </nav>
         </header>
     )}
@@ -255,10 +250,6 @@ const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" =
             <span>Built by <a href={MARTIN_URL} target="_blank" rel="noopener">Martin Ibsen</a></span>
             <span class="foot__sep" aria-hidden="true">·</span>
             <a href={MARTIN_URL} target="_blank" rel="noopener">martinibsen.dk</a>
-            <span class="foot__sep" aria-hidden="true">·</span>
-            <a href={GITHUB_URL} rel="noopener">GitHub</a>
-            <span class="foot__sep" aria-hidden="true">·</span>
-            <span>MIT</span>
         </div>
     </footer>
 
