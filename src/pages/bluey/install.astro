@@ -1,0 +1,289 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import EmailSignup from "../../components/shared/EmailSignup.astro";
+import { generateFullInstallPrompt } from "../../utils/generate-prompts";
+
+const prompts = {
+    "claude-code": generateFullInstallPrompt("claude-code", "bluey"),
+    v0: generateFullInstallPrompt("v0", "bluey"),
+    lovable: generateFullInstallPrompt("lovable", "bluey"),
+};
+---
+
+<Layout
+    title="Install Bluey — Wardrobe"
+    description="One paste. 30 seconds. Editorial calm everywhere."
+    system="bluey"
+    chrome="bluey"
+>
+    <main class="wrap">
+        <div class="bly-blob bly-blob--top-right" aria-hidden="true"></div>
+
+        <section class="hero">
+            <div class="hero__head">
+                <span class="bly-mono-label">Wardrobe / Bluey / Install</span>
+                <span class="bly-mono-label hero__model">SET-UP / 30 SEC</span>
+            </div>
+            <h1 class="hero__title">Install Bluey<br/>in 30 seconds.</h1>
+            <p class="hero__sub">
+                Pick your AI tool. Hit copy. Paste it into a fresh chat in your project.
+                Watch the powder-blue settle in.
+            </p>
+        </section>
+
+        <section class="section">
+            <div class="targets-row" role="tablist">
+                <button
+                    type="button"
+                    role="tab"
+                    class="target target--active"
+                    data-target="claude-code"
+                    aria-selected="true"
+                >
+                    Claude Code / Cursor
+                </button>
+                <button
+                    type="button"
+                    role="tab"
+                    class="target"
+                    data-target="v0"
+                    aria-selected="false"
+                >
+                    v0
+                </button>
+                <button
+                    type="button"
+                    role="tab"
+                    class="target"
+                    data-target="lovable"
+                    aria-selected="false"
+                >
+                    Lovable
+                </button>
+            </div>
+
+            <div class="copy-bar">
+                <button type="button" id="copy-full" class="bly-btn bly-btn--primary bly-btn--lg">
+                    Copy entire prompt →
+                </button>
+                <span id="copy-status" class="copy-status"></span>
+            </div>
+
+            <div class="prompt-pane" data-pane="claude-code" data-active="true">
+                <pre><code>{prompts["claude-code"]}</code></pre>
+            </div>
+            <div class="prompt-pane" data-pane="v0">
+                <pre><code>{prompts.v0}</code></pre>
+            </div>
+            <div class="prompt-pane" data-pane="lovable">
+                <pre><code>{prompts.lovable}</code></pre>
+            </div>
+        </section>
+
+        <section class="section foot">
+            <p class="foot__lede">Once it's installed, wrap whichever section you want themed:</p>
+            <pre class="foot__snippet"><code>{`<div data-system="bluey">
+    <Button variant="primary">Run validation →</Button>
+    <Card>Glass card</Card>
+</div>`}</code></pre>
+            <p class="foot__lede">
+                Want to see what it looks like in the wild?{" "}
+                <a class="foot__link" href="/bluey/superyes">SuperYes →</a>
+            </p>
+        </section>
+
+        <section class="section signup-section">
+            <div class="signup-box">
+                <EmailSignup
+                    variant="bluey"
+                    size="default"
+                    placement="install"
+                    heading="Got it working?"
+                    subheading="Drop your email — I'll send you the next theme + occasional builder notes."
+                />
+            </div>
+        </section>
+    </main>
+</Layout>
+
+<style>
+    .wrap {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 4rem 2rem 8rem;
+        position: relative;
+    }
+    .hero { margin-bottom: 4rem; max-width: 720px; }
+    .hero__head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 2rem;
+    }
+    .hero__model { opacity: 0.4; }
+    .hero__title {
+        font-size: clamp(48px, 7vw, 80px);
+        font-weight: 700;
+        line-height: 0.95;
+        letter-spacing: -0.04em;
+        margin: 0 0 1.5rem;
+    }
+    .hero__sub {
+        font-size: 1.15rem;
+        line-height: 1.55;
+        opacity: 0.8;
+        max-width: 540px;
+        margin: 0;
+    }
+
+    .section { margin-bottom: 4rem; position: relative; z-index: 5; }
+    .targets-row {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.25rem;
+    }
+    .target {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 0.85rem;
+        background: rgba(255,255,255,0.25);
+        border: 1px solid rgba(0,0,0,0.08);
+        border-radius: 50px;
+        padding: 0.6rem 1.2rem;
+        cursor: pointer;
+        color: var(--color-fg);
+        transition: background 120ms ease;
+        backdrop-filter: blur(8px);
+    }
+    .target:hover { background: rgba(255,255,255,0.4); }
+    .target--active {
+        background: var(--color-fg);
+        color: var(--color-bg);
+        border-color: var(--color-fg);
+    }
+
+    .copy-bar {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+    .copy-status {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        opacity: 0.6;
+    }
+    .copy-status[data-state="copied"] {
+        color: var(--color-status-validated-fg, #107C41);
+        opacity: 1;
+    }
+
+    .prompt-pane {
+        display: none;
+        background: rgba(255,255,255,0.18);
+        border: 1px solid rgba(0,0,0,0.08);
+        border-radius: 16px;
+        padding: 1.5rem;
+        backdrop-filter: blur(10px);
+        max-height: 520px;
+        overflow: auto;
+    }
+    .prompt-pane[data-active="true"] { display: block; }
+    .prompt-pane pre {
+        margin: 0;
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        line-height: 1.5;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+    .prompt-pane code { font-family: inherit; }
+
+    .foot__lede {
+        font-size: 1rem;
+        line-height: 1.5;
+        margin: 0 0 1rem;
+    }
+    .foot__snippet {
+        background: rgba(0,0,0,0.85);
+        color: #B4C5E4;
+        padding: 1.25rem 1.5rem;
+        border-radius: 12px;
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        line-height: 1.5;
+        margin: 0 0 1.5rem;
+        overflow-x: auto;
+    }
+    .foot__link {
+        color: var(--color-accent);
+        font-weight: 600;
+        text-decoration: none;
+    }
+    .foot__link:hover { text-decoration: underline; }
+
+    .signup-section { margin-top: 4rem; }
+    .signup-box {
+        background: rgba(255,255,255,0.25);
+        border: 1px solid rgba(0,0,0,0.08);
+        border-radius: 20px;
+        padding: 2.5rem;
+        backdrop-filter: blur(10px);
+        max-width: 520px;
+    }
+
+    @media (max-width: 720px) {
+        .wrap { padding: 2.5rem 1.25rem 4rem; }
+    }
+</style>
+
+<script>
+    (function () {
+        const targets = document.querySelectorAll<HTMLButtonElement>("[data-target]");
+        const panes = document.querySelectorAll<HTMLElement>("[data-pane]");
+        const copyBtn = document.getElementById("copy-full") as HTMLButtonElement | null;
+        const status = document.getElementById("copy-status");
+
+        function activate(target: string) {
+            targets.forEach((t) => {
+                const isActive = t.dataset.target === target;
+                t.classList.toggle("target--active", isActive);
+                t.setAttribute("aria-selected", String(isActive));
+            });
+            panes.forEach((p) => {
+                p.dataset.active = p.dataset.pane === target ? "true" : "false";
+            });
+        }
+
+        targets.forEach((t) =>
+            t.addEventListener("click", () => activate(t.dataset.target ?? "claude-code"))
+        );
+
+        if (copyBtn && status) {
+            copyBtn.addEventListener("click", async () => {
+                const active = document.querySelector<HTMLElement>('[data-pane][data-active="true"]');
+                const text = active?.querySelector("code")?.textContent ?? "";
+                try {
+                    await navigator.clipboard.writeText(text);
+                    status.textContent = "Copied ✓";
+                    status.dataset.state = "copied";
+                    (window as any).wardrobeTrack?.("wardrobe_copy_install_full", {
+                        system: "bluey",
+                        target: active?.dataset.pane ?? "claude-code",
+                    });
+                    setTimeout(() => {
+                        status.textContent = "";
+                        status.dataset.state = "";
+                    }, 2000);
+                } catch (_) {
+                    status.textContent = "Copy failed";
+                }
+            });
+        }
+
+        (window as any).wardrobeTrack?.("wardrobe_install_view", { system: "bluey" });
+    })();
+</script>

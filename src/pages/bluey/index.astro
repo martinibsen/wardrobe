@@ -1,0 +1,314 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import CopyBlock from "../../components/shared/CopyBlock.astro";
+import ComponentShowcase from "../../components/shared/ComponentShowcase.astro";
+import EmailSignup from "../../components/shared/EmailSignup.astro";
+import {
+    BLUEY_COMPONENTS,
+    getComponentCode,
+    generateComponentPrompt,
+    generateThemeBlock,
+} from "../../utils/generate-prompts";
+
+import {
+    ButtonDemo,
+    InputDemo,
+    TextareaDemo,
+    SelectDemo,
+    CardDemo,
+    BadgeDemo,
+    DialogDemo,
+    TabsDemo,
+    SwitchDemo,
+    ToastDemo,
+} from "../../components/bluey/demos";
+
+type ComponentName = (typeof BLUEY_COMPONENTS)[number];
+
+const blurbs: Record<ComponentName, string> = {
+    Button:
+        "Pill-shaped (50px radius). Primary is vermillion with a soft accent-glow. Secondary fills in deep ink. Ghost is a hairline border that softens on hover.",
+    Input:
+        "Glass field on the powder-blue surface — translucent white at 25%, hairline border. Mono CAPS label sits above. Focus deepens the surface and pulls the border to ink.",
+    Textarea:
+        "Same glass treatment as Input — taller, line-height 1.5, vertical resize.",
+    Select:
+        "Glass field with a CSS-painted chevron. Same edges as Input so a stack of fields breathes the same.",
+    Card:
+        "Glass-morphism: translucent white with a 1px hairline + 10px backdrop-blur. Score variant flips to deep ink with a 3rem hero number.",
+    Badge:
+        "Status chip in mono Courier. Validated/needs-work/rejected map to the SaaS palette; high/med are inline metric tags.",
+    Dialog:
+        "Powder-blue tinted backdrop with 8px blur. The card itself is glass-strong + 20px radius. Esc + outside-click both close.",
+    Tabs:
+        "Hairline underline strip. Active tab is full-opacity with a vermillion 2px underbar. No animation — just the line moving as you click.",
+    Switch:
+        "Pebble track. Off is hairline grey. On flips to vermillion with the thumb sliding 16px right.",
+    Toast:
+        "Glass-strong card with a colored left border. Default is unmarked, success picks the green from validated, error picks vermillion.",
+};
+
+const themeBlock = generateThemeBlock("bluey");
+
+const componentBlocks = BLUEY_COMPONENTS.map((name) => ({
+    name,
+    code: getComponentCode(name, "bluey"),
+    prompt: generateComponentPrompt(name, "bluey"),
+    blurb: blurbs[name],
+}));
+---
+
+<Layout
+    title="Bluey — Wardrobe"
+    description="Editorial calm. Composed authority. Powder-blue surface, vermillion accent, glass cards, animated blobs."
+    system="bluey"
+    chrome="bluey"
+>
+    <main class="wrap">
+        <div class="bly-blob bly-blob--top-right" aria-hidden="true"></div>
+
+        <section class="hero">
+            <div class="hero__head">
+                <span class="bly-mono-label">Wardrobe / Bluey</span>
+                <span class="bly-mono-label hero__model">REV — 01</span>
+            </div>
+            <h1 class="hero__title">Bluey.</h1>
+            <p class="hero__sub">
+                Editorial calm. Composed authority. Linear meets Stratechery —
+                powder-blue surface, vermillion accent, glass cards.
+            </p>
+            <div class="hero__cta">
+                <a class="bly-btn bly-btn--primary bly-btn--lg" href="/bluey/install">
+                    Install in 30 seconds →
+                </a>
+                <a class="bly-btn bly-btn--ghost bly-btn--lg" href="/bluey/superyes">
+                    See SuperYes →
+                </a>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Tokens<span class="section-title__rev">REV-01</span></h2>
+
+            <h3 class="sub-title">Surface + ink</h3>
+            <div class="chip-grid">
+                <div class="chip"><span class="swatch" style="background:#B4C5E4"></span><div><strong>--color-bg</strong><span>#B4C5E4 — powder blue</span></div></div>
+                <div class="chip"><span class="swatch" style="background:#FF3F14"></span><div><strong>--color-accent</strong><span>#FF3F14 — vermillion</span></div></div>
+                <div class="chip"><span class="swatch" style="background:#000000"></span><div><strong>--color-fg</strong><span>#000000 — deep ink</span></div></div>
+                <div class="chip"><span class="swatch" style="background:rgba(255,255,255,0.4); backdrop-filter: blur(8px)"></span><div><strong>--color-card</strong><span>rgba(255,255,255,0.2) — glass</span></div></div>
+            </div>
+
+            <h3 class="sub-title">Status</h3>
+            <div class="chip-grid">
+                <div class="chip"><span class="swatch" style="background:#E1F9EB"></span><div><strong>validated</strong><span>#E1F9EB / #107C41</span></div></div>
+                <div class="chip"><span class="swatch" style="background:#FFF4F2"></span><div><strong>needs-work</strong><span>#FFF4F2 / #FF3F14</span></div></div>
+                <div class="chip"><span class="swatch" style="background:#EEEEEE"></span><div><strong>rejected</strong><span>#EEEEEE / #666666</span></div></div>
+            </div>
+
+            <h3 class="sub-title">Typography</h3>
+            <ul class="type-list">
+                <li><span class="bly-mono-label">Display</span> Helvetica Neue — 700 / -0.03em</li>
+                <li><span class="bly-mono-label">Body</span> Helvetica Neue — 400 / 1.5</li>
+                <li><span class="bly-mono-label">Mono</span> Courier New — 0.65rem CAPS / 0.1em</li>
+            </ul>
+
+            <CopyBlock
+                code={themeBlock}
+                prompt="Theme tokens — paste into globals.css"
+                theme={themeBlock}
+                label="Theme block"
+                system="bluey"
+                defaultTab="theme"
+            />
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Components<span class="section-title__rev">10</span></h2>
+            <p class="section-lede">
+                The standard Wardrobe contract — Button, Input, Textarea, Select,
+                Card, Badge, Dialog, Tabs, Switch, Toast. Bluey-styled, drop-in compatible.
+            </p>
+        </section>
+
+        {componentBlocks.map(({ name, code, prompt, blurb }) => (
+            <ComponentShowcase name={name} blurb={blurb}>
+                <div slot="preview" class="bly-preview">
+                    {name === "Button" && <ButtonDemo client:load />}
+                    {name === "Input" && <InputDemo client:load />}
+                    {name === "Textarea" && <TextareaDemo client:load />}
+                    {name === "Select" && <SelectDemo client:load />}
+                    {name === "Card" && <CardDemo client:load />}
+                    {name === "Badge" && <BadgeDemo client:load />}
+                    {name === "Dialog" && <DialogDemo client:load />}
+                    {name === "Tabs" && <TabsDemo client:load />}
+                    {name === "Switch" && <SwitchDemo client:load />}
+                    {name === "Toast" && <ToastDemo client:load />}
+                </div>
+                <div slot="copy">
+                    <CopyBlock
+                        code={code}
+                        prompt={prompt}
+                        theme={themeBlock}
+                        component={name}
+                        label={`${name}.tsx`}
+                        system="bluey"
+                    />
+                </div>
+            </ComponentShowcase>
+        ))}
+
+        <section class="section signup-section">
+            <div class="signup-box">
+                <EmailSignup
+                    variant="bluey"
+                    size="default"
+                    placement="install"
+                    heading="Like the calm?"
+                    subheading="Drop your email — get the next theme + occasional builder notes."
+                />
+            </div>
+        </section>
+    </main>
+</Layout>
+
+<style>
+    .wrap {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 4rem 2rem 8rem;
+        position: relative;
+    }
+    .hero { margin-bottom: 6rem; max-width: 720px; }
+    .hero__head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 2rem;
+    }
+    .hero__model { opacity: 0.4; }
+    .hero__title {
+        font-size: clamp(56px, 8vw, 96px);
+        font-weight: 700;
+        line-height: 0.95;
+        letter-spacing: -0.04em;
+        margin: 0 0 1.5rem;
+    }
+    .hero__sub {
+        font-size: 1.25rem;
+        line-height: 1.5;
+        opacity: 0.8;
+        max-width: 560px;
+        margin: 0 0 2.5rem;
+    }
+    .hero__cta {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .section {
+        margin-bottom: 5rem;
+        position: relative;
+        z-index: 5;
+    }
+    .section-title {
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin: 0 0 1.5rem;
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        border-bottom: 1px solid rgba(0,0,0,0.15);
+        padding-bottom: 1rem;
+    }
+    .section-title__rev {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        letter-spacing: 0.1em;
+        opacity: 0.5;
+        font-weight: 400;
+    }
+    .section-lede {
+        font-size: 1.05rem;
+        line-height: 1.5;
+        opacity: 0.75;
+        max-width: 640px;
+        margin: 0;
+    }
+    .sub-title {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        opacity: 0.55;
+        margin: 2rem 0 1rem;
+    }
+    .chip-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1rem;
+    }
+    .chip {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        background: rgba(255,255,255,0.25);
+        border: 1px solid rgba(0,0,0,0.08);
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        backdrop-filter: blur(8px);
+    }
+    .swatch {
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        border: 1px solid rgba(0,0,0,0.1);
+        flex-shrink: 0;
+    }
+    .chip strong { font-family: var(--font-mono); font-size: 0.78rem; display: block; }
+    .chip span { font-size: 0.75rem; opacity: 0.7; }
+    .type-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 0.85rem;
+    }
+    .type-list li {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        font-size: 0.95rem;
+    }
+
+    .bly-preview {
+        background: rgba(255,255,255,0.15);
+        border: 1px solid rgba(0,0,0,0.08);
+        border-radius: 16px;
+        padding: 2rem;
+        backdrop-filter: blur(8px);
+    }
+
+    .signup-section { margin-top: 5rem; }
+    .signup-box {
+        background: rgba(255,255,255,0.25);
+        border: 1px solid rgba(0,0,0,0.08);
+        border-radius: 20px;
+        padding: 2.5rem;
+        backdrop-filter: blur(10px);
+        max-width: 520px;
+    }
+
+    @media (max-width: 720px) {
+        .wrap { padding: 2.5rem 1.25rem 4rem; }
+        .hero { margin-bottom: 3.5rem; }
+        .hero__cta { flex-direction: column; }
+    }
+</style>
+
+<script>
+    if (typeof window !== "undefined") {
+        (window as any).wardrobeTrack?.("wardrobe_system_view", { system: "bluey" });
+    }
+</script>

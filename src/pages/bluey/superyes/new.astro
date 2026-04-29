@@ -1,0 +1,117 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import SuperYesAside from "../../../components/bluey/SuperYesAside.astro";
+---
+
+<Layout
+    title="SuperYes — New Validation"
+    description="Bluey habitat: empty state for a new problem validation."
+    system="bluey"
+    chrome="hidden"
+>
+    <div class="bly-shell">
+        <SuperYesAside active="new" verticalText="READY-TO-VALIDATE" />
+
+        <main class="bly-main bly-main--center">
+            <div class="bly-blob bly-blob--center" aria-hidden="true"></div>
+
+            <header class="bly-header-row" style="margin-bottom: 6rem;">
+                <div class="bly-workflow-title">
+                    <span class="bly-mono-label">Getting Started</span>
+                    <h1>New Validation</h1>
+                </div>
+            </header>
+
+            <div class="empty-state">
+                <p class="welcome-prompt">
+                    Turn your product assumptions into validated roadmap items.
+                    Let's define your first problem statement.
+                </p>
+
+                <div class="step">
+                    <span class="step-num">01</span>
+                    <div class="placeholder-input">
+                        Type or paste the friction point users keep hitting…
+                    </div>
+                </div>
+
+                <button class="bly-btn bly-btn--primary bly-btn--lg">
+                    Start First Validation →
+                </button>
+
+                <p class="guide-text">
+                    SuperYes will pull supporting evidence from your connected sources
+                    (GitHub, Sentry, Mixpanel, Hotjar, Intercom, CS notes) and score
+                    cross-functional alignment.
+                </p>
+            </div>
+        </main>
+    </div>
+</Layout>
+
+<style>
+    .bly-main--center {
+        display: flex;
+        flex-direction: column;
+    }
+    .empty-state {
+        max-width: 600px;
+        position: relative;
+        z-index: 10;
+    }
+    .welcome-prompt {
+        font-size: 1.5rem;
+        font-weight: 600;
+        line-height: 1.4;
+        margin: 0 0 2.5rem;
+        opacity: 0.9;
+    }
+    .step {
+        margin-bottom: 3.5rem;
+        position: relative;
+        padding-left: 3rem;
+    }
+    .step-num {
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        position: absolute;
+        left: 0;
+        top: 0.4rem;
+        opacity: 0.3;
+        letter-spacing: 0.1em;
+    }
+    .placeholder-input {
+        width: 100%;
+        min-height: 80px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px dashed rgba(0, 0, 0, 0.1);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        padding: 0 1.5rem;
+        color: rgba(0, 0, 0, 0.35);
+        font-size: 1.05rem;
+        cursor: text;
+        transition: all 0.2s;
+    }
+    .placeholder-input:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(0, 0, 0, 0.2);
+    }
+    .guide-text {
+        font-size: 0.9rem;
+        opacity: 0.5;
+        margin: 1.5rem 0 0;
+        max-width: 460px;
+        line-height: 1.5;
+    }
+</style>
+
+<script>
+    if (typeof window !== "undefined") {
+        (window as any).wardrobeTrack?.("wardrobe_demo_view", {
+            system: "bluey",
+            page: "new-validation",
+        });
+    }
+</script>

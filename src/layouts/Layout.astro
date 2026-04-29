@@ -2,14 +2,15 @@
 import "../components/hyper/globals.css";
 import "../components/system/globals.css";
 import "../components/brick/globals.css";
+import "../components/bluey/globals.css";
 import EmailSignup from "../components/shared/EmailSignup.astro";
 import CookieBanner from "../components/shared/CookieBanner.astro";
 
 interface Props {
     title: string;
     description?: string;
-    system?: "hyper" | "system" | "brick" | null;
-    chrome?: "neutral" | "hyper" | "system" | "brick" | "hidden";
+    system?: "hyper" | "system" | "brick" | "bluey" | null;
+    chrome?: "neutral" | "hyper" | "system" | "brick" | "bluey" | "hidden";
 }
 
 const {
@@ -22,7 +23,9 @@ const {
           ? "system"
           : system === "brick"
             ? "brick"
-            : "neutral",
+            : system === "bluey"
+              ? "bluey"
+              : "neutral",
 } = Astro.props;
 
 const MARTIN_URL = "https://martinibsen.dk";
@@ -56,6 +59,11 @@ const isBrickInstall = path === "/brick/install";
 const isBrickDemo = path.startsWith("/brick/baustein");
 const isBrickHome = path === "/brick";
 
+// Bluey nav active states
+const isBlueyInstall = path === "/bluey/install";
+const isBlueyDemo = path.startsWith("/bluey/superyes");
+const isBlueyHome = path === "/bluey";
+
 // Sticky CTA: only on the "browsing" pages where someone is reading a system
 // or considering an install. Not on the forsiden (hero already covers it) and
 // not on demos (immersion).
@@ -63,16 +71,20 @@ const stickyRoutes = [
     "/hyper",
     "/system",
     "/brick",
+    "/bluey",
     "/hyper/install",
     "/system/install",
     "/brick/install",
+    "/bluey/install",
 ];
 const showStickyCta = stickyRoutes.includes(path);
-const stickyVariant: "hyper" | "system" | "brick" = path.startsWith("/system")
+const stickyVariant: "hyper" | "system" | "brick" | "bluey" = path.startsWith("/system")
     ? "system"
     : path.startsWith("/brick")
       ? "brick"
-      : "hyper";
+      : path.startsWith("/bluey")
+        ? "bluey"
+        : "hyper";
 
 // "Built with..." pill — depends on which sphere we're in when chrome="hidden"
 const builtWith =
@@ -90,23 +102,32 @@ const builtWith =
                 suffix: "/ GET DROPS",
                 cls: "built--brick",
             }
-          : {
-                href: "/hyper#signup",
-                label: "← Built with Hyper",
-                suffix: "· get drops →",
-                cls: "built--hyper",
-            };
+          : system === "bluey"
+            ? {
+                  href: "/bluey#signup",
+                  label: "← Built with Bluey",
+                  suffix: "· get drops →",
+                  cls: "built--bluey",
+              }
+            : {
+                  href: "/hyper#signup",
+                  label: "← Built with Hyper",
+                  suffix: "· get drops →",
+                  cls: "built--hyper",
+              };
 
 // Footer signup is shown on every chrome except "hidden" (demo immersion).
 const showFooterSignup = chrome !== "hidden";
-const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" =
+const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" | "bluey" =
     chrome === "hyper"
         ? "hyper"
         : chrome === "system"
           ? "system"
           : chrome === "brick"
             ? "brick"
-            : "neutral";
+            : chrome === "bluey"
+              ? "bluey"
+              : "neutral";
 ---
 
 <!DOCTYPE html>
@@ -220,6 +241,34 @@ const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" =
                     class:list={[isBrickHome && "is-active"]}
                 >
                     [ BRICK ]
+                </a>
+            </nav>
+        </header>
+    )}
+
+    {chrome === "bluey" && (
+        <header class="nav nav--bluey">
+            <a class="nav__brand nav__brand--bluey" href="/">
+                Wardrobe / Bluey
+            </a>
+            <nav class="nav__links nav__links--bluey" aria-label="Bluey">
+                <a
+                    href="/bluey/install"
+                    class:list={[isBlueyInstall && "is-active"]}
+                >
+                    Install
+                </a>
+                <a
+                    href="/bluey/superyes"
+                    class:list={[isBlueyDemo && "is-active"]}
+                >
+                    SuperYes
+                </a>
+                <a
+                    href="/bluey"
+                    class:list={[isBlueyHome && "is-active"]}
+                >
+                    Bluey
                 </a>
             </nav>
         </header>
@@ -421,6 +470,39 @@ const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" =
             border-bottom-color: var(--color-fg, #1a1a1a);
         }
 
+        /* ===== Sphere B — bluey (editorial calm) ===== */
+        .nav--bluey {
+            background: rgba(180, 197, 228, 0.85);
+            color: #000000;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+        }
+        .nav__brand--bluey {
+            font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        .nav--bluey .nav__links {
+            font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+            font-weight: 600;
+        }
+        .nav--bluey .nav__links a {
+            font-size: 13px;
+            color: #000000;
+            opacity: 0.55;
+        }
+        .nav--bluey .nav__links a.is-active {
+            opacity: 1;
+            border-bottom-color: #FF3F14;
+        }
+        .nav--bluey .nav__links a:hover {
+            opacity: 1;
+            border-bottom-color: #000000;
+        }
+
         /* ===== Built-with pill — chrome="hidden" ===== */
         .built {
             position: fixed;
@@ -498,6 +580,27 @@ const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" =
             font-family: "JetBrains Mono", ui-monospace, monospace;
             font-size: 10px;
             color: var(--color-fg-muted, #555);
+        }
+
+        .built--bluey {
+            background: rgba(255, 255, 255, 0.55);
+            color: #000000;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50px;
+            padding: 8px 14px;
+            font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+        }
+        .built--bluey .built__suffix {
+            font-family: "Courier New", Courier, monospace;
+            font-size: 10px;
+            color: #FF3F14;
+            font-weight: 700;
+            letter-spacing: 0.04em;
         }
 
         /* ===== STICKY CTA ===== */
@@ -588,6 +691,21 @@ const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" =
             text-transform: uppercase;
             letter-spacing: 0.1em;
             font-size: 11px;
+        }
+
+        .sticky-cta--bluey {
+            background: rgba(255, 255, 255, 0.55);
+            color: #000000;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 16px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
+        }
+        .sticky-cta--bluey .sticky-cta__copy {
+            font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+            font-weight: 600;
+            font-size: 13px;
         }
 
         @media (max-width: 720px) {
@@ -686,6 +804,21 @@ const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" =
             text-transform: uppercase;
             letter-spacing: 0.05em;
             opacity: 1;
+        }
+        .foot--bluey {
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            color: #000000;
+            opacity: 0.6;
+            font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+            font-size: 13px;
+        }
+        .foot--bluey .foot__sep { opacity: 0.5; }
+        body[data-system="bluey"] .foot--hidden {
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            color: #000000;
+            font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+            font-size: 12px;
+            opacity: 0.55;
         }
 
         @media (max-width: 540px) {

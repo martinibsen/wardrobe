@@ -1,0 +1,124 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import SuperYesAside from "../../../components/bluey/SuperYesAside.astro";
+---
+
+<Layout
+    title="SuperYes — Stakeholder Perspectives"
+    description="Bluey habitat: cross-functional perspective grid."
+    system="bluey"
+    chrome="hidden"
+>
+    <div class="bly-shell">
+        <SuperYesAside active="perspectives" verticalText="PERSPECTIVES / Q3-2026" />
+
+        <main class="bly-main">
+            <div class="bly-blob bly-blob--white" style="top:-100px; right:-100px; width:600px; height:600px;" aria-hidden="true"></div>
+
+            <header class="bly-header-row">
+                <div class="bly-workflow-title">
+                    <div class="bly-active-problem">
+                        <span class="bly-pulse"></span>
+                        Active Problem: Enterprise Checkout Drop-off
+                    </div>
+                    <h1>Stakeholder Perspectives</h1>
+                </div>
+            </header>
+
+            <div class="bly-perspective-grid">
+                <div class="bly-perspective-col">
+                    <div class="bly-column-header">
+                        <span class="bly-mono-label">Function</span>
+                        <h2>Engineering</h2>
+                    </div>
+                    <div class="bly-card bly-card--strong bly-viewpoint">
+                        <p>"The current validation logic for enterprise tax IDs is synchronous and times out on 3G connections, causing 'ghost' form submissions."</p>
+                        <span class="bly-mono-label" style="margin-bottom: 0.5rem;">Supporting Evidence</span>
+                        <div class="bly-evidence">
+                            <div class="bly-evidence-icon" style="background: #F4F0FF; color: #7B61FF;">GH</div>
+                            <div class="bly-evidence-text">Issue #1082: Validation Timeout</div>
+                        </div>
+                        <div class="bly-evidence">
+                            <div class="bly-evidence-icon" style="background: #FFF4F2; color: #FF3F14;">Sn</div>
+                            <div class="bly-evidence-text">504 Gateway Timeout +14%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bly-perspective-col">
+                    <div class="bly-column-header">
+                        <span class="bly-mono-label">Function</span>
+                        <h2>Product</h2>
+                    </div>
+                    <div class="bly-card bly-card--strong bly-viewpoint">
+                        <p>"We're asking for 6 optional fields before the credit card entry. It increases cognitive load and friction for the primary conversion goal."</p>
+                        <span class="bly-mono-label" style="margin-bottom: 0.5rem;">Supporting Evidence</span>
+                        <div class="bly-evidence">
+                            <div class="bly-evidence-icon" style="background: #F0F7FF; color: #007AFF;">Mx</div>
+                            <div class="bly-evidence-text">Funnel: Step 3 Drop-off</div>
+                        </div>
+                        <div class="bly-evidence">
+                            <div class="bly-evidence-icon" style="background: #F4F0FF; color: #7B61FF;">Hj</div>
+                            <div class="bly-evidence-text">Rage Click Map</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bly-perspective-col">
+                    <div class="bly-column-header">
+                        <span class="bly-mono-label">Function</span>
+                        <h2>Customer Success</h2>
+                    </div>
+                    <div class="bly-card bly-card--strong bly-viewpoint">
+                        <p>"Large accounts complain that they can't save progress. If they miss one field, the whole form clears on mobile refresh."</p>
+                        <span class="bly-mono-label" style="margin-bottom: 0.5rem;">Supporting Evidence</span>
+                        <div class="bly-evidence">
+                            <div class="bly-evidence-icon" style="background: #F0F7FF; color: #007AFF;">In</div>
+                            <div class="bly-evidence-text">Ticket: 'Lost progress'</div>
+                        </div>
+                        <div class="bly-evidence">
+                            <div class="bly-evidence-icon" style="background: #FFF4F2; color: #FF3F14;">CS</div>
+                            <div class="bly-evidence-text">Q3 Churn Risk: Enterprise</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="perspective-footer">
+                <p>
+                    Cross-functional alignment score is <strong>High (84%)</strong>.
+                    All perspectives point toward technical friction in the middle-funnel.
+                </p>
+                <button class="bly-btn bly-btn--primary bly-btn--md">Synthesize Solution</button>
+            </footer>
+        </main>
+    </div>
+</Layout>
+
+<style>
+    .perspective-footer {
+        margin-top: 4rem;
+        border-top: 1px solid rgba(0,0,0,0.1);
+        padding-top: 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+    }
+    .perspective-footer p {
+        opacity: 0.65;
+        font-size: 0.9rem;
+        max-width: 480px;
+        margin: 0;
+    }
+</style>
+
+<script>
+    if (typeof window !== "undefined") {
+        (window as any).wardrobeTrack?.("wardrobe_demo_view", {
+            system: "bluey",
+            page: "perspectives",
+        });
+    }
+</script>

@@ -1,0 +1,148 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import SuperYesAside from "../../../components/bluey/SuperYesAside.astro";
+---
+
+<Layout
+    title="SuperYes — Validation Results"
+    description="Bluey habitat: SuperYes validation engine."
+    system="bluey"
+    chrome="hidden"
+>
+    <div class="bly-shell">
+        <SuperYesAside active="engine" verticalText="RESULT-ID: #VF-90422" />
+
+        <main class="bly-main">
+            <div class="bly-blob bly-blob--corner" aria-hidden="true"></div>
+
+            <header class="bly-header-row">
+                <div class="bly-workflow-title">
+                    <span class="bly-mono-label">Validation Complete</span>
+                    <h1>Checkout Flow Analysis</h1>
+                </div>
+                <button class="bly-btn bly-btn--ghost bly-btn--md">Export Report</button>
+            </header>
+
+            <div class="results-grid">
+                <div class="score-column">
+                    <div class="bly-card bly-card--score">
+                        <span class="bly-score-meta">Overall Confidence</span>
+                        <div class="bly-score-big">72</div>
+                        <div class="bly-score-conviction">High Conviction</div>
+                        <p class="bly-score-blurb">
+                            This problem is corroborated by three independent data sources.
+                            The revenue impact is significant enough to warrant immediate prioritization.
+                        </p>
+                    </div>
+
+                    <div class="bly-card" style="margin-top: 2.5rem;">
+                        <span class="bly-mono-label">Risk Assessment</span>
+                        <div class="metric-row">
+                            <span class="metric-label">Implementation Risk</span>
+                            <span class="bly-badge bly-badge--med">Medium</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Assumed Impact</span>
+                            <span class="bly-badge bly-badge--high">High</span>
+                        </div>
+                        <div class="metric-row metric-row--last">
+                            <span class="metric-label">Market Urgency</span>
+                            <span class="bly-badge bly-badge--high">Urgent</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="details-column">
+                    <div class="bly-card">
+                        <span class="bly-mono-label">Evidence Breakdown</span>
+                        <div class="metric-row">
+                            <div>
+                                <span class="metric-label">Source Quality</span>
+                                <div class="metric-sub">Verified behavioral data</div>
+                            </div>
+                            <span class="metric-value">88%</span>
+                        </div>
+                        <div class="metric-row">
+                            <div>
+                                <span class="metric-label">User Sentiment</span>
+                                <div class="metric-sub">Qualitative frustration index</div>
+                            </div>
+                            <span class="metric-value">64%</span>
+                        </div>
+                        <div class="metric-row metric-row--last">
+                            <div>
+                                <span class="metric-label">Data Freshness</span>
+                                <div class="metric-sub">Average age: 4.2 days</div>
+                            </div>
+                            <span class="metric-value">92%</span>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2.5rem;">
+                        <span class="bly-mono-label">AI Recommendations</span>
+                        <ul class="bly-rec-list">
+                            <li class="bly-rec-item">
+                                <div>
+                                    <strong>Increase n-size:</strong>
+                                    Import more Hotjar sessions to confirm if the drop-off is specific to iOS or Android browsers.
+                                </div>
+                            </li>
+                            <li class="bly-rec-item">
+                                <div>
+                                    <strong>Quantify Delay:</strong>
+                                    Calculate average time-to-completion for successful checkouts vs. drop-offs.
+                                </div>
+                            </li>
+                            <li class="bly-rec-item">
+                                <div>
+                                    <strong>Validate Solution:</strong>
+                                    The current evidence suggests "Field Reduction" as the primary solution. Run a 10% A/B test.
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</Layout>
+
+<style>
+    .results-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2.5rem;
+        position: relative;
+        z-index: 5;
+    }
+    .metric-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+        padding-bottom: 1rem;
+        margin-top: 1rem;
+    }
+    .metric-row--last { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+    .metric-label { font-weight: 600; font-size: 1rem; }
+    .metric-value {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 1.25rem;
+    }
+    .metric-sub { font-size: 0.8rem; opacity: 0.6; margin-top: 0.2rem; }
+
+    @media (max-width: 900px) {
+        .results-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    }
+</style>
+
+<script>
+    if (typeof window !== "undefined") {
+        (window as any).wardrobeTrack?.("wardrobe_demo_view", {
+            system: "bluey",
+            page: "validation-engine",
+        });
+    }
+</script>

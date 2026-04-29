@@ -1,0 +1,68 @@
+/* =========================================================
+   Wardrobe — BLUEY tokens
+   Editorial SaaS calm. Composed authority. Powder blue
+   surface, vermillion accent, glass cards, animated blobs,
+   vertical Courier text in corners. Linear meets Stratechery.
+   Activate via data-system="bluey".
+   ========================================================= */
+
+:where([data-system="bluey"]) {
+    /* ---- Surface ---- */
+    --color-bg: #B4C5E4;                    /* powder blue */
+    --color-fg: #000000;                    /* deep ink for text + sort buttons */
+    --color-bg-tint: rgba(255, 255, 255, 0.2);
+    --color-card: rgba(255, 255, 255, 0.2); /* glass card surface */
+    --color-card-soft: rgba(255, 255, 255, 0.15);
+    --color-card-strong: rgba(255, 255, 255, 0.4);
+    --color-card-solid: #ffffff;            /* white "data-tag" surface */
+    --color-card-border: rgba(0, 0, 0, 0.1);
+    --color-divider: rgba(0, 0, 0, 0.1);
+    --color-divider-soft: rgba(0, 0, 0, 0.05);
+
+    /* ---- Brand accent ---- */
+    --color-accent: #FF3F14;                /* vermillion */
+    --color-accent-soft: rgba(255, 63, 20, 0.1);
+    --color-accent-shadow: rgba(255, 63, 20, 0.2);
+
+    /* ---- Status palette (table + badges) ---- */
+    --color-status-validated-bg: #E1F9EB;
+    --color-status-validated-fg: #107C41;
+    --color-status-needs-bg: #FFF4F2;
+    --color-status-needs-fg: #FF3F14;
+    --color-status-rejected-bg: #EEEEEE;
+    --color-status-rejected-fg: #666666;
+    --color-status-high-bg: rgba(0, 255, 0, 0.1);
+    --color-status-high-fg: #006622;
+    --color-status-med-bg: rgba(255, 200, 0, 0.1);
+    --color-status-med-fg: #885500;
+
+    /* ---- Typography ---- */
+    --font-display: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+    --font-mono: "Courier New", Courier, monospace;
+    --weight-regular: 400;
+    --weight-medium: 500;
+    --weight-semibold: 600;
+    --weight-bold: 700;
+
+    --label-font-size: 0.65rem;
+    --label-letter-spacing: 0.1em;
+    --tight-tracking: -0.03em;
+    --display-tracking: -0.05em;
+
+    /* ---- Radii ---- */
+    --radius-xs: 4px;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-card: 16px;
+    --radius-card-lg: 20px;
+    --radius-hero: 24px;
+    --radius-pill: 50px;
+
+    /* ---- Shadows + glass ---- */
+    --shadow-card-soft: 0 2px 8px rgba(0, 0, 0, 0.03);
+    --shadow-accent-glow: 0 10px 30px rgba(255, 63, 20, 0.2);
+    --backdrop-blur: blur(10px);
+
+    /* ---- Layout ---- */
+    --sidebar-width: 320px;
+}

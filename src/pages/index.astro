@@ -102,14 +102,34 @@ import EmailSignup from "../components/shared/EmailSignup.astro";
                     </div>
                 </a>
 
-                <div class="theme-card theme-card--ghost">
-                    <div class="theme-card__preview theme-card__preview--ghost">
-                        <span class="theme-card__display ghost">SOON.</span>
+                <a class="theme-card theme-card--bluey" href="/bluey">
+                    <div class="theme-card__preview theme-card__preview--bluey" aria-hidden="true">
+                        <div class="bly-prev-blob"></div>
+                        <div class="bly-prev-tag">
+                            <span class="bly-prev-pulse"></span>
+                            <span>VALIDATION · LIVE</span>
+                        </div>
+                        <div class="bly-prev-card">
+                            <span class="bly-prev-label">Confidence</span>
+                            <span class="bly-prev-score">72</span>
+                        </div>
+                        <span class="bly-prev-vertical">SUPERYES — REV 01</span>
                     </div>
                     <div class="theme-card__meta">
-                        <span class="theme-card__name">Theme #4</span>
-                        <span class="theme-card__vibe">Coming soon.</span>
+                        <span class="theme-card__name">Bluey</span>
+                        <span class="theme-card__vibe">
+                            Editorial calm. Composed authority.
+                        </span>
+                        <span class="theme-card__cta">See Bluey →</span>
                     </div>
+                </a>
+            </div>
+
+            <div class="theme-card theme-card--soon" aria-hidden="false">
+                <div class="theme-card__soon">
+                    <span class="theme-card__soon-label">Theme 05 — In the works</span>
+                    <span class="theme-card__soon-title">—</span>
+                    <span class="theme-card__soon-blurb">Sign up below to hear when it drops.</span>
                 </div>
             </div>
 
@@ -233,7 +253,7 @@ import EmailSignup from "../components/shared/EmailSignup.astro";
         overflow: hidden;
         transition: border-color 200ms ease;
     }
-    .theme-card:not(.theme-card--ghost):hover {
+    .theme-card:not(.theme-card--ghost):not(.theme-card--soon):hover {
         border-color: #0a0a0a;
     }
     .theme-card__preview {
@@ -540,6 +560,126 @@ import EmailSignup from "../components/shared/EmailSignup.astro";
     }
     .theme-card--ghost { opacity: 0.65; }
     .theme-card--ghost .theme-card__name { color: #525252; }
+
+    /* ===== BLUEY card preview =====
+       Editorial calm. Powder blue + glass card + vermillion blur. */
+    .theme-card__preview--bluey {
+        background: #B4C5E4;
+        color: #000000;
+        position: relative;
+        overflow: hidden;
+        align-items: stretch;
+        justify-content: space-between;
+        padding: 22px 24px 24px;
+        font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+    }
+    .bly-prev-blob {
+        position: absolute;
+        bottom: -60px;
+        right: -60px;
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        background: #FF3F14;
+        filter: blur(60px);
+        opacity: 0.22;
+        pointer-events: none;
+    }
+    .bly-prev-tag {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(0, 0, 0, 0.06);
+        padding: 5px 10px;
+        border-radius: 6px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        align-self: flex-start;
+    }
+    .bly-prev-pulse {
+        width: 5px;
+        height: 5px;
+        background: #FF3F14;
+        border-radius: 50%;
+    }
+    .bly-prev-card {
+        position: relative;
+        background: rgba(255, 255, 255, 0.45);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 14px;
+        padding: 12px 16px;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        align-self: flex-end;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        margin-top: auto;
+    }
+    .bly-prev-label {
+        font-family: "Courier New", Courier, monospace;
+        font-size: 9px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        opacity: 0.55;
+    }
+    .bly-prev-score {
+        font-size: 36px;
+        font-weight: 700;
+        line-height: 1;
+        letter-spacing: -0.04em;
+    }
+    .bly-prev-vertical {
+        position: absolute;
+        bottom: 16px;
+        left: 14px;
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 8px;
+        letter-spacing: 0.1em;
+        opacity: 0.4;
+    }
+
+    /* ===== SOON strip (theme #5) =====
+       Full-width below the grid. Dashed, muted, intentional. */
+    .theme-card--soon {
+        margin-top: 24px;
+        border: 1.5px dashed #d4d4d4;
+        border-radius: 8px;
+        background: #fafafa;
+        opacity: 0.55;
+        cursor: default;
+        padding: 24px 28px;
+        display: block;
+    }
+    .theme-card__soon {
+        display: flex;
+        align-items: baseline;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+    .theme-card__soon-label {
+        font-family: ui-monospace, "JetBrains Mono", SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: #525252;
+        flex-shrink: 0;
+    }
+    .theme-card__soon-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: #525252;
+        letter-spacing: -0.02em;
+    }
+    .theme-card__soon-blurb {
+        font-size: 14px;
+        color: #737373;
+    }
 
     .themes-signup {
         margin-top: 40px;

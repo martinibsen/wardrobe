@@ -1,0 +1,93 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import SuperYesAside from "../../../components/bluey/SuperYesAside.astro";
+
+type Status = "validated" | "needs-work" | "rejected";
+type Row = {
+    title: string;
+    status: Status;
+    statusLabel: string;
+    score: number;
+    evidence: string;
+    impact: string;
+};
+
+const rows: Row[] = [
+    { title: "Enterprise Checkout Drop-off Flow", status: "validated", statusLabel: "Validated", score: 72, evidence: "3 Sources", impact: "$12k ARR" },
+    { title: "API Documentation Search Friction", status: "needs-work", statusLabel: "Needs Work", score: 45, evidence: "1 Source", impact: "~1,200 u/mo" },
+    { title: "Mobile App Push Notification Fatigue", status: "validated", statusLabel: "Validated", score: 88, evidence: "12 Sources", impact: "5% Retention" },
+    { title: "Workspace Invite Loop UX Bug", status: "rejected", statusLabel: "Rejected", score: 18, evidence: "0 Sources", impact: "Low" },
+    { title: "Subscription Plan Comparison Confusion", status: "needs-work", statusLabel: "Needs Work", score: 52, evidence: "2 Sources", impact: "$4k ARR" },
+    { title: "Team Performance Dashboard Latency", status: "validated", statusLabel: "Validated", score: 64, evidence: "5 Sources", impact: "~800 u/mo" },
+];
+---
+
+<Layout
+    title="SuperYes — Validation History"
+    description="Bluey habitat: validation history table view."
+    system="bluey"
+    chrome="hidden"
+>
+    <div class="bly-shell">
+        <SuperYesAside active="history" verticalText="ARCHIVE / 2026-Q3" />
+
+        <main class="bly-main">
+            <div class="bly-blob" style="top:20%; right:-10%; width:600px; height:600px; filter:blur(120px); opacity:0.1;" aria-hidden="true"></div>
+
+            <header class="bly-header-row">
+                <div class="bly-workflow-title">
+                    <span class="bly-mono-label">Overview</span>
+                    <h1>Validation History</h1>
+                </div>
+                <button class="bly-btn bly-btn--secondary bly-btn--md">+ New Validation</button>
+            </header>
+
+            <div class="bly-stats">
+                <div class="bly-stat">
+                    <span class="bly-mono-label">Active Problems</span>
+                    <span class="bly-stat-value">14</span>
+                </div>
+                <div class="bly-stat">
+                    <span class="bly-mono-label">Avg. Validation Score</span>
+                    <span class="bly-stat-value">68.4</span>
+                </div>
+                <div class="bly-stat">
+                    <span class="bly-mono-label">Evidence Density</span>
+                    <span class="bly-stat-value">High</span>
+                </div>
+            </div>
+
+            <table class="bly-table">
+                <thead>
+                    <tr>
+                        <th>Problem Statement</th>
+                        <th>Status</th>
+                        <th>Score</th>
+                        <th>Evidence</th>
+                        <th>Impact</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {rows.map((r) => (
+                        <tr>
+                            <td>{r.title}</td>
+                            <td><span class:list={["bly-badge", `bly-badge--${r.status}`]}>{r.statusLabel}</span></td>
+                            <td><span class="bly-score-pill">{r.score}</span></td>
+                            <td>{r.evidence}</td>
+                            <td>{r.impact}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </main>
+    </div>
+</Layout>
+
+<script>
+    if (typeof window !== "undefined") {
+        (window as any).wardrobeTrack?.("wardrobe_demo_view", {
+            system: "bluey",
+            page: "history",
+        });
+    }
+</script>

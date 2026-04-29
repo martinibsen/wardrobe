@@ -46,6 +46,21 @@ import brickCnSrc from "../components/brick/cn.ts?raw";
 import brickTokensCssSrc from "../components/brick/tokens.css?raw";
 import brickGlobalsCssSrc from "../components/brick/globals.css?raw";
 
+// ===== BLUEY =====
+import blueyButtonSrc from "../components/bluey/Button.tsx?raw";
+import blueyInputSrc from "../components/bluey/Input.tsx?raw";
+import blueyTextareaSrc from "../components/bluey/Textarea.tsx?raw";
+import blueySelectSrc from "../components/bluey/Select.tsx?raw";
+import blueyCardSrc from "../components/bluey/Card.tsx?raw";
+import blueyBadgeSrc from "../components/bluey/Badge.tsx?raw";
+import blueyDialogSrc from "../components/bluey/Dialog.tsx?raw";
+import blueyTabsSrc from "../components/bluey/Tabs.tsx?raw";
+import blueySwitchSrc from "../components/bluey/Switch.tsx?raw";
+import blueyToastSrc from "../components/bluey/Toast.tsx?raw";
+import blueyCnSrc from "../components/bluey/cn.ts?raw";
+import blueyTokensCssSrc from "../components/bluey/tokens.css?raw";
+import blueyGlobalsCssSrc from "../components/bluey/globals.css?raw";
+
 export type ComponentName =
     | "Button"
     | "Input"
@@ -78,8 +93,10 @@ export type SystemComponentName = ComponentName;
 export const SYSTEM_COMPONENTS = COMPONENT_NAMES;
 export type BrickComponentName = ComponentName;
 export const BRICK_COMPONENTS = COMPONENT_NAMES;
+export type BlueyComponentName = ComponentName;
+export const BLUEY_COMPONENTS = COMPONENT_NAMES;
 
-export type ThemeName = "hyper" | "system" | "brick";
+export type ThemeName = "hyper" | "system" | "brick" | "bluey";
 
 type ThemeBundle = {
     name: ThemeName;
@@ -191,7 +208,40 @@ const BRICK: ThemeBundle = {
     },
 };
 
-const THEMES: Record<ThemeName, ThemeBundle> = { hyper: HYPER, system: SYSTEM, brick: BRICK };
+const BLUEY: ThemeBundle = {
+    name: "bluey",
+    sources: {
+        Button: blueyButtonSrc,
+        Input: blueyInputSrc,
+        Textarea: blueyTextareaSrc,
+        Select: blueySelectSrc,
+        Card: blueyCardSrc,
+        Badge: blueyBadgeSrc,
+        Dialog: blueyDialogSrc,
+        Tabs: blueyTabsSrc,
+        Switch: blueySwitchSrc,
+        Toast: blueyToastSrc,
+    },
+    cn: blueyCnSrc,
+    tokens: blueyTokensCssSrc,
+    globals: blueyGlobalsCssSrc,
+    fontImport: `/* Helvetica Neue + Courier New are system-installed on most platforms — no @import needed.\n   If your stack lacks Helvetica Neue, swap in Inter or another neutral grotesk. */`,
+    activationHint: `<div data-system="bluey">`,
+    tokenHints: {
+        Button: ["--color-accent", "--color-fg", "--color-bg", "--font-display", "--radius-pill", "--shadow-accent-glow"],
+        Input: ["--color-card-border", "--color-fg", "--color-accent", "--font-display", "--radius-md"],
+        Textarea: ["--color-card-border", "--color-fg", "--font-display", "--radius-md"],
+        Select: ["--color-card-border", "--color-fg", "--font-display", "--radius-md"],
+        Card: ["--color-card", "--color-card-border", "--radius-card-lg", "--backdrop-blur", "--color-fg", "--color-bg", "--radius-hero"],
+        Badge: ["--color-status-validated-bg", "--color-status-validated-fg", "--color-status-needs-bg", "--color-status-needs-fg", "--color-status-rejected-bg", "--color-status-rejected-fg", "--font-mono", "--radius-xs"],
+        Dialog: ["--color-card-strong", "--color-fg", "--font-display", "--radius-card-lg", "--backdrop-blur"],
+        Tabs: ["--color-card-border", "--color-fg", "--color-accent", "--font-display"],
+        Switch: ["--color-fg", "--color-accent", "--color-card-border"],
+        Toast: ["--color-card-strong", "--color-fg", "--color-accent", "--color-status-validated-fg", "--font-display", "--radius-md", "--backdrop-blur"],
+    },
+};
+
+const THEMES: Record<ThemeName, ThemeBundle> = { hyper: HYPER, system: SYSTEM, brick: BRICK, bluey: BLUEY };
 
 function bundle(theme: ThemeName): ThemeBundle {
     return THEMES[theme];
@@ -226,6 +276,10 @@ export function getBrickComponentCode(name: ComponentName): string {
     return getComponentCode(name, "brick");
 }
 
+export function getBlueyComponentCode(name: ComponentName): string {
+    return getComponentCode(name, "bluey");
+}
+
 export function generateComponentPrompt(
     name: ComponentName,
     theme: ThemeName = "hyper",
@@ -238,7 +292,11 @@ export function generateComponentPrompt(
         ? hints.map((tok) => `   ${tok}`).join("\n")
         : "   (see full theme block — copy the entire token list)";
 
-    const themeLabel = theme === "hyper" ? "Hyper" : theme === "system" ? "System" : "Brick";
+    const themeLabel =
+        theme === "hyper" ? "Hyper"
+        : theme === "system" ? "System"
+        : theme === "brick" ? "Brick"
+        : "Bluey";
 
     return `Add this Wardrobe ${themeLabel} ${name} to my project.
 

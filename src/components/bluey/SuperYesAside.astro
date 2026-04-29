@@ -1,0 +1,46 @@
+---
+/**
+ * SuperYes — shared sidebar nav used across the habitat pages.
+ * Mirrors the Bluey reference designs: 320px aside, mono labels,
+ * nav-groups, vertical-text bottom caption.
+ */
+interface Props {
+    active: "engine" | "perspectives" | "history" | "new";
+    verticalText?: string;
+}
+const { active, verticalText = "RESULT-ID: #VF-90422" } = Astro.props;
+---
+
+<aside class="bly-aside">
+    <div>
+        <a href="/bluey" class="bly-logo" style="margin-bottom: 3rem; display: inline-block; text-decoration: none; color: inherit;">SuperYes.</a>
+
+        <div class="bly-nav-group">
+            <span class="bly-nav-label">Workspace</span>
+            <a href="/bluey/superyes" class:list={["bly-nav-item", active === "engine" && "is-active"]}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+                Validation Engine
+            </a>
+            <a href="/bluey/superyes/perspectives" class:list={["bly-nav-item", active === "perspectives" && "is-active"]}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+                Perspectives
+            </a>
+            <a href="/bluey/superyes/history" class:list={["bly-nav-item", active === "history" && "is-active"]}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                Validation History
+            </a>
+            <a href="/bluey/superyes/new" class:list={["bly-nav-item", active === "new" && "is-active"]}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                New Validation
+            </a>
+        </div>
+
+        <div class="bly-nav-group">
+            <span class="bly-nav-label">Team</span>
+            <a href="#" class="bly-nav-item">Product Strategy</a>
+            <a href="#" class="bly-nav-item">Growth Lab</a>
+        </div>
+    </div>
+
+    <div class="bly-vertical-text">{verticalText}</div>
+</aside>
