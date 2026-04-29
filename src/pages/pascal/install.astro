@@ -1,0 +1,298 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import EmailSignup from "../../components/shared/EmailSignup.astro";
+import { generateFullInstallPrompt } from "../../utils/generate-prompts";
+
+const prompts = {
+    "claude-code": generateFullInstallPrompt("claude-code", "pascal"),
+    v0: generateFullInstallPrompt("v0", "pascal"),
+    lovable: generateFullInstallPrompt("lovable", "pascal"),
+};
+---
+
+<Layout
+    title="Install Pascal — Wardrobe"
+    description="One paste. 30 seconds. Paper logic everywhere."
+    system="pascal"
+    chrome="pascal"
+>
+    <div class="pas-shell">
+        <section class="psc-grid pas-hero-grid">
+            <div class="psc-cell pas-hero-cell">
+                <span class="psc-label-tiny">FILE_INSTALL // PASCAL</span>
+                <h1 class="psc-display-title">INSTALL<br/>IN 30 SEC.</h1>
+            </div>
+            <div class="psc-cell pas-hero-cell pas-hero-cell--mint">
+                <span class="psc-label-tiny">PROCEDURE</span>
+                <p class="psc-mono pas-hero-blurb">
+                    PICK YOUR AI. HIT COPY. PASTE INTO A FRESH CHAT.
+                </p>
+            </div>
+        </section>
+
+        <div class="psc-marquee">
+            <span class="psc-marquee__track">
+                &nbsp; INSTALL_TARGETS: CLAUDE_CODE // CURSOR // V0 // LOVABLE // SHADCN // STATUS: READY // PROCEDURE: COPY-PASTE // ESTIMATED_TIME: 30s //
+            </span>
+        </div>
+
+        <section class="psc-grid pas-section">
+            <div class="psc-cell pas-section__head">
+                <span class="psc-label-tiny">STEP_01 — PICK TARGET</span>
+                <h2 class="psc-display-huge">SELECT YOUR TOOL.</h2>
+            </div>
+        </section>
+
+        <section class="psc-grid pas-targets-grid">
+            <button type="button" role="tab" class="psc-cell pas-target is-active" data-target="claude-code" aria-selected="true">
+                <span class="psc-label-tiny">FLD_01</span>
+                <span class="pas-target-name">CLAUDE CODE / CURSOR</span>
+            </button>
+            <button type="button" role="tab" class="psc-cell pas-target" data-target="v0" aria-selected="false">
+                <span class="psc-label-tiny">FLD_02</span>
+                <span class="pas-target-name">V0</span>
+            </button>
+            <button type="button" role="tab" class="psc-cell pas-target" data-target="lovable" aria-selected="false">
+                <span class="psc-label-tiny">FLD_03</span>
+                <span class="pas-target-name">LOVABLE</span>
+            </button>
+        </section>
+
+        <section class="psc-grid pas-section">
+            <div class="psc-cell pas-section__head">
+                <span class="psc-label-tiny">STEP_02 — COPY PROMPT</span>
+                <div class="pas-copy-row">
+                    <h2 class="psc-display-huge">FILE THE PROMPT.</h2>
+                    <button type="button" id="copy-full" class="psc-btn psc-btn--primary psc-btn--lg">
+                        COPY ENTIRE PROMPT →
+                    </button>
+                </div>
+                <span id="copy-status" class="pas-copy-status"></span>
+            </div>
+        </section>
+
+        <div class="psc-stack pas-pane-wrap">
+            <div class="psc-cell pas-pane" data-pane="claude-code" data-active="true">
+                <pre><code>{prompts["claude-code"]}</code></pre>
+            </div>
+            <div class="psc-cell pas-pane" data-pane="v0" data-active="false">
+                <pre><code>{prompts.v0}</code></pre>
+            </div>
+            <div class="psc-cell pas-pane" data-pane="lovable" data-active="false">
+                <pre><code>{prompts.lovable}</code></pre>
+            </div>
+        </div>
+
+        <section class="psc-grid pas-section">
+            <div class="psc-cell pas-section__head">
+                <span class="psc-label-tiny">STEP_03 — ACTIVATE</span>
+                <h2 class="psc-display-huge">WRAP YOUR SECTION.</h2>
+                <pre class="pas-snippet"><code>{`<div data-system="pascal">
+    <Button variant="primary">FILE ENTRY</Button>
+    <Card variant="mint">LIVE_NODE</Card>
+</div>`}</code></pre>
+                <p class="psc-mono pas-foot-line">
+                    See it in the wild → <a class="pas-link" href="/pascal/archive-node">ARCHIVE.NODE →</a>
+                </p>
+            </div>
+        </section>
+
+        <section class="psc-grid pas-signup-grid">
+            <div class="psc-cell pas-signup">
+                <EmailSignup
+                    variant="pascal"
+                    size="default"
+                    placement="install"
+                    heading="GOT IT WORKING?"
+                    subheading="File for the next theme + occasional builder notes."
+                />
+            </div>
+        </section>
+    </div>
+</Layout>
+
+<style>
+    .pas-shell {
+        max-width: 1280px;
+        margin: 0 auto;
+        background-color: var(--color-ink);
+        display: flex;
+        flex-direction: column;
+        gap: var(--border-width);
+        border-left: 2px solid var(--color-ink);
+        border-right: 2px solid var(--color-ink);
+    }
+
+    .pas-hero-grid { grid-template-columns: 2fr 1fr; }
+    .pas-hero-cell {
+        padding: 40px 32px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        gap: 16px;
+    }
+    .pas-hero-cell--mint { background: var(--color-mint); }
+    .pas-hero-blurb {
+        font-size: 14px;
+        line-height: 1.5;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        font-weight: 500;
+        margin: 0;
+    }
+
+    .pas-section { grid-template-columns: 1fr; }
+    .pas-section__head {
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+    .pas-copy-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+    .pas-copy-status {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        opacity: 0.6;
+    }
+    .pas-copy-status[data-state="copied"] {
+        color: var(--color-mint);
+        opacity: 1;
+        font-weight: 700;
+    }
+
+    .pas-targets-grid { grid-template-columns: repeat(3, 1fr); }
+    .pas-target {
+        padding: 24px;
+        background: var(--color-paper);
+        border: none;
+        cursor: pointer;
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        font-family: var(--font-display);
+        color: var(--color-ink);
+    }
+    .pas-target:hover { background: #ffffff; }
+    .pas-target.is-active {
+        background: var(--color-ink);
+        color: var(--color-paper);
+    }
+    .pas-target.is-active .psc-label-tiny { opacity: 0.7; }
+    .pas-target-name {
+        font-size: 16px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    .pas-pane-wrap { padding: 0; }
+    .pas-pane {
+        padding: 24px;
+        max-height: 540px;
+        overflow: auto;
+        display: none;
+    }
+    .pas-pane[data-active="true"] { display: block; }
+    .pas-pane pre {
+        margin: 0;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        line-height: 1.55;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+    .pas-pane code { font-family: inherit; }
+
+    .pas-snippet {
+        background: var(--color-ink);
+        color: var(--color-paper);
+        padding: 16px 20px;
+        font-family: var(--font-mono);
+        font-size: 13px;
+        line-height: 1.5;
+        margin: 16px 0 0;
+        overflow-x: auto;
+        border: 2px solid var(--color-ink);
+    }
+    .pas-foot-line {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin: 16px 0 0;
+    }
+    .pas-link {
+        color: var(--color-ink);
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    .pas-signup-grid { grid-template-columns: 1fr; }
+    .pas-signup {
+        padding: 40px 32px;
+        background: var(--color-paper);
+    }
+
+    @media (max-width: 900px) {
+        .pas-hero-grid,
+        .pas-targets-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<script>
+    (function () {
+        const targets = document.querySelectorAll<HTMLButtonElement>("[data-target]");
+        const panes = document.querySelectorAll<HTMLElement>("[data-pane]");
+        const copyBtn = document.getElementById("copy-full") as HTMLButtonElement | null;
+        const status = document.getElementById("copy-status");
+
+        function activate(target: string) {
+            targets.forEach((t) => {
+                const isActive = t.dataset.target === target;
+                t.classList.toggle("is-active", isActive);
+                t.setAttribute("aria-selected", String(isActive));
+            });
+            panes.forEach((p) => {
+                p.dataset.active = p.dataset.pane === target ? "true" : "false";
+            });
+        }
+
+        targets.forEach((t) =>
+            t.addEventListener("click", () => activate(t.dataset.target ?? "claude-code"))
+        );
+
+        if (copyBtn && status) {
+            copyBtn.addEventListener("click", async () => {
+                const active = document.querySelector<HTMLElement>('[data-pane][data-active="true"]');
+                const text = active?.querySelector("code")?.textContent ?? "";
+                try {
+                    await navigator.clipboard.writeText(text);
+                    status.textContent = "FILED ✓";
+                    status.dataset.state = "copied";
+                    (window as any).wardrobeTrack?.("wardrobe_copy_install_full", {
+                        system: "pascal",
+                        target: active?.dataset.pane ?? "claude-code",
+                    });
+                    setTimeout(() => {
+                        status.textContent = "";
+                        status.dataset.state = "";
+                    }, 2000);
+                } catch (_) {
+                    status.textContent = "COPY FAILED";
+                }
+            });
+        }
+
+        (window as any).wardrobeTrack?.("wardrobe_install_view", { system: "pascal" });
+    })();
+</script>

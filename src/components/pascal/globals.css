@@ -1,0 +1,583 @@
+/* =========================================================
+   Wardrobe — PASCAL globals
+   Loads Space Grotesk + IBM Plex Mono, then component +
+   decoration styles. Active under data-system="pascal".
+   ========================================================= */
+
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap");
+
+@import "./tokens.css";
+
+[data-system="pascal"] *,
+[data-system="pascal"] *::before,
+[data-system="pascal"] *::after {
+    box-sizing: border-box;
+}
+
+[data-system="pascal"] {
+    background-color: var(--color-ink);
+    color: var(--color-ink);
+    font-family: var(--font-display);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+}
+
+/* ===========================
+   CELL (paper card with 2px ink grid)
+   =========================== */
+.psc-cell {
+    background-color: var(--color-paper);
+    padding: 24px;
+    position: relative;
+    color: var(--color-ink);
+}
+.psc-cell--mint { background-color: var(--color-mint); }
+.psc-cell--pink { background-color: var(--color-pink); }
+.psc-cell--ink {
+    background-color: var(--color-ink);
+    color: var(--color-paper);
+}
+
+/* Grid wrapper — uses gap + black bg to paint 2px ink lines */
+.psc-grid {
+    display: grid;
+    gap: var(--border-width);
+    background-color: var(--color-ink);
+}
+.psc-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--border-width);
+    background-color: var(--color-ink);
+}
+.psc-row {
+    display: flex;
+    gap: var(--border-width);
+    background-color: var(--color-ink);
+}
+
+/* ===========================
+   TYPOGRAPHY
+   =========================== */
+.psc-mono {
+    font-family: var(--font-mono);
+    font-size: 13px;
+}
+.psc-label-tiny {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: var(--label-tracking);
+    opacity: 0.8;
+    display: block;
+    margin-bottom: 10px;
+}
+.psc-display-title {
+    font-family: var(--font-display);
+    font-size: clamp(48px, 8vw, 80px);
+    line-height: 0.85;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: var(--tight-tracking);
+}
+.psc-display-huge {
+    font-family: var(--font-display);
+    font-size: clamp(32px, 5vw, 64px);
+    line-height: 0.9;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+}
+.psc-display-large {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 6vw, 72px);
+    line-height: 0.9;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+}
+.psc-display-med {
+    font-family: var(--font-display);
+    font-size: 24px;
+    line-height: 0.95;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+/* ===========================
+   MARQUEE TICKER
+   =========================== */
+.psc-marquee {
+    background-color: var(--color-ink);
+    color: var(--color-paper);
+    padding: 12px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    position: relative;
+}
+.psc-marquee__track {
+    display: inline-block;
+    padding-left: 100%;
+    animation: psc-marquee-scroll 28s linear infinite;
+}
+@keyframes psc-marquee-scroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+
+/* ===========================
+   STAMP (rotated round border)
+   =========================== */
+.psc-stamp {
+    width: 80px;
+    height: 80px;
+    border: 2px solid var(--color-ink);
+    border-radius: var(--radius-stamp);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    line-height: 1.1;
+    transform: rotate(-15deg);
+    padding: 8px;
+}
+.psc-stamp--double {
+    border: 3px double var(--color-ink);
+}
+
+/* ===========================
+   VERTICAL LABEL (writing-mode)
+   =========================== */
+.psc-vertical {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    opacity: 0.65;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+/* ===========================
+   STATUS BADGE
+   =========================== */
+.psc-status {
+    display: inline-block;
+    padding: 4px 10px;
+    border: 2px solid var(--color-ink);
+    background: var(--color-paper);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    line-height: 1.2;
+    color: var(--color-ink);
+}
+.psc-status--mint { background: var(--color-mint); }
+.psc-status--pink { background: var(--color-pink); }
+.psc-status--ink {
+    background: var(--color-ink);
+    color: var(--color-paper);
+}
+
+/* ===========================
+   FIELD GROUP (FLD_NN inputs)
+   =========================== */
+.psc-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.psc-field__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+.psc-field__code {
+    color: var(--color-ink);
+    opacity: 0.55;
+    font-weight: 600;
+}
+.psc-field__label {
+    color: var(--color-ink);
+    font-weight: 600;
+}
+.psc-field__input {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid var(--color-ink);
+    border-radius: 0;
+    padding: 8px 0;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--color-ink);
+    width: 100%;
+}
+.psc-field__input:focus {
+    outline: none;
+    background: rgba(0, 0, 0, 0.04);
+}
+.psc-field__input::placeholder {
+    color: var(--color-ink);
+    opacity: 0.35;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 12px;
+}
+textarea.psc-field__input {
+    border: 2px solid var(--color-ink);
+    padding: 10px 12px;
+    min-height: 100px;
+    line-height: 1.5;
+    resize: vertical;
+}
+select.psc-field__input {
+    appearance: none;
+    border: 2px solid var(--color-ink);
+    padding: 10px 12px;
+    background-image: linear-gradient(45deg, transparent 50%, var(--color-ink) 50%),
+                      linear-gradient(135deg, var(--color-ink) 50%, transparent 50%);
+    background-position: calc(100% - 18px) 55%, calc(100% - 13px) 55%;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+    padding-right: 2.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ===========================
+   BUTTONS
+   =========================== */
+.psc-btn {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 12px;
+    border: 2px solid var(--color-ink);
+    cursor: pointer;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    padding: 12px 22px;
+    transition: background 100ms ease, color 100ms ease;
+    line-height: 1.1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0;
+}
+.psc-btn:hover { background: var(--color-mint); }
+.psc-btn:active { transform: translate(1px, 1px); }
+.psc-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; background: var(--color-paper); }
+
+.psc-btn--primary {
+    background: var(--color-ink);
+    color: var(--color-paper);
+}
+.psc-btn--primary:hover {
+    background: var(--color-mint);
+    color: var(--color-ink);
+}
+.psc-btn--secondary {
+    background: var(--color-paper);
+    color: var(--color-ink);
+}
+.psc-btn--secondary:hover { background: var(--color-pink); }
+.psc-btn--destructive {
+    background: var(--color-pink);
+    color: var(--color-ink);
+}
+.psc-btn--destructive:hover { background: var(--color-ink); color: var(--color-pink); }
+.psc-btn--ghost {
+    background: transparent;
+    color: var(--color-ink);
+}
+.psc-btn--ghost:hover { background: rgba(0, 0, 0, 0.06); }
+
+.psc-btn--sm { padding: 8px 14px; font-size: 10px; }
+.psc-btn--lg { padding: 16px 28px; font-size: 13px; }
+
+/* ===========================
+   DASHED CTA (empty-state container)
+   =========================== */
+.psc-dashed-cta {
+    border: 2px dashed var(--color-ink);
+    background: transparent;
+    padding: 32px 28px;
+    text-align: center;
+    cursor: pointer;
+    transition: background 120ms ease;
+}
+.psc-dashed-cta:hover { background: rgba(0, 0, 0, 0.04); }
+
+/* ===========================
+   TOC ITEMS (used in reading view)
+   =========================== */
+.psc-toc-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-ink);
+    display: block;
+    text-decoration: none;
+}
+.psc-toc-item:hover { background: rgba(0, 0, 0, 0.05); }
+.psc-toc-item.is-active {
+    background: var(--color-mint);
+    font-weight: 600;
+}
+
+/* ===========================
+   TABLE (table-row pattern from log-index)
+   =========================== */
+.psc-table {
+    display: flex;
+    flex-direction: column;
+    gap: var(--border-width);
+    background-color: var(--color-ink);
+    width: 100%;
+}
+.psc-thead,
+.psc-trow {
+    display: grid;
+    gap: var(--border-width);
+    background-color: var(--color-ink);
+}
+.psc-th {
+    background-color: var(--color-paper-soft);
+    padding: 10px 12px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--label-tracking);
+}
+.psc-td {
+    background-color: var(--color-paper);
+    padding: 12px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    color: var(--color-ink);
+}
+.psc-td--title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    text-transform: uppercase;
+    line-height: 1.1;
+    font-size: 14px;
+}
+.psc-trow:hover .psc-td { background-color: #ffffff; }
+
+/* ===========================
+   CARD (standard component)
+   =========================== */
+.psc-card {
+    background: var(--color-paper);
+    border: 2px solid var(--color-ink);
+    padding: 24px;
+    color: var(--color-ink);
+}
+.psc-card--mint { background: var(--color-mint); }
+.psc-card--pink { background: var(--color-pink); }
+.psc-card--ink {
+    background: var(--color-ink);
+    color: var(--color-paper);
+}
+
+/* ===========================
+   BADGE (standard component, status variants)
+   =========================== */
+.psc-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border: 2px solid var(--color-ink);
+    background: var(--color-paper);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    line-height: 1.2;
+    color: var(--color-ink);
+}
+.psc-badge--mint { background: var(--color-mint); }
+.psc-badge--pink { background: var(--color-pink); }
+.psc-badge--ink {
+    background: var(--color-ink);
+    color: var(--color-paper);
+}
+
+/* ===========================
+   DIALOG
+   =========================== */
+.psc-dialog-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+.psc-dialog {
+    background: var(--color-paper);
+    border: 2px solid var(--color-ink);
+    padding: 0;
+    max-width: 520px;
+    width: 100%;
+    color: var(--color-ink);
+    display: flex;
+    flex-direction: column;
+}
+.psc-dialog__head {
+    padding: 16px 20px;
+    border-bottom: 2px solid var(--color-ink);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--color-pink);
+}
+.psc-dialog__title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+}
+.psc-dialog__close {
+    background: none;
+    border: none;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    cursor: pointer;
+}
+.psc-dialog__body { padding: 24px; }
+
+/* ===========================
+   TABS
+   =========================== */
+.psc-tabs {
+    display: grid;
+    grid-template-columns: repeat(var(--psc-tab-count, 3), 1fr);
+    gap: var(--border-width);
+    background-color: var(--color-ink);
+}
+.psc-tab {
+    background: var(--color-paper);
+    padding: 12px 16px;
+    border: none;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--label-tracking);
+    cursor: pointer;
+    color: var(--color-ink);
+    text-align: center;
+}
+.psc-tab.is-active {
+    background: var(--color-ink);
+    color: var(--color-paper);
+}
+
+/* ===========================
+   SWITCH
+   =========================== */
+.psc-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+.psc-switch__track {
+    width: 44px;
+    height: 22px;
+    background: var(--color-paper);
+    border: 2px solid var(--color-ink);
+    position: relative;
+    transition: background 120ms ease;
+}
+.psc-switch__thumb {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 18px;
+    height: 18px;
+    background: var(--color-ink);
+    transition: left 120ms ease;
+}
+.psc-switch[data-checked="true"] .psc-switch__track {
+    background: var(--color-mint);
+}
+.psc-switch[data-checked="true"] .psc-switch__thumb {
+    left: 22px;
+}
+
+/* ===========================
+   TOAST
+   =========================== */
+.psc-toast {
+    background: var(--color-paper);
+    border: 2px solid var(--color-ink);
+    padding: 12px 16px;
+    min-width: 240px;
+    color: var(--color-ink);
+    font-family: var(--font-display);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.psc-toast__title {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+}
+.psc-toast__desc {
+    font-size: 13px;
+    opacity: 0.75;
+}
+.psc-toast--success { border-left: 8px solid var(--color-mint); }
+.psc-toast--error { border-left: 8px solid var(--color-pink); }
+
+/* ===========================
+   RESPONSIVE
+   =========================== */
+@media (max-width: 720px) {
+    .psc-cell { padding: 16px; }
+    .psc-display-title { font-size: 56px; }
+    .psc-vertical { display: none; }
+}

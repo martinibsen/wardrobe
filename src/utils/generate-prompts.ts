@@ -61,6 +61,21 @@ import blueyCnSrc from "../components/bluey/cn.ts?raw";
 import blueyTokensCssSrc from "../components/bluey/tokens.css?raw";
 import blueyGlobalsCssSrc from "../components/bluey/globals.css?raw";
 
+// ===== PASCAL =====
+import pascalButtonSrc from "../components/pascal/Button.tsx?raw";
+import pascalInputSrc from "../components/pascal/Input.tsx?raw";
+import pascalTextareaSrc from "../components/pascal/Textarea.tsx?raw";
+import pascalSelectSrc from "../components/pascal/Select.tsx?raw";
+import pascalCardSrc from "../components/pascal/Card.tsx?raw";
+import pascalBadgeSrc from "../components/pascal/Badge.tsx?raw";
+import pascalDialogSrc from "../components/pascal/Dialog.tsx?raw";
+import pascalTabsSrc from "../components/pascal/Tabs.tsx?raw";
+import pascalSwitchSrc from "../components/pascal/Switch.tsx?raw";
+import pascalToastSrc from "../components/pascal/Toast.tsx?raw";
+import pascalCnSrc from "../components/pascal/cn.ts?raw";
+import pascalTokensCssSrc from "../components/pascal/tokens.css?raw";
+import pascalGlobalsCssSrc from "../components/pascal/globals.css?raw";
+
 export type ComponentName =
     | "Button"
     | "Input"
@@ -95,8 +110,10 @@ export type BrickComponentName = ComponentName;
 export const BRICK_COMPONENTS = COMPONENT_NAMES;
 export type BlueyComponentName = ComponentName;
 export const BLUEY_COMPONENTS = COMPONENT_NAMES;
+export type PascalComponentName = ComponentName;
+export const PASCAL_COMPONENTS = COMPONENT_NAMES;
 
-export type ThemeName = "hyper" | "system" | "brick" | "bluey";
+export type ThemeName = "hyper" | "system" | "brick" | "bluey" | "pascal";
 
 type ThemeBundle = {
     name: ThemeName;
@@ -241,7 +258,46 @@ const BLUEY: ThemeBundle = {
     },
 };
 
-const THEMES: Record<ThemeName, ThemeBundle> = { hyper: HYPER, system: SYSTEM, brick: BRICK, bluey: BLUEY };
+const PASCAL: ThemeBundle = {
+    name: "pascal",
+    sources: {
+        Button: pascalButtonSrc,
+        Input: pascalInputSrc,
+        Textarea: pascalTextareaSrc,
+        Select: pascalSelectSrc,
+        Card: pascalCardSrc,
+        Badge: pascalBadgeSrc,
+        Dialog: pascalDialogSrc,
+        Tabs: pascalTabsSrc,
+        Switch: pascalSwitchSrc,
+        Toast: pascalToastSrc,
+    },
+    cn: pascalCnSrc,
+    tokens: pascalTokensCssSrc,
+    globals: pascalGlobalsCssSrc,
+    fontImport: `@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap");`,
+    activationHint: `<div data-system="pascal">`,
+    tokenHints: {
+        Button: ["--color-ink", "--color-paper", "--color-mint", "--color-pink", "--font-mono", "--border-width"],
+        Input: ["--color-ink", "--color-paper", "--font-mono", "--border-width"],
+        Textarea: ["--color-ink", "--color-paper", "--font-mono", "--border-width"],
+        Select: ["--color-ink", "--color-paper", "--font-mono", "--border-width"],
+        Card: ["--color-ink", "--color-paper", "--color-mint", "--color-pink", "--border-width"],
+        Badge: ["--color-ink", "--color-paper", "--color-mint", "--color-pink", "--font-mono", "--border-width"],
+        Dialog: ["--color-ink", "--color-paper", "--color-pink", "--font-display", "--font-mono", "--border-width"],
+        Tabs: ["--color-ink", "--color-paper", "--font-mono", "--border-width"],
+        Switch: ["--color-ink", "--color-paper", "--color-mint", "--border-width"],
+        Toast: ["--color-ink", "--color-paper", "--color-mint", "--color-pink", "--font-mono", "--border-width"],
+    },
+};
+
+const THEMES: Record<ThemeName, ThemeBundle> = {
+    hyper: HYPER,
+    system: SYSTEM,
+    brick: BRICK,
+    bluey: BLUEY,
+    pascal: PASCAL,
+};
 
 function bundle(theme: ThemeName): ThemeBundle {
     return THEMES[theme];
@@ -280,6 +336,10 @@ export function getBlueyComponentCode(name: ComponentName): string {
     return getComponentCode(name, "bluey");
 }
 
+export function getPascalComponentCode(name: ComponentName): string {
+    return getComponentCode(name, "pascal");
+}
+
 export function generateComponentPrompt(
     name: ComponentName,
     theme: ThemeName = "hyper",
@@ -296,7 +356,8 @@ export function generateComponentPrompt(
         theme === "hyper" ? "Hyper"
         : theme === "system" ? "System"
         : theme === "brick" ? "Brick"
-        : "Bluey";
+        : theme === "bluey" ? "Bluey"
+        : "Pascal";
 
     return `Add this Wardrobe ${themeLabel} ${name} to my project.
 

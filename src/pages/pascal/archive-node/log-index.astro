@@ -1,0 +1,201 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import ArchiveHeader from "../../../components/pascal/ArchiveHeader.astro";
+
+type LogStatus = "default" | "mint" | "pink" | "ink";
+type Log = {
+    num: string;
+    code: string;
+    title: string;
+    tag: string;
+    statusVariant: LogStatus;
+    date: string;
+};
+
+const logs: Log[] = [
+    { num: "088", code: "BR-GRD",   title: "Brutalist Grids: A Field Manual",         tag: "ESSAY",   statusVariant: "mint",    date: "01.15.24" },
+    { num: "087", code: "PA-LOG",   title: "Paper Logic v2 — Form-First Interfaces",  tag: "THEORY",  statusVariant: "default", date: "12.02.23" },
+    { num: "086", code: "TX-DAT",   title: "Taxonomy of Data: Naming Things Honestly",tag: "ESSAY",   statusVariant: "pink",    date: "11.20.23" },
+    { num: "085", code: "TM-VAL",   title: "Terminal Values & Document Permanence",   tag: "THEORY",  statusVariant: "mint",    date: "10.05.23" },
+    { num: "084", code: "ST-MPS",   title: "Stamps, Seals, and the UX of Trust",       tag: "ESSAY",   statusVariant: "default", date: "09.18.23" },
+    { num: "083", code: "MN-LBL",   title: "Mono Labels in the Age of Soft UI",       tag: "DESIGN",  statusVariant: "ink",     date: "08.02.23" },
+    { num: "082", code: "GR-MAP",   title: "The Grid as a Map (Not a Cage)",          tag: "THEORY",  statusVariant: "pink",    date: "07.11.23" },
+    { num: "081", code: "FR-FRM",   title: "Friction is Not the Enemy",                tag: "ESSAY",   statusVariant: "default", date: "06.04.23" },
+];
+---
+
+<Layout
+    title="Archive.Node — Log Index"
+    description="Pascal habitat: full table view of all archive entries."
+    system="pascal"
+    chrome="hidden"
+>
+    <div class="arch-shell">
+        <ArchiveHeader active="log-index" docId="LOG_INDEX_2024" revision="REV: v5.01.0" />
+
+        <header class="psc-grid log-hero-grid">
+            <div class="psc-cell log-hero-title">
+                <span class="psc-label-tiny">SYSTEM_LOG_INDEX_2024</span>
+                <h1 class="psc-display-title">LOG<br/>INDEX.</h1>
+            </div>
+            <div class="psc-cell log-hero-stat">
+                <span class="psc-label-tiny">TOTAL ENTRIES</span>
+                <span class="psc-mono log-hero-num">1,042</span>
+            </div>
+        </header>
+
+        <div class="psc-marquee">
+            <span class="psc-marquee__track">
+                &nbsp; SORT: NEWEST → OLDEST // FILTER: ALL // VIEW: TABLE // EXPORT: AVAILABLE // SYSTEM_OK //
+            </span>
+        </div>
+
+        <section class="psc-stack log-table-wrap">
+            <div class="psc-grid log-thead">
+                <div class="psc-cell log-th"><span>#</span></div>
+                <div class="psc-cell log-th"><span>CODE</span></div>
+                <div class="psc-cell log-th"><span>TAG</span></div>
+                <div class="psc-cell log-th"><span>STATUS</span></div>
+                <div class="psc-cell log-th"><span>TITLE</span></div>
+                <div class="psc-cell log-th"><span>FILED</span></div>
+            </div>
+
+            {logs.map((log) => (
+                <a class="psc-grid log-trow" href="/pascal/archive-node/reading">
+                    <div class="psc-cell log-td"><span class="psc-mono">{log.num}</span></div>
+                    <div class="psc-cell log-td"><span class="psc-mono">{log.code}</span></div>
+                    <div class="psc-cell log-td"><span class="psc-mono">{log.tag}</span></div>
+                    <div class:list={["psc-cell log-td log-status", `log-status--${log.statusVariant}`]}>
+                        <span class="psc-mono">●</span>
+                    </div>
+                    <div class="psc-cell log-td log-td--title">{log.title}</div>
+                    <div class="psc-cell log-td"><span class="psc-mono">{log.date}</span></div>
+                </a>
+            ))}
+        </section>
+
+        <footer class="psc-grid log-foot">
+            <div class="psc-cell log-foot-cell">
+                <span class="psc-label-tiny">PAGE</span>
+                <span class="psc-mono">01 / 130</span>
+            </div>
+            <div class="psc-cell log-foot-cell">
+                <span class="psc-label-tiny">EXPORT</span>
+                <span class="psc-mono">CSV · JSON · XML</span>
+            </div>
+            <div class="psc-cell log-foot-cell" style="background-color: var(--color-mint);">
+                <span class="psc-label-tiny">SYNC</span>
+                <span class="psc-mono">14:22:01 — OK</span>
+            </div>
+        </footer>
+    </div>
+</Layout>
+
+<style>
+    .arch-shell {
+        max-width: 1280px;
+        margin: 0 auto;
+        background-color: var(--color-ink);
+        display: flex;
+        flex-direction: column;
+        gap: var(--border-width);
+        border-left: 2px solid var(--color-ink);
+        border-right: 2px solid var(--color-ink);
+    }
+
+    .log-hero-grid { grid-template-columns: 2fr 1fr; }
+    .log-hero-title {
+        padding: 60px 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+    .log-hero-stat {
+        padding: 60px 40px;
+        background: var(--color-pink);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        gap: 8px;
+    }
+    .log-hero-num {
+        font-size: 56px;
+        font-weight: 700;
+        line-height: 0.9;
+    }
+
+    .log-table-wrap {
+        gap: var(--border-width);
+    }
+    .log-thead,
+    .log-trow {
+        grid-template-columns: 60px 80px 80px 60px 1fr 100px;
+    }
+    .log-thead { background-color: var(--color-ink); }
+    .log-th {
+        background: var(--color-paper-soft);
+        padding: 10px 14px;
+        font-family: var(--font-mono);
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-weight: 600;
+    }
+    .log-trow {
+        text-decoration: none;
+        color: inherit;
+    }
+    .log-trow:hover .log-td { background: #ffffff; }
+    .log-td {
+        padding: 14px;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+    }
+    .log-td--title {
+        font-family: var(--font-display);
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: -0.01em;
+        font-size: 14px;
+    }
+    .log-status--mint { background: var(--color-mint); }
+    .log-status--pink { background: var(--color-pink); }
+    .log-status--ink {
+        background: var(--color-ink);
+        color: var(--color-paper);
+    }
+
+    .log-foot { grid-template-columns: 1fr 1fr 1fr; }
+    .log-foot-cell {
+        padding: 16px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    @media (max-width: 900px) {
+        .log-hero-grid,
+        .log-foot {
+            grid-template-columns: 1fr;
+        }
+        .log-thead,
+        .log-trow {
+            grid-template-columns: 50px 70px 70px 50px 1fr;
+        }
+        .log-thead .log-th:last-child,
+        .log-trow .log-td:last-child {
+            display: none;
+        }
+    }
+</style>
+
+<script>
+    if (typeof window !== "undefined") {
+        (window as any).wardrobeTrack?.("wardrobe_demo_view", {
+            system: "pascal",
+            page: "log-index",
+        });
+    }
+</script>

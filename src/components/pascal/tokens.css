@@ -1,0 +1,46 @@
+/* =========================================================
+   Wardrobe — PASCAL tokens
+   Brutalist editorial bureaucracy. Paper-logic UI, form-field
+   aesthetic, Swiss-grid-meets-tax-document. Black grid lines,
+   paper cells with mint/pink accents, Space Grotesk display
+   + IBM Plex Mono labels. Activate via data-system="pascal".
+   ========================================================= */
+
+:where([data-system="pascal"]) {
+    /* ---- Surface ---- */
+    --color-bg: #000000;            /* ink — body bg, grid lines */
+    --color-paper: #f2f2f2;         /* cell bg */
+    --color-paper-soft: #e5e5e5;    /* table headers, dividers */
+    --color-mint: #4ea884;          /* mint accent */
+    --color-pink: #ebaec1;          /* pink accent */
+    --color-ink: #000000;           /* primary text */
+    --color-ink-soft: rgba(0, 0, 0, 0.6);
+    --color-ink-faint: rgba(0, 0, 0, 0.1);
+
+    /* Aliases used throughout the SuperYes-style designs */
+    --bg-paper: #f2f2f2;
+    --bg-mint: #4ea884;
+    --bg-pink: #ebaec1;
+    --ink: #000000;
+
+    /* ---- Borders + grid ---- */
+    --border-width: 2px;
+    --border-ink: 2px solid var(--color-ink);
+
+    /* ---- Typography ---- */
+    --font-display: "Space Grotesk", system-ui, -apple-system, sans-serif;
+    --font-main: "Space Grotesk", system-ui, -apple-system, sans-serif;
+    --font-mono: "IBM Plex Mono", "Courier New", Courier, monospace;
+    --weight-light: 300;
+    --weight-regular: 400;
+    --weight-medium: 500;
+    --weight-semibold: 600;
+    --weight-bold: 700;
+
+    --tight-tracking: -0.04em;
+    --label-tracking: 0.05em;
+
+    /* ---- Radii (almost none — this theme is angular) ---- */
+    --radius-none: 0;
+    --radius-stamp: 50%;
+}

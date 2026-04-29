@@ -1,0 +1,80 @@
+---
+/**
+ * Archive.Node — shared top nav strip used across the habitat pages.
+ * Mirrors the Pascal reference designs: paper logo cell + nav-strip
+ * with mono uppercase labels separated by 2px ink borders.
+ */
+interface Props {
+    active: "index" | "reading" | "log-index" | "about";
+    docId?: string;
+    revision?: string;
+}
+const { active, docId = "ARCHIVE_ROOT", revision = "REV: v4.02.b" } = Astro.props;
+---
+
+<header class="psc-grid arch-header">
+    <a class="psc-cell arch-logo" href="/pascal/archive-node">
+        ARCHIVE.NODE
+    </a>
+    <div class="psc-cell arch-meta">
+        <span class="psc-label-tiny">DOCUMENT_ID</span>
+        <span class="psc-mono">{docId}</span>
+    </div>
+    <div class="psc-cell arch-meta">
+        <span class="psc-label-tiny">REVISION</span>
+        <span class="psc-mono">{revision}</span>
+    </div>
+</header>
+
+<nav class="psc-grid arch-nav" aria-label="Archive.Node">
+    <a href="/pascal/archive-node" class:list={["psc-cell arch-nav__item", active === "index" && "is-active"]}>INDEX</a>
+    <a href="/pascal/archive-node/log-index" class:list={["psc-cell arch-nav__item", active === "log-index" && "is-active"]}>LOG INDEX</a>
+    <a href="/pascal/archive-node/reading" class:list={["psc-cell arch-nav__item", active === "reading" && "is-active"]}>READING</a>
+    <a href="/pascal/archive-node/about" class:list={["psc-cell arch-nav__item", active === "about" && "is-active"]}>ABOUT</a>
+</nav>
+
+<style>
+    .arch-header {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+    .arch-logo {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 18px;
+        letter-spacing: -0.02em;
+        text-decoration: none;
+        color: var(--color-ink);
+        display: flex;
+        align-items: center;
+        padding: 16px 24px;
+    }
+    .arch-meta {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 12px 20px;
+    }
+    .arch-nav {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    .arch-nav__item {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-weight: 600;
+        text-decoration: none;
+        color: var(--color-ink);
+        padding: 14px 16px;
+        text-align: center;
+    }
+    .arch-nav__item:hover { background: #ffffff; }
+    .arch-nav__item.is-active {
+        background: var(--color-ink);
+        color: var(--color-paper);
+    }
+    @media (max-width: 720px) {
+        .arch-header { grid-template-columns: 1fr; }
+        .arch-nav { grid-template-columns: 1fr 1fr; }
+    }
+</style>

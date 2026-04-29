@@ -1,0 +1,195 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import ArchiveHeader from "../../../components/pascal/ArchiveHeader.astro";
+
+const recentEntries = [
+    { num: "088", slug: "BRUTALIST_GRIDS", date: "01.15.24" },
+    { num: "087", slug: "PAPER_LOGIC_V2", date: "12.02.23" },
+    { num: "086", slug: "TAXONOMY_OF_DATA", date: "11.20.23" },
+    { num: "085", slug: "TERMINAL_VALUES", date: "10.05.23" },
+];
+---
+
+<Layout
+    title="Archive.Node — Index"
+    description="Pascal habitat: Archive.Node home — recent entries, featured log, marquee status."
+    system="pascal"
+    chrome="hidden"
+>
+    <div class="arch-shell">
+        <ArchiveHeader active="index" docId="ARCHIVE_ROOT" revision="REV: v4.02.b" />
+
+        <header class="psc-cell arch-hero">
+            <div>
+                <span class="psc-label-tiny">INDEX.V4</span>
+                <h1 class="psc-display-title">ARCHIVE.<br/>NODE</h1>
+            </div>
+            <p class="psc-mono arch-hero__blurb">
+                A CRITICAL REPOSITORY FOR DIGITAL BUREAUCRACY &amp; INTERFACE THEORY.
+            </p>
+        </header>
+
+        <section class="psc-grid arch-featured">
+            <div class="psc-cell arch-feat-title">
+                <span class="psc-label-tiny">FEATURED_LOG_01</span>
+                <h2 class="psc-display-large">The Aesthetics of<br/>Bureaucracy</h2>
+            </div>
+            <div class="psc-stack arch-feat-meta">
+                <div class="psc-cell arch-feat-cell" style="background-color: var(--color-mint);">
+                    <span class="psc-label-tiny">CATEGORY</span>
+                    <span class="psc-mono arch-feat-value">THEORY</span>
+                </div>
+                <div class="psc-cell arch-feat-cell">
+                    <span class="psc-label-tiny">DATE</span>
+                    <span class="psc-mono arch-feat-value">05.22.2024</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="psc-marquee">
+            <span class="psc-marquee__track">
+                &nbsp; SYSTEM STATUS: OPERATIONAL // DATA STREAMS: ACTIVE // NODE_ID: ARCHIVE_ROOT // LATEST UPDATE: 14:22:01 // REPOSITORY_SYNC: COMPLETE // SYSTEM STATUS: OPERATIONAL // DATA STREAMS: ACTIVE //
+            </span>
+        </div>
+
+        <section class="psc-stack arch-entries">
+            <div class="psc-cell arch-section-head">
+                <span class="psc-label-tiny" style="margin: 0;">RECENT ENTRIES</span>
+            </div>
+
+            <div class="psc-grid arch-entries-grid">
+                {recentEntries.map((e) => (
+                    <a class="psc-grid arch-row" href="/pascal/archive-node/reading">
+                        <div class="psc-cell arch-row__num"><span class="psc-mono">{e.num}</span></div>
+                        <div class="psc-cell arch-row__title"><span class="psc-mono arch-link">{e.slug}</span></div>
+                        <div class="psc-cell arch-row__date"><span class="psc-label-tiny" style="margin: 0;">{e.date}</span></div>
+                    </a>
+                ))}
+            </div>
+        </section>
+
+        <footer class="psc-grid arch-footer">
+            <div class="psc-cell arch-foot-stat">
+                <span class="psc-label-tiny">TOTAL_RECORDS</span>
+                <span class="psc-mono arch-foot-value">1,042</span>
+            </div>
+            <div class="psc-cell arch-foot-stat">
+                <span class="psc-label-tiny">UPTIME</span>
+                <span class="psc-mono arch-foot-value">99.98%</span>
+            </div>
+            <div class="psc-cell arch-foot-foot">
+                <a class="psc-mono arch-link" href="/pascal/archive-node/log-index">FULL ARCHIVE</a>
+                <span class="psc-mono" style="opacity: 0.4;">© 2024 ARCHIVE.NODE</span>
+            </div>
+        </footer>
+    </div>
+</Layout>
+
+<style>
+    .arch-shell {
+        max-width: 1280px;
+        margin: 0 auto;
+        background-color: var(--color-ink);
+        display: flex;
+        flex-direction: column;
+        gap: var(--border-width);
+        border-left: 2px solid var(--color-ink);
+        border-right: 2px solid var(--color-ink);
+    }
+
+    .arch-hero {
+        padding: 60px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 32px;
+        flex-wrap: wrap;
+    }
+    .arch-hero__blurb {
+        max-width: 320px;
+        line-height: 1.5;
+        text-align: right;
+        font-size: 13px;
+        text-transform: uppercase;
+    }
+
+    .arch-featured { grid-template-columns: 1.5fr 1fr; }
+    .arch-feat-title {
+        background-color: var(--color-pink);
+        padding: 60px 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 16px;
+    }
+    .arch-feat-meta {
+        gap: var(--border-width);
+    }
+    .arch-feat-cell {
+        padding: 30px 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 8px;
+    }
+    .arch-feat-value {
+        font-size: 24px;
+        font-weight: 600;
+    }
+
+    .arch-section-head { padding: 15px 40px; }
+    .arch-entries-grid { grid-template-columns: 1fr 1fr; }
+
+    .arch-row {
+        grid-template-columns: 80px 1fr 120px;
+        text-decoration: none;
+        color: inherit;
+        cursor: pointer;
+    }
+    .arch-row:hover .psc-cell { background-color: #ffffff; }
+    .arch-row .psc-cell {
+        padding: 22px 18px;
+        display: flex;
+        align-items: center;
+    }
+    .arch-link {
+        text-decoration: underline;
+        font-weight: 600;
+    }
+
+    .arch-footer { grid-template-columns: 1fr 1fr 2fr; }
+    .arch-foot-stat {
+        padding: 24px 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .arch-foot-value {
+        font-size: 24px;
+        font-weight: 700;
+    }
+    .arch-foot-foot {
+        padding: 0 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    @media (max-width: 900px) {
+        .arch-featured,
+        .arch-entries-grid,
+        .arch-footer {
+            grid-template-columns: 1fr;
+        }
+        .arch-row { grid-template-columns: 60px 1fr 100px; }
+    }
+</style>
+
+<script>
+    if (typeof window !== "undefined") {
+        (window as any).wardrobeTrack?.("wardrobe_demo_view", {
+            system: "pascal",
+            page: "archive-index",
+        });
+    }
+</script>

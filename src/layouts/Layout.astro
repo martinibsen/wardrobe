@@ -3,14 +3,15 @@ import "../components/hyper/globals.css";
 import "../components/system/globals.css";
 import "../components/brick/globals.css";
 import "../components/bluey/globals.css";
+import "../components/pascal/globals.css";
 import EmailSignup from "../components/shared/EmailSignup.astro";
 import CookieBanner from "../components/shared/CookieBanner.astro";
 
 interface Props {
     title: string;
     description?: string;
-    system?: "hyper" | "system" | "brick" | "bluey" | null;
-    chrome?: "neutral" | "hyper" | "system" | "brick" | "bluey" | "hidden";
+    system?: "hyper" | "system" | "brick" | "bluey" | "pascal" | null;
+    chrome?: "neutral" | "hyper" | "system" | "brick" | "bluey" | "pascal" | "hidden";
 }
 
 const {
@@ -25,7 +26,9 @@ const {
             ? "brick"
             : system === "bluey"
               ? "bluey"
-              : "neutral",
+              : system === "pascal"
+                ? "pascal"
+                : "neutral",
 } = Astro.props;
 
 const MARTIN_URL = "https://martinibsen.dk";
@@ -64,6 +67,11 @@ const isBlueyInstall = path === "/bluey/install";
 const isBlueyDemo = path.startsWith("/bluey/superyes");
 const isBlueyHome = path === "/bluey";
 
+// Pascal nav active states
+const isPascalInstall = path === "/pascal/install";
+const isPascalDemo = path.startsWith("/pascal/archive-node");
+const isPascalHome = path === "/pascal";
+
 // Sticky CTA: only on the "browsing" pages where someone is reading a system
 // or considering an install. Not on the forsiden (hero already covers it) and
 // not on demos (immersion).
@@ -72,19 +80,23 @@ const stickyRoutes = [
     "/system",
     "/brick",
     "/bluey",
+    "/pascal",
     "/hyper/install",
     "/system/install",
     "/brick/install",
     "/bluey/install",
+    "/pascal/install",
 ];
 const showStickyCta = stickyRoutes.includes(path);
-const stickyVariant: "hyper" | "system" | "brick" | "bluey" = path.startsWith("/system")
+const stickyVariant: "hyper" | "system" | "brick" | "bluey" | "pascal" = path.startsWith("/system")
     ? "system"
     : path.startsWith("/brick")
       ? "brick"
       : path.startsWith("/bluey")
         ? "bluey"
-        : "hyper";
+        : path.startsWith("/pascal")
+          ? "pascal"
+          : "hyper";
 
 // "Built with..." pill — depends on which sphere we're in when chrome="hidden"
 const builtWith =
@@ -109,16 +121,23 @@ const builtWith =
                   suffix: "· get drops →",
                   cls: "built--bluey",
               }
-            : {
-                  href: "/hyper#signup",
-                  label: "← Built with Hyper",
-                  suffix: "· get drops →",
-                  cls: "built--hyper",
-              };
+            : system === "pascal"
+              ? {
+                    href: "/pascal#signup",
+                    label: "← BUILT WITH PASCAL",
+                    suffix: "/ FILE FOR DROPS",
+                    cls: "built--pascal",
+                }
+              : {
+                    href: "/hyper#signup",
+                    label: "← Built with Hyper",
+                    suffix: "· get drops →",
+                    cls: "built--hyper",
+                };
 
 // Footer signup is shown on every chrome except "hidden" (demo immersion).
 const showFooterSignup = chrome !== "hidden";
-const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" | "bluey" =
+const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" | "bluey" | "pascal" =
     chrome === "hyper"
         ? "hyper"
         : chrome === "system"
@@ -127,7 +146,9 @@ const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" | "bluey" =
             ? "brick"
             : chrome === "bluey"
               ? "bluey"
-              : "neutral";
+              : chrome === "pascal"
+                ? "pascal"
+                : "neutral";
 ---
 
 <!DOCTYPE html>
@@ -269,6 +290,34 @@ const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" | "bluey" =
                     class:list={[isBlueyHome && "is-active"]}
                 >
                     Bluey
+                </a>
+            </nav>
+        </header>
+    )}
+
+    {chrome === "pascal" && (
+        <header class="nav nav--pascal">
+            <a class="nav__brand nav__brand--pascal" href="/">
+                WARDROBE / PASCAL
+            </a>
+            <nav class="nav__links nav__links--pascal" aria-label="Pascal">
+                <a
+                    href="/pascal/install"
+                    class:list={[isPascalInstall && "is-active"]}
+                >
+                    INSTALL
+                </a>
+                <a
+                    href="/pascal/archive-node"
+                    class:list={[isPascalDemo && "is-active"]}
+                >
+                    ARCHIVE.NODE
+                </a>
+                <a
+                    href="/pascal"
+                    class:list={[isPascalHome && "is-active"]}
+                >
+                    PASCAL
                 </a>
             </nav>
         </header>
@@ -503,6 +552,42 @@ const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" | "bluey" =
             border-bottom-color: #000000;
         }
 
+        /* ===== Sphere B — pascal (brutalist editorial) ===== */
+        .nav--pascal {
+            background: #f2f2f2;
+            color: #000000;
+            border-bottom: 2px solid #000000;
+            font-family: "Space Grotesk", system-ui, sans-serif;
+        }
+        .nav__brand--pascal {
+            font-family: "Space Grotesk", system-ui, sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+        }
+        .nav--pascal .nav__links {
+            font-family: "IBM Plex Mono", "Courier New", monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .nav--pascal .nav__links a {
+            font-size: 11px;
+            font-weight: 600;
+            color: #000000;
+            opacity: 0.6;
+            border-bottom: none;
+            padding-bottom: 2px;
+            transition: opacity 100ms ease;
+        }
+        .nav--pascal .nav__links a:hover { opacity: 1; }
+        .nav--pascal .nav__links a.is-active {
+            opacity: 1;
+            background: #000000;
+            color: #f2f2f2;
+            padding: 4px 10px;
+        }
+
         /* ===== Built-with pill — chrome="hidden" ===== */
         .built {
             position: fixed;
@@ -601,6 +686,25 @@ const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" | "bluey" =
             color: #FF3F14;
             font-weight: 700;
             letter-spacing: 0.04em;
+        }
+
+        .built--pascal {
+            background: #f2f2f2;
+            color: #000000;
+            border: 2px solid #000000;
+            border-radius: 0;
+            padding: 7px 12px;
+            font-family: "IBM Plex Mono", "Courier New", monospace;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        .built--pascal .built__suffix {
+            font-family: "IBM Plex Mono", "Courier New", monospace;
+            font-size: 9px;
+            color: #000000;
+            opacity: 0.7;
         }
 
         /* ===== STICKY CTA ===== */
@@ -706,6 +810,21 @@ const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" | "bluey" =
             font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
             font-weight: 600;
             font-size: 13px;
+        }
+
+        .sticky-cta--pascal {
+            background: #f2f2f2;
+            color: #000000;
+            border: 2px solid #000000;
+            border-radius: 0;
+            box-shadow: 4px 4px 0 #000000;
+        }
+        .sticky-cta--pascal .sticky-cta__copy {
+            font-family: "IBM Plex Mono", "Courier New", monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 600;
+            font-size: 11px;
         }
 
         @media (max-width: 720px) {
@@ -819,6 +938,26 @@ const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" | "bluey" =
             font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
             font-size: 12px;
             opacity: 0.55;
+        }
+        .foot--pascal {
+            border-top: 2px solid #000000;
+            background: #f2f2f2;
+            color: #000000;
+            font-family: "IBM Plex Mono", "Courier New", monospace;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .foot--pascal .foot__sep { opacity: 0.5; }
+        body[data-system="pascal"] .foot--hidden {
+            border-top: 2px solid #000000;
+            background: #f2f2f2;
+            color: #000000;
+            font-family: "IBM Plex Mono", "Courier New", monospace;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            opacity: 1;
         }
 
         @media (max-width: 540px) {

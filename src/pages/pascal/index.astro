@@ -1,0 +1,318 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import CopyBlock from "../../components/shared/CopyBlock.astro";
+import ComponentShowcase from "../../components/shared/ComponentShowcase.astro";
+import EmailSignup from "../../components/shared/EmailSignup.astro";
+import {
+    PASCAL_COMPONENTS,
+    getComponentCode,
+    generateComponentPrompt,
+    generateThemeBlock,
+} from "../../utils/generate-prompts";
+
+import {
+    ButtonDemo,
+    InputDemo,
+    TextareaDemo,
+    SelectDemo,
+    CardDemo,
+    BadgeDemo,
+    DialogDemo,
+    TabsDemo,
+    SwitchDemo,
+    ToastDemo,
+} from "../../components/pascal/demos";
+
+type ComponentName = (typeof PASCAL_COMPONENTS)[number];
+
+const blurbs: Record<ComponentName, string> = {
+    Button:
+        "Mono CAPS, 2px ink border, no radius. Primary fills in ink. Hover swaps to mint. Active translates 1px down-right.",
+    Input:
+        "FLD_NN code in the corner, mono CAPS label, underlined input. The form-field aesthetic — paper logic, hand-stamped feel.",
+    Textarea:
+        "Same FLD code + label, but the body sits in a 2px-bordered ink box. Mono inside, paper background.",
+    Select:
+        "Same field-shell as Input/Textarea. Custom CSS chevron. Caps the value, no rounded corners.",
+    Card:
+        "Default = paper cell with 2px ink border. Mint, pink, ink variants for status, accent, and inversion.",
+    Badge:
+        "Paper, mint, pink, or ink chip with 2px ink border. Mono CAPS. Used for OPEN, LIVE_NODE, CRITICAL, STABLE.",
+    Dialog:
+        "Pink header bar with title in Space Grotesk + mono close. Body sits below a 2px ink divider. Backdrop is half-black.",
+    Tabs:
+        "Horizontal grid of paper cells separated by 2px ink lines. Active tab inverts to ink/paper. Mono CAPS labels.",
+    Switch:
+        "Paper track with 2px ink border. Square ink thumb that slides across. Checked = mint track.",
+    Toast:
+        "Paper card, 2px ink border, mono CAPS title in 11px, body in display 13px. Success picks mint, error picks pink.",
+};
+
+const themeBlock = generateThemeBlock("pascal");
+
+const componentBlocks = PASCAL_COMPONENTS.map((name) => ({
+    name,
+    code: getComponentCode(name, "pascal"),
+    prompt: generateComponentPrompt(name, "pascal"),
+    blurb: blurbs[name],
+}));
+---
+
+<Layout
+    title="Pascal — Wardrobe"
+    description="Brutalist editorial bureaucracy. Paper logic. Swiss-grid-meets-tax-document."
+    system="pascal"
+    chrome="pascal"
+>
+    <div class="pas-shell">
+        <section class="psc-grid pas-hero-grid">
+            <div class="psc-cell pas-hero-cell">
+                <span class="psc-label-tiny">INDEX.V5 / WARDROBE</span>
+                <h1 class="psc-display-title">PASCAL.</h1>
+            </div>
+            <div class="psc-cell pas-hero-cell pas-hero-cell--mint">
+                <span class="psc-label-tiny">CHARACTER</span>
+                <p class="psc-mono pas-hero-blurb">
+                    BRUTALIST EDITORIAL BUREAUCRACY. PAPER LOGIC. SWISS GRID MEETS TAX DOCUMENT.
+                </p>
+            </div>
+            <div class="psc-cell pas-hero-cell pas-hero-cell--pink">
+                <span class="psc-label-tiny">HABITAT</span>
+                <span class="psc-mono pas-hero-meta">ARCHIVE.NODE</span>
+            </div>
+        </section>
+
+        <div class="psc-marquee">
+            <span class="psc-marquee__track">
+                &nbsp; SYSTEM STATUS: OPERATIONAL // DATA STREAMS: ACTIVE // NODE_ID: WARDROBE_PASCAL // LATEST UPDATE: REV-01 // REPOSITORY_SYNC: COMPLETE // SYSTEM STATUS: OPERATIONAL // DATA STREAMS: ACTIVE //
+            </span>
+        </div>
+
+        <section class="psc-grid pas-cta-grid">
+            <a class="psc-cell pas-cta" href="/pascal/install">
+                <span class="psc-label-tiny">FILE_01</span>
+                <span class="psc-display-med">INSTALL IN 30 SEC →</span>
+            </a>
+            <a class="psc-cell pas-cta pas-cta--pink" href="/pascal/archive-node">
+                <span class="psc-label-tiny">FILE_02</span>
+                <span class="psc-display-med">ARCHIVE.NODE →</span>
+            </a>
+        </section>
+
+        <section class="psc-grid pas-section">
+            <div class="psc-cell pas-section__head">
+                <span class="psc-label-tiny">SECTION_01 — TOKENS</span>
+                <h2 class="psc-display-huge">PALETTE.</h2>
+            </div>
+        </section>
+
+        <section class="psc-grid pas-tokens-grid">
+            <div class="psc-cell pas-token">
+                <span class="psc-label-tiny">--bg-paper</span>
+                <span class="psc-mono">#F2F2F2</span>
+                <span class="psc-mono pas-token-sub">cell surface</span>
+            </div>
+            <div class="psc-cell pas-token pas-token--mint">
+                <span class="psc-label-tiny">--bg-mint</span>
+                <span class="psc-mono">#4EA884</span>
+                <span class="psc-mono pas-token-sub">accent / live</span>
+            </div>
+            <div class="psc-cell pas-token pas-token--pink">
+                <span class="psc-label-tiny">--bg-pink</span>
+                <span class="psc-mono">#EBAEC1</span>
+                <span class="psc-mono pas-token-sub">accent / critical</span>
+            </div>
+            <div class="psc-cell pas-token pas-token--ink">
+                <span class="psc-label-tiny">--ink</span>
+                <span class="psc-mono">#000000</span>
+                <span class="psc-mono pas-token-sub">grid / type</span>
+            </div>
+        </section>
+
+        <section class="psc-grid pas-type-grid">
+            <div class="psc-cell pas-type">
+                <span class="psc-label-tiny">DISPLAY</span>
+                <span class="psc-mono">SPACE GROTESK 700 / -0.04em / 0.85 line-height</span>
+            </div>
+            <div class="psc-cell pas-type">
+                <span class="psc-label-tiny">MONO</span>
+                <span class="psc-mono">IBM PLEX MONO 400-600 / 10-13px / 0.05-0.1em tracking</span>
+            </div>
+        </section>
+
+        <section class="psc-grid pas-section">
+            <div class="psc-cell pas-section__head">
+                <span class="psc-label-tiny">SECTION_02 — THEME BLOCK</span>
+                <h2 class="psc-display-huge">PASTE INTO GLOBALS.CSS.</h2>
+            </div>
+        </section>
+
+        <div class="psc-stack pas-copyblock-wrap">
+            <div class="psc-cell" style="padding: 0;">
+                <CopyBlock
+                    code={themeBlock}
+                    prompt="Theme tokens — paste into globals.css"
+                    theme={themeBlock}
+                    label="Theme block"
+                    system="pascal"
+                    defaultTab="theme"
+                />
+            </div>
+        </div>
+
+        <section class="psc-grid pas-section">
+            <div class="psc-cell pas-section__head">
+                <span class="psc-label-tiny">SECTION_03 — COMPONENTS</span>
+                <h2 class="psc-display-huge">10 COMPONENTS.</h2>
+            </div>
+        </section>
+
+        {componentBlocks.map(({ name, code, prompt, blurb }) => (
+            <ComponentShowcase name={name} blurb={blurb}>
+                <div slot="preview" class="pas-preview">
+                    {name === "Button" && <ButtonDemo client:load />}
+                    {name === "Input" && <InputDemo client:load />}
+                    {name === "Textarea" && <TextareaDemo client:load />}
+                    {name === "Select" && <SelectDemo client:load />}
+                    {name === "Card" && <CardDemo client:load />}
+                    {name === "Badge" && <BadgeDemo client:load />}
+                    {name === "Dialog" && <DialogDemo client:load />}
+                    {name === "Tabs" && <TabsDemo client:load />}
+                    {name === "Switch" && <SwitchDemo client:load />}
+                    {name === "Toast" && <ToastDemo client:load />}
+                </div>
+                <div slot="copy">
+                    <CopyBlock
+                        code={code}
+                        prompt={prompt}
+                        theme={themeBlock}
+                        component={name}
+                        label={`${name}.tsx`}
+                        system="pascal"
+                    />
+                </div>
+            </ComponentShowcase>
+        ))}
+
+        <section class="psc-grid pas-signup-grid">
+            <div class="psc-cell pas-signup">
+                <EmailSignup
+                    variant="pascal"
+                    size="default"
+                    placement="install"
+                    heading="FILE FOR DROPS."
+                    subheading="One email per theme. Mono CAPS optional."
+                />
+            </div>
+        </section>
+    </div>
+</Layout>
+
+<style>
+    .pas-shell {
+        max-width: 1280px;
+        margin: 0 auto;
+        background-color: var(--color-ink);
+        display: flex;
+        flex-direction: column;
+        gap: var(--border-width);
+        border-left: 2px solid var(--color-ink);
+        border-right: 2px solid var(--color-ink);
+    }
+
+    .pas-hero-grid { grid-template-columns: 2fr 1fr 1fr; }
+    .pas-hero-cell {
+        padding: 40px 32px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+    .pas-hero-cell--mint { background: var(--color-mint); }
+    .pas-hero-cell--pink { background: var(--color-pink); }
+    .pas-hero-blurb {
+        font-size: 14px;
+        line-height: 1.5;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        font-weight: 500;
+        margin: 0;
+    }
+    .pas-hero-meta {
+        font-size: 22px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .pas-cta-grid { grid-template-columns: 1fr 1fr; }
+    .pas-cta {
+        padding: 40px 32px;
+        text-decoration: none;
+        color: var(--color-ink);
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        transition: background 120ms ease;
+    }
+    .pas-cta:hover { background: var(--color-mint); }
+    .pas-cta--pink { background: var(--color-pink); }
+    .pas-cta--pink:hover { background: var(--color-mint); }
+
+    .pas-section { grid-template-columns: 1fr; }
+    .pas-section__head {
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .pas-tokens-grid { grid-template-columns: repeat(4, 1fr); }
+    .pas-token {
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+    .pas-token--mint { background: var(--color-mint); }
+    .pas-token--pink { background: var(--color-pink); }
+    .pas-token--ink {
+        background: var(--color-ink);
+        color: var(--color-paper);
+    }
+    .pas-token-sub {
+        font-size: 11px;
+        opacity: 0.7;
+        text-transform: uppercase;
+    }
+
+    .pas-type-grid { grid-template-columns: 1fr 1fr; }
+    .pas-type { padding: 20px 24px; }
+
+    .pas-copyblock-wrap { padding: 0; }
+
+    .pas-preview {
+        background: var(--color-paper);
+        padding: 32px;
+        border: 2px solid var(--color-ink);
+    }
+
+    .pas-signup-grid { grid-template-columns: 1fr; }
+    .pas-signup {
+        padding: 40px 32px;
+        background: var(--color-paper);
+    }
+
+    @media (max-width: 900px) {
+        .pas-hero-grid,
+        .pas-cta-grid,
+        .pas-tokens-grid,
+        .pas-type-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<script>
+    if (typeof window !== "undefined") {
+        (window as any).wardrobeTrack?.("wardrobe_system_view", { system: "pascal" });
+    }
+</script>

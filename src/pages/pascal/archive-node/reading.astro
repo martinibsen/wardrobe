@@ -1,0 +1,284 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import ArchiveHeader from "../../../components/pascal/ArchiveHeader.astro";
+
+const toc = [
+    { id: "01", label: "01. THE SEAMLESS LIE", active: true },
+    { id: "02", label: "02. RIGIDITY AS HONESTY" },
+    { id: "03", label: "03. LOGIC OF THE MACHINE" },
+    { id: "04", label: "04. THE PAPER FRAMEWORK" },
+    { id: "05", label: "05. GRID AS A MAP" },
+];
+---
+
+<Layout
+    title="Archive.Node — Reading"
+    description="Pascal habitat: long-form manifest reading view with sidebar TOC."
+    system="pascal"
+    chrome="hidden"
+>
+    <div class="arch-shell">
+        <ArchiveHeader
+            active="reading"
+            docId="MANIFESTO_01 // THE_AESTHETICS_OF_BUREAUCRACY"
+            revision="REV: v4.02.b [STABLE]"
+        />
+
+        <header class="psc-grid read-meta-strip">
+            <div class="psc-cell read-meta-cell">
+                <span class="psc-label-tiny">STATUS</span>
+                <span class="psc-mono">LIVE_NODE</span>
+            </div>
+            <div class="psc-cell read-meta-cell" style="background-color: var(--color-mint);">
+                <span class="psc-label-tiny">TAG</span>
+                <span class="psc-mono">CRITICAL</span>
+            </div>
+            <div class="psc-cell read-meta-cell">
+                <span class="psc-label-tiny">WORD COUNT</span>
+                <span class="psc-mono">1,402 WORDS</span>
+            </div>
+            <div class="psc-cell read-meta-cell">
+                <span class="psc-label-tiny">FILED</span>
+                <span class="psc-mono">05.22.2024</span>
+            </div>
+        </header>
+
+        <div class="psc-grid read-body">
+            <aside class="psc-stack read-sidebar">
+                <div class="psc-cell read-toc-head">
+                    <span class="psc-label-tiny">TABLE OF CONTENTS</span>
+                </div>
+                {toc.map((item) => (
+                    <a href="#" class:list={["psc-cell psc-toc-item", item.active && "is-active"]}>
+                        {item.label}
+                    </a>
+                ))}
+                <div class="psc-cell read-stamp-cell">
+                    <div class="psc-stamp psc-stamp--double">
+                        ARCHIVED<br/>·<br/>v4.02.b
+                    </div>
+                </div>
+            </aside>
+
+            <main class="psc-cell read-main">
+                <header class="read-header">
+                    <span class="psc-label-tiny">ESSAY / THEORY / DESIGN</span>
+                    <h1 class="psc-display-large read-title">THE AESTHETICS OF<br/>BUREAUCRACY.</h1>
+                    <p class="psc-mono read-byline">FILED BY ELIAS KLEIN — 05.22.2024 — REV: v4.02.b</p>
+                </header>
+
+                <div class="read-content">
+                    <div class="read-vertical">
+                        <span class="psc-vertical">DOC #772-K // SECTION 01 // THE SEAMLESS LIE</span>
+                    </div>
+                    <div class="read-article">
+                        <p>
+                            <strong>THE SEAMLESS LIE.</strong> Modern interface design has spent two decades
+                            apologizing for its own logic — softening corners, blurring edges, hiding seams,
+                            promising a world without forms. The result is a UI that pretends to be effortless
+                            and lies about everything underneath it.
+                        </p>
+                        <p>
+                            Bureaucracy is honest in a way that "seamless" never was. A tax form does not
+                            apologize for being a tax form. A ledger does not bury its rows behind a hero
+                            illustration. A passport stamp does not animate. Each element states what it is,
+                            where it sits, and what it does — in mono, in caps, with a 2-pixel border.
+                        </p>
+                        <p>
+                            We are not arguing for friction. We are arguing for <em>legibility</em>. A grid
+                            that names itself a grid. A field that labels itself FLD_01. A status that calls
+                            itself LIVE_NODE. The interface as a paper system that respects its user enough
+                            to show its own scaffolding.
+                        </p>
+                        <p>
+                            The aesthetic this produces is not warm. It is not friendly. It is not, in the
+                            Silicon Valley sense, "delightful." But it is honest, and honesty is rarer in
+                            software than any of us would like to admit.
+                        </p>
+                    </div>
+                </div>
+            </main>
+
+            <aside class="psc-stack read-sidebar-right">
+                <div class="psc-cell read-aside-cell" style="background-color: var(--color-pink);">
+                    <span class="psc-label-tiny">DOC ID</span>
+                    <span class="psc-mono read-aside-value">#772-K</span>
+                </div>
+                <div class="psc-cell read-aside-cell">
+                    <span class="psc-label-tiny">SECTION</span>
+                    <span class="psc-mono read-aside-value">01 / 05</span>
+                </div>
+                <div class="psc-cell read-aside-cell">
+                    <span class="psc-label-tiny">REVISIONS</span>
+                    <span class="psc-mono">v4.02.b<br/>v4.01.a<br/>v4.00.0</span>
+                </div>
+            </aside>
+        </div>
+
+        <footer class="psc-grid read-progress">
+            <div class="psc-cell read-progress-track">
+                <span class="psc-label-tiny" style="margin-bottom: 0;">PROGRESS</span>
+                <div class="read-progress-bar">
+                    <div class="read-progress-fill"></div>
+                </div>
+                <span class="psc-mono">35%</span>
+            </div>
+            <button class="psc-cell read-action">
+                <span class="psc-mono">← PREV SECTION</span>
+            </button>
+            <button class="psc-cell read-action">
+                <span class="psc-mono">NEXT SECTION →</span>
+            </button>
+        </footer>
+    </div>
+</Layout>
+
+<style>
+    .arch-shell {
+        max-width: 1280px;
+        margin: 0 auto;
+        background-color: var(--color-ink);
+        display: flex;
+        flex-direction: column;
+        gap: var(--border-width);
+        border-left: 2px solid var(--color-ink);
+        border-right: 2px solid var(--color-ink);
+    }
+
+    .read-meta-strip { grid-template-columns: repeat(4, 1fr); }
+    .read-meta-cell {
+        padding: 16px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .read-body {
+        grid-template-columns: 280px 1fr 240px;
+    }
+    .read-sidebar {
+        gap: 0;
+    }
+    .read-toc-head { padding: 16px 18px; border-bottom: 2px solid var(--color-ink); }
+    .read-stamp-cell {
+        padding: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+    }
+
+    .read-main {
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+    }
+    .read-header {
+        padding: 60px 40px 40px;
+        background: var(--color-pink);
+        border-bottom: 2px solid var(--color-ink);
+    }
+    .read-title {
+        margin-top: 16px;
+        margin-bottom: 16px;
+    }
+    .read-byline {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        opacity: 0.7;
+    }
+    .read-content {
+        padding: 40px;
+        display: grid;
+        grid-template-columns: 24px 1fr;
+        gap: 24px;
+        position: relative;
+    }
+    .read-vertical {
+        display: flex;
+        align-items: flex-start;
+        padding-top: 8px;
+    }
+    .read-article {
+        max-width: 640px;
+    }
+    .read-article p {
+        font-family: var(--font-mono);
+        font-size: 14px;
+        line-height: 1.75;
+        margin-bottom: 22px;
+    }
+    .read-article strong {
+        font-family: var(--font-display);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+    }
+
+    .read-sidebar-right {
+        gap: var(--border-width);
+    }
+    .read-aside-cell {
+        padding: 18px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+    .read-aside-value {
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .read-progress { grid-template-columns: 2fr 1fr 1fr; }
+    .read-progress-track {
+        padding: 16px 24px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+    .read-progress-bar {
+        flex: 1;
+        height: 8px;
+        background: rgba(0, 0, 0, 0.1);
+        position: relative;
+    }
+    .read-progress-fill {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 35%;
+        background: var(--color-ink);
+    }
+    .read-action {
+        padding: 16px;
+        background: var(--color-paper);
+        border: none;
+        cursor: pointer;
+        font-family: var(--font-mono);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 12px;
+    }
+    .read-action:hover { background: var(--color-mint); }
+
+    @media (max-width: 1024px) {
+        .read-body { grid-template-columns: 1fr; }
+        .read-meta-strip { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 720px) {
+        .read-content { grid-template-columns: 1fr; }
+        .read-vertical { display: none; }
+        .read-progress { grid-template-columns: 1fr; }
+    }
+</style>
+
+<script>
+    if (typeof window !== "undefined") {
+        (window as any).wardrobeTrack?.("wardrobe_demo_view", {
+            system: "pascal",
+            page: "reading",
+        });
+    }
+</script>

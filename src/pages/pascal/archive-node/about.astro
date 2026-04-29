@@ -1,0 +1,242 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import ArchiveHeader from "../../../components/pascal/ArchiveHeader.astro";
+
+const timeline = [
+    { year: "2024", text: "Filed Manifesto_01: 'The Aesthetics of Bureaucracy'" },
+    { year: "2022", text: "Founded Archive.Node as a critical repository" },
+    { year: "2019", text: "Published 'Paper Logic' in MUTE Quarterly" },
+    { year: "2015", text: "MA, Critical Theory of Interface Design" },
+    { year: "2011", text: "First public log entry" },
+];
+
+const inventory = [
+    { label: "ESSAYS", value: "47" },
+    { label: "MANIFESTOS", value: "08" },
+    { label: "TALKS", value: "12" },
+    { label: "INTERVIEWS", value: "23" },
+];
+---
+
+<Layout
+    title="Archive.Node — About"
+    description="Pascal habitat: profile of Elias Klein, archivist."
+    system="pascal"
+    chrome="hidden"
+>
+    <div class="arch-shell">
+        <ArchiveHeader active="about" docId="ABOUT_ELIAS_KLEIN" revision="REV: v3.00.0" />
+
+        <header class="psc-grid about-hero-grid">
+            <div class="psc-cell about-hero-title">
+                <span class="psc-label-tiny">SUBJECT FILE</span>
+                <h1 class="psc-display-title">ELIAS<br/>KLEIN.</h1>
+                <p class="psc-mono about-hero-byline">
+                    ARCHIVIST · CRITIC · INTERFACE THEORIST
+                </p>
+            </div>
+            <div class="psc-cell about-portrait" aria-hidden="true">
+                <div class="about-pixel"></div>
+                <span class="psc-vertical">SUBJECT // FILED 2024</span>
+            </div>
+        </header>
+
+        <section class="psc-grid about-bio-grid">
+            <div class="psc-cell about-bio">
+                <span class="psc-label-tiny">PHILOSOPHY</span>
+                <p class="about-bio-text">
+                    Bureaucracy is honesty. A grid that names itself a grid.
+                    A field that labels itself FLD_01. A system that does
+                    not apologize for being a system.
+                </p>
+            </div>
+            <div class="psc-cell about-bio" style="background-color: var(--color-mint);">
+                <span class="psc-label-tiny">METHOD</span>
+                <p class="about-bio-text">
+                    Read everything. File everything. Number every entry.
+                    Cite the seams. Refuse the seamless.
+                </p>
+            </div>
+        </section>
+
+        <section class="psc-grid about-inventory">
+            {inventory.map((item) => (
+                <div class="psc-cell about-inv-cell">
+                    <span class="psc-label-tiny">{item.label}</span>
+                    <span class="psc-mono about-inv-value">{item.value}</span>
+                </div>
+            ))}
+        </section>
+
+        <div class="psc-marquee">
+            <span class="psc-marquee__track">
+                &nbsp; CONTACT: NODE@ARCHIVE.SYSTEM // OFFICE_HOURS: TUESDAYS 14:00–16:00 CET // RESPONSE_TIME: 7 DAYS // CORRESPONDENCE: TYPED ONLY //
+            </span>
+        </div>
+
+        <section class="psc-grid about-timeline-section">
+            <div class="psc-cell about-timeline-head">
+                <span class="psc-label-tiny">TIMELINE</span>
+                <h2 class="psc-display-huge">RECORD.</h2>
+            </div>
+            <div class="psc-cell about-timeline-body">
+                {timeline.map((entry) => (
+                    <div class="about-timeline-row">
+                        <span class="psc-mono about-timeline-year">{entry.year}</span>
+                        <span class="about-timeline-text">{entry.text}</span>
+                    </div>
+                ))}
+            </div>
+        </section>
+
+        <footer class="psc-grid about-foot">
+            <div class="psc-cell about-foot-cell">
+                <span class="psc-label-tiny">EMAIL</span>
+                <span class="psc-mono">node@archive.system</span>
+            </div>
+            <div class="psc-cell about-foot-cell" style="background-color: var(--color-pink);">
+                <span class="psc-label-tiny">DESK</span>
+                <span class="psc-mono">ROOM 302 / FLOOR 03 / WING B</span>
+            </div>
+            <div class="psc-cell about-foot-cell">
+                <span class="psc-label-tiny">© FILED</span>
+                <span class="psc-mono">© 2024 ARCHIVE.NODE</span>
+            </div>
+        </footer>
+    </div>
+</Layout>
+
+<style>
+    .arch-shell {
+        max-width: 1280px;
+        margin: 0 auto;
+        background-color: var(--color-ink);
+        display: flex;
+        flex-direction: column;
+        gap: var(--border-width);
+        border-left: 2px solid var(--color-ink);
+        border-right: 2px solid var(--color-ink);
+    }
+
+    .about-hero-grid { grid-template-columns: 1.5fr 1fr; }
+    .about-hero-title {
+        padding: 60px 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        justify-content: flex-end;
+    }
+    .about-hero-byline {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        opacity: 0.7;
+    }
+    .about-portrait {
+        padding: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--color-paper);
+        position: relative;
+        min-height: 300px;
+    }
+    .about-pixel {
+        width: 70%;
+        aspect-ratio: 1;
+        background-image:
+            linear-gradient(45deg, #ddd 25%, transparent 25%),
+            linear-gradient(-45deg, #ddd 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, #ddd 75%),
+            linear-gradient(-45deg, transparent 75%, #ddd 75%);
+        background-size: 24px 24px;
+        background-position: 0 0, 0 12px, 12px -12px, -12px 0;
+        border: 2px solid var(--color-ink);
+    }
+    .about-portrait .psc-vertical {
+        position: absolute;
+        right: 20px;
+        bottom: 24px;
+    }
+
+    .about-bio-grid { grid-template-columns: 1fr 1fr; }
+    .about-bio {
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+    .about-bio-text {
+        font-family: var(--font-mono);
+        font-size: 14px;
+        line-height: 1.65;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+    }
+
+    .about-inventory { grid-template-columns: repeat(4, 1fr); }
+    .about-inv-cell {
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .about-inv-value {
+        font-size: 36px;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    .about-timeline-section { grid-template-columns: 1fr 2fr; }
+    .about-timeline-head {
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        background: var(--color-mint);
+    }
+    .about-timeline-body { padding: 0; }
+    .about-timeline-row {
+        display: grid;
+        grid-template-columns: 100px 1fr;
+        gap: 16px;
+        padding: 18px 24px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    .about-timeline-row:last-child { border-bottom: none; }
+    .about-timeline-year {
+        font-size: 14px;
+        font-weight: 700;
+    }
+    .about-timeline-text {
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .about-foot { grid-template-columns: 1fr 1fr 1fr; }
+    .about-foot-cell {
+        padding: 18px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    @media (max-width: 900px) {
+        .about-hero-grid,
+        .about-bio-grid,
+        .about-timeline-section,
+        .about-foot {
+            grid-template-columns: 1fr;
+        }
+        .about-inventory { grid-template-columns: 1fr 1fr; }
+    }
+</style>
+
+<script>
+    if (typeof window !== "undefined") {
+        (window as any).wardrobeTrack?.("wardrobe_demo_view", {
+            system: "pascal",
+            page: "about",
+        });
+    }
+</script>

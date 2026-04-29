@@ -123,13 +123,46 @@ import EmailSignup from "../components/shared/EmailSignup.astro";
                         <span class="theme-card__cta">See Bluey →</span>
                     </div>
                 </a>
-            </div>
 
-            <div class="theme-card theme-card--soon" aria-hidden="false">
-                <div class="theme-card__soon">
-                    <span class="theme-card__soon-label">Theme 05 — In the works</span>
-                    <span class="theme-card__soon-title">—</span>
-                    <span class="theme-card__soon-blurb">Sign up below to hear when it drops.</span>
+                <a class="theme-card theme-card--pascal" href="/pascal">
+                    <div class="theme-card__preview theme-card__preview--pascal" aria-hidden="true">
+                        <div class="psc-prev-grid">
+                            <div class="psc-prev-cell psc-prev-head">
+                                <span class="psc-prev-label">INDEX.V5</span>
+                                <span class="psc-prev-title">PASCAL.</span>
+                            </div>
+                            <div class="psc-prev-cell psc-prev-mint">
+                                <span class="psc-prev-label">STATUS</span>
+                                <span class="psc-prev-mono">LIVE_NODE</span>
+                            </div>
+                            <div class="psc-prev-cell psc-prev-pink">
+                                <span class="psc-prev-label">REV</span>
+                                <span class="psc-prev-mono">v4.02.b</span>
+                            </div>
+                        </div>
+                        <div class="psc-prev-marquee">
+                            <span class="psc-prev-marquee-track">
+                                SYSTEM STATUS: OPERATIONAL // DATA STREAMS: ACTIVE // NODE_ID: PASCAL_ROOT // SYSTEM STATUS: OPERATIONAL //
+                            </span>
+                        </div>
+                    </div>
+                    <div class="theme-card__meta">
+                        <span class="theme-card__name">Pascal</span>
+                        <span class="theme-card__vibe">
+                            Brutalist bureaucracy. Paper logic.
+                        </span>
+                        <span class="theme-card__cta">See Pascal →</span>
+                    </div>
+                </a>
+
+                <div class="theme-card theme-card--soon">
+                    <div class="theme-card__preview theme-card__preview--soon">
+                        <span class="theme-card__soon-mark">SOON</span>
+                    </div>
+                    <div class="theme-card__meta theme-card__meta--soon">
+                        <span class="theme-card__soon-label">Theme 06 — In the works</span>
+                        <span class="theme-card__soon-blurb">Sign up below to hear when it drops.</span>
+                    </div>
                 </div>
             </div>
 
@@ -240,8 +273,11 @@ import EmailSignup from "../components/shared/EmailSignup.astro";
 
     .grid {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 24px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+    @media (max-width: 960px) {
+        .grid { grid-template-columns: repeat(2, 1fr); }
     }
     .theme-card {
         display: flex;
@@ -644,23 +680,100 @@ import EmailSignup from "../components/shared/EmailSignup.astro";
         opacity: 0.4;
     }
 
-    /* ===== SOON strip (theme #5) =====
-       Full-width below the grid. Dashed, muted, intentional. */
-    .theme-card--soon {
-        margin-top: 24px;
-        border: 1.5px dashed #d4d4d4;
-        border-radius: 8px;
-        background: #fafafa;
-        opacity: 0.55;
-        cursor: default;
-        padding: 24px 28px;
-        display: block;
+    /* ===== PASCAL card preview =====
+       Brutalist editorial bureaucracy. Black bg, paper cells with
+       2px ink gutters, mono labels, marquee strip. */
+    .theme-card__preview--pascal {
+        background: #000000;
+        color: #000000;
+        padding: 0;
+        flex-direction: column;
+        gap: 2px;
+        font-family: "Space Grotesk", system-ui, sans-serif;
     }
-    .theme-card__soon {
+    .psc-prev-grid {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr 1fr;
+        gap: 2px;
+        background: #000000;
+        flex: 1;
+    }
+    .psc-prev-cell {
+        background: #f2f2f2;
+        padding: 14px 16px;
         display: flex;
-        align-items: baseline;
-        gap: 16px;
-        flex-wrap: wrap;
+        flex-direction: column;
+        gap: 8px;
+        justify-content: flex-end;
+    }
+    .psc-prev-mint { background: #4ea884; }
+    .psc-prev-pink { background: #ebaec1; }
+    .psc-prev-label {
+        font-family: "IBM Plex Mono", "Courier New", monospace;
+        font-size: 9px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        opacity: 0.75;
+    }
+    .psc-prev-title {
+        font-family: "Space Grotesk", system-ui, sans-serif;
+        font-size: 36px;
+        font-weight: 700;
+        line-height: 0.85;
+        letter-spacing: -0.04em;
+        text-transform: uppercase;
+    }
+    .psc-prev-mono {
+        font-family: "IBM Plex Mono", "Courier New", monospace;
+        font-size: 13px;
+        font-weight: 600;
+    }
+    .psc-prev-marquee {
+        background: #000000;
+        color: #f2f2f2;
+        padding: 8px 0;
+        overflow: hidden;
+        white-space: nowrap;
+        font-family: "IBM Plex Mono", "Courier New", monospace;
+        font-size: 9px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+    .psc-prev-marquee-track {
+        display: inline-block;
+        padding-left: 100%;
+        animation: psc-prev-scroll 24s linear infinite;
+    }
+    @keyframes psc-prev-scroll {
+        0%   { transform: translateX(0); }
+        100% { transform: translateX(-100%); }
+    }
+
+    /* ===== SOON tile (theme #6) =====
+       Sits inside the 3-col grid. Dashed, muted, intentional. */
+    .theme-card--soon {
+        border: 1.5px dashed #d4d4d4;
+        background: #fafafa;
+        opacity: 0.65;
+        cursor: default;
+        overflow: hidden;
+    }
+    .theme-card__preview--soon {
+        background: #fafafa;
+        align-items: center;
+        justify-content: center;
+        min-height: 220px;
+    }
+    .theme-card__soon-mark {
+        font-family: ui-monospace, "JetBrains Mono", SFMono-Regular, Menlo, monospace;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        color: #a3a3a3;
+        font-weight: 600;
+    }
+    .theme-card__meta--soon {
+        background: #fafafa;
     }
     .theme-card__soon-label {
         font-family: ui-monospace, "JetBrains Mono", SFMono-Regular, Menlo, monospace;
@@ -668,17 +781,11 @@ import EmailSignup from "../components/shared/EmailSignup.astro";
         text-transform: uppercase;
         letter-spacing: 0.12em;
         color: #525252;
-        flex-shrink: 0;
-    }
-    .theme-card__soon-title {
-        font-size: 24px;
-        font-weight: 600;
-        color: #525252;
-        letter-spacing: -0.02em;
     }
     .theme-card__soon-blurb {
-        font-size: 14px;
+        font-size: 13px;
         color: #737373;
+        line-height: 1.5;
     }
 
     .themes-signup {
