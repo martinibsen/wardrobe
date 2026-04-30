@@ -1,0 +1,344 @@
+---
+/**
+ * InstallGate — modal that intercepts the install-page "Copy entire prompt"
+ * click on first use. Captures email (POST /api/signup) or accepts a skip,
+ * then unlocks copy. Choice persists in localStorage under
+ * "wardrobe-install-unlocked".
+ *
+ * Drop into any install page. The page's copy button only needs to:
+ *   1. dispatch "install-gate-open" when localStorage is empty
+ *   2. listen for "install-gate-passed" to actually copy
+ *
+ * Styling is intentionally neutral so the modal stays out of the way of
+ * each theme's chrome — like a system dialog, not a themed surface.
+ */
+---
+
+<div
+    class="ig"
+    data-install-gate
+    hidden
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="install-gate-title"
+>
+    <div class="ig__backdrop" data-ig-backdrop aria-hidden="true"></div>
+
+    <div class="ig__card" role="document">
+        <button type="button" class="ig__close" data-ig-close aria-label="Close">
+            ×
+        </button>
+
+        <h2 id="install-gate-title" class="ig__title">Drop your email — get the prompt.</h2>
+        <p class="ig__sub">
+            One email per theme drop. Plus the occasional builder note when I ship
+            something. No spam.
+        </p>
+
+        <form class="ig__form" data-ig-form novalidate>
+            <label class="ig__hidden-label" for="install-gate-email">Email</label>
+            <input
+                id="install-gate-email"
+                class="ig__input"
+                type="email"
+                name="email"
+                placeholder="you@something.dev"
+                autocomplete="email"
+                required
+            />
+            <button type="submit" class="ig__submit">
+                <span class="ig__submit-label">Get the prompt →</span>
+                <span class="ig__submit-loading" aria-hidden="true">…</span>
+            </button>
+        </form>
+
+        <p class="ig__msg" data-ig-msg role="status" aria-live="polite"></p>
+
+        <button type="button" class="ig__skip" data-ig-skip>
+            or skip and copy raw →
+        </button>
+
+        <p class="ig__legal">
+            By signing up, you agree to receive emails about Wardrobe.
+            See <a href="/privacy">Privacy policy</a>.
+        </p>
+    </div>
+</div>
+
+<style>
+    .ig {
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+            "Helvetica Neue", Arial, sans-serif;
+    }
+    .ig[hidden] { display: none; }
+    .ig__backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+    }
+    .ig__card {
+        position: relative;
+        background: #ffffff;
+        color: #0a0a0a;
+        max-width: 440px;
+        width: 100%;
+        border-radius: 12px;
+        padding: 32px 28px 22px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    }
+    .ig__close {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: none;
+        font-size: 22px;
+        line-height: 1;
+        color: #525252;
+        cursor: pointer;
+        border-radius: 6px;
+        transition: background 100ms ease, color 100ms ease;
+    }
+    .ig__close:hover { background: #f5f5f5; color: #0a0a0a; }
+    .ig__title {
+        font-size: 22px;
+        font-weight: 600;
+        line-height: 1.2;
+        letter-spacing: -0.02em;
+        margin: 0 0 10px;
+    }
+    .ig__sub {
+        font-size: 14px;
+        line-height: 1.5;
+        color: #525252;
+        margin: 0 0 22px;
+    }
+    .ig__hidden-label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+    .ig__form {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    .ig__input {
+        flex: 1 1 220px;
+        min-width: 0;
+        padding: 12px 14px;
+        border: 1px solid #d4d4d4;
+        border-radius: 8px;
+        background: #ffffff;
+        color: #0a0a0a;
+        font: inherit;
+        font-size: 14px;
+        transition: border-color 120ms ease;
+    }
+    .ig__input:focus {
+        outline: 2px solid #0a0a0a;
+        outline-offset: -2px;
+        border-color: #0a0a0a;
+    }
+    .ig__submit {
+        position: relative;
+        padding: 12px 18px;
+        background: #0a0a0a;
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        font: inherit;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 120ms ease;
+    }
+    .ig__submit:hover { background: #2a2a2a; }
+    .ig__submit-loading { display: none; }
+    .ig[data-loading="true"] .ig__submit-label { visibility: hidden; }
+    .ig[data-loading="true"] .ig__submit-loading {
+        display: inline-flex;
+        position: absolute;
+        inset: 0;
+        align-items: center;
+        justify-content: center;
+    }
+    .ig[data-loading="true"] .ig__submit,
+    .ig[data-loading="true"] .ig__input {
+        opacity: 0.7;
+        pointer-events: none;
+    }
+    .ig__msg {
+        margin: 12px 0 0;
+        font-size: 13px;
+        line-height: 1.4;
+        min-height: 1em;
+        color: #525252;
+    }
+    .ig__msg.is-success { color: #197b3a; font-weight: 500; }
+    .ig__msg.is-error { color: #b91c1c; }
+    .ig__skip {
+        margin-top: 16px;
+        background: none;
+        border: none;
+        font: inherit;
+        font-size: 13px;
+        color: #525252;
+        cursor: pointer;
+        text-decoration: underline;
+        padding: 0;
+    }
+    .ig__skip:hover { color: #0a0a0a; }
+    .ig__legal {
+        margin: 18px 0 0;
+        font-size: 11px;
+        line-height: 1.45;
+        color: #737373;
+    }
+    .ig__legal a {
+        color: #525252;
+        text-decoration: underline;
+    }
+    .ig__legal a:hover { color: #0a0a0a; }
+
+    @media (max-width: 540px) {
+        .ig__card { padding: 26px 20px 18px; }
+        .ig__title { font-size: 19px; }
+    }
+</style>
+
+<script is:inline>
+    (function () {
+        const STORAGE_KEY = "wardrobe-install-unlocked";
+        const gate = document.querySelector("[data-install-gate]");
+        if (!gate) return;
+
+        const form = gate.querySelector("[data-ig-form]");
+        const input = form ? form.querySelector('input[name="email"]') : null;
+        const msg = gate.querySelector("[data-ig-msg]");
+        const skip = gate.querySelector("[data-ig-skip]");
+        const closeBtn = gate.querySelector("[data-ig-close]");
+        const backdrop = gate.querySelector("[data-ig-backdrop]");
+
+        function openGate() {
+            gate.hidden = false;
+            requestAnimationFrame(function () {
+                if (input) input.focus();
+            });
+            if (window.wardrobeTrack) {
+                window.wardrobeTrack("wardrobe_install_email_modal_open", {});
+            }
+        }
+
+        function closeGate() {
+            gate.hidden = true;
+            gate.dataset.loading = "false";
+            if (msg) {
+                msg.textContent = "";
+                msg.className = "ig__msg";
+            }
+        }
+
+        function unlockAndPass(via) {
+            try { localStorage.setItem(STORAGE_KEY, "true"); } catch (_) {}
+            window.dispatchEvent(
+                new CustomEvent("install-gate-passed", { detail: { via: via } })
+            );
+            // Small delay so the success message reads as confirmation
+            // before the modal dismisses.
+            setTimeout(closeGate, via === "email" ? 600 : 0);
+        }
+
+        window.addEventListener("install-gate-open", openGate);
+
+        document.addEventListener("keydown", function (e) {
+            if (gate.hidden) return;
+            if (e.key === "Escape") closeGate(); // close WITHOUT unlocking
+        });
+
+        if (backdrop) backdrop.addEventListener("click", closeGate);
+        if (closeBtn) closeBtn.addEventListener("click", closeGate);
+
+        if (skip) {
+            skip.addEventListener("click", function () {
+                if (window.wardrobeTrack) {
+                    window.wardrobeTrack("wardrobe_install_email_skipped", {});
+                }
+                unlockAndPass("skip");
+            });
+        }
+
+        if (form) {
+            form.addEventListener("submit", async function (e) {
+                e.preventDefault();
+                const email = String((input && input.value) || "").trim();
+                if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+                    if (msg) {
+                        msg.textContent = "Please enter a valid email.";
+                        msg.className = "ig__msg is-error";
+                    }
+                    return;
+                }
+                gate.dataset.loading = "true";
+                if (msg) {
+                    msg.textContent = "";
+                    msg.className = "ig__msg";
+                }
+                try {
+                    const res = await fetch("/api/signup", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ email: email }),
+                    });
+                    if (res.ok) {
+                        if (msg) {
+                            msg.textContent = "✓ You're in. Copying…";
+                            msg.className = "ig__msg is-success";
+                        }
+                        if (window.wardrobeTrack) {
+                            window.wardrobeTrack("wardrobe_install_email_submitted", {});
+                            window.wardrobeTrack("wardrobe_signup", {
+                                source: "wardrobe",
+                                placement: "install-gate",
+                            });
+                        }
+                        unlockAndPass("email");
+                    } else {
+                        let data = {};
+                        try { data = await res.json(); } catch (_) {}
+                        if (msg) {
+                            msg.textContent = data && data.error
+                                ? "Couldn't sign up: " + data.error
+                                : "Couldn't sign up. Try again.";
+                            msg.className = "ig__msg is-error";
+                        }
+                    }
+                } catch (_) {
+                    if (msg) {
+                        msg.textContent = "Network hiccup. Try again.";
+                        msg.className = "ig__msg is-error";
+                    }
+                } finally {
+                    gate.dataset.loading = "false";
+                }
+            });
+        }
+    })();
+</script>

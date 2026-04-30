@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import EmailSignup from "../../components/shared/EmailSignup.astro";
+import InstallGate from "../../components/shared/InstallGate.astro";
 import { generateFullInstallPrompt } from "../../utils/generate-prompts";
 
 const prompts = {
@@ -101,6 +102,8 @@ const prompts = {
             </div>
         </section>
     </main>
+
+    <InstallGate />
 </Layout>
 
 <style>
@@ -254,7 +257,9 @@ const prompts = {
     const copyBtn = document.getElementById("copy-full") as HTMLButtonElement | null;
     const copyStatus = document.getElementById("copy-status") as HTMLElement | null;
 
-    copyBtn?.addEventListener("click", async () => {
+    const GATE_KEY = "wardrobe-install-unlocked";
+
+    async function runCopy() {
         const activePane = document.querySelector<HTMLElement>(
             `.prompt-pane[data-pane="${activeTarget}"]`,
         );
@@ -279,5 +284,17 @@ const prompts = {
             system: "hyper",
             target: activeTarget,
         });
+    }
+
+    copyBtn?.addEventListener("click", () => {
+        let unlocked = false;
+        try { unlocked = localStorage.getItem(GATE_KEY) === "true"; } catch (_) {}
+        if (unlocked) {
+            runCopy();
+        } else {
+            window.dispatchEvent(new CustomEvent("install-gate-open"));
+        }
     });
+
+    window.addEventListener("install-gate-passed", () => runCopy());
 </script>

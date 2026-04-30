@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import EmailSignup from "../../components/shared/EmailSignup.astro";
+import InstallGate from "../../components/shared/InstallGate.astro";
 import { generateFullInstallPrompt } from "../../utils/generate-prompts";
 
 const prompts = {
@@ -104,6 +105,8 @@ const prompts = {
             </div>
         </section>
     </main>
+
+    <InstallGate />
 </Layout>
 
 <style>
@@ -262,26 +265,41 @@ const prompts = {
             t.addEventListener("click", () => activate(t.dataset.target ?? "claude-code"))
         );
 
+        const GATE_KEY = "wardrobe-install-unlocked";
+
+        async function runCopy() {
+            if (!status) return;
+            const active = document.querySelector<HTMLElement>('[data-pane][data-active="true"]');
+            const text = active?.querySelector("code")?.textContent ?? "";
+            try {
+                await navigator.clipboard.writeText(text);
+                status.textContent = "Copied ✓";
+                status.dataset.state = "copied";
+                (window as any).wardrobeTrack?.("wardrobe_copy_install_full", {
+                    system: "bluey",
+                    target: active?.dataset.pane ?? "claude-code",
+                });
+                setTimeout(() => {
+                    status.textContent = "";
+                    status.dataset.state = "";
+                }, 2000);
+            } catch (_) {
+                status.textContent = "Copy failed";
+            }
+        }
+
         if (copyBtn && status) {
-            copyBtn.addEventListener("click", async () => {
-                const active = document.querySelector<HTMLElement>('[data-pane][data-active="true"]');
-                const text = active?.querySelector("code")?.textContent ?? "";
-                try {
-                    await navigator.clipboard.writeText(text);
-                    status.textContent = "Copied ✓";
-                    status.dataset.state = "copied";
-                    (window as any).wardrobeTrack?.("wardrobe_copy_install_full", {
-                        system: "bluey",
-                        target: active?.dataset.pane ?? "claude-code",
-                    });
-                    setTimeout(() => {
-                        status.textContent = "";
-                        status.dataset.state = "";
-                    }, 2000);
-                } catch (_) {
-                    status.textContent = "Copy failed";
+            copyBtn.addEventListener("click", () => {
+                let unlocked = false;
+                try { unlocked = localStorage.getItem(GATE_KEY) === "true"; } catch (_) {}
+                if (unlocked) {
+                    runCopy();
+                } else {
+                    window.dispatchEvent(new CustomEvent("install-gate-open"));
                 }
             });
+
+            window.addEventListener("install-gate-passed", () => runCopy());
         }
 
         (window as any).wardrobeTrack?.("wardrobe_install_view", { system: "bluey" });
