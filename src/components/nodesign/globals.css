@@ -36,6 +36,17 @@
 body[data-system="nodesign"] {
     opacity: 0;
     animation: nds-fade-in 1.6s var(--ease-soft) forwards;
+    /* Many Nodesign habitat pages place all visible content with
+       position: absolute (V O I D, inquiry form). Without a flex
+       column on the body, the in-flow footer collapses up against
+       the top of the viewport. Force the body to fill the screen
+       and let the footer drop to the bottom. */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+body[data-system="nodesign"] > .foot {
+    margin-top: auto;
 }
 @keyframes nds-fade-in {
     0% { opacity: 0; }
