@@ -1,7 +1,7 @@
 /* =========================================================
    Wardrobe — NODESIGN globals
-   Loads Inter, applies cursor:none + decorations only inside
-   [data-system="nodesign"]. Other pages keep native cursor.
+   Loads Inter, applies decorations only inside
+   [data-system="nodesign"]. Other pages stay untouched.
    ========================================================= */
 
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap");
