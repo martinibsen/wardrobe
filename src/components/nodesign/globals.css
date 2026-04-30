@@ -14,13 +14,6 @@
     box-sizing: border-box;
 }
 
-/* The whole point: hide the native cursor and replace it with
-   .nds-cursor-dot + .nds-cursor-follower (see NodesignChrome.astro). */
-[data-system="nodesign"],
-[data-system="nodesign"] * {
-    cursor: none;
-}
-
 [data-system="nodesign"] {
     background-color: var(--color-bg);
     color: var(--color-fg);
@@ -51,54 +44,6 @@ body[data-system="nodesign"] > .foot {
 @keyframes nds-fade-in {
     0% { opacity: 0; }
     100% { opacity: 1; }
-}
-
-/* ===========================
-   CUSTOM CURSOR
-   =========================== */
-.nds-cursor-dot {
-    width: 4px;
-    height: 4px;
-    background-color: var(--color-fg);
-    border-radius: 50%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-    transition: width 0.3s, height 0.3s, background-color 0.3s;
-    mix-blend-mode: difference;
-}
-.nds-cursor-follower {
-    width: 24px;
-    height: 24px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 50%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    z-index: 9998;
-    transform: translate(-50%, -50%);
-    transition: width 0.3s, height 0.3s, border-color 0.3s, background-color 0.3s;
-}
-body.hovering .nds-cursor-dot {
-    width: 0;
-    height: 0;
-}
-body.hovering .nds-cursor-follower {
-    width: 44px;
-    height: 44px;
-    border-color: rgba(0, 0, 0, 0.3);
-    background-color: rgba(0, 0, 0, 0.03);
-}
-@media (hover: none) {
-    /* Touch devices: hide custom cursor, restore native interaction. */
-    .nds-cursor-dot,
-    .nds-cursor-follower { display: none; }
-    [data-system="nodesign"],
-    [data-system="nodesign"] * { cursor: auto; }
 }
 
 /* ===========================
