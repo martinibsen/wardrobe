@@ -373,13 +373,12 @@ import EmailSignup from "../components/shared/EmailSignup.astro";
     }
     .vibe-random:active { transform: rotate(360deg); }
 
-    /* Dimmed cards under an active filter */
+    /* Hide cards that don't match the active filter. */
     .theme-card[data-dimmed="true"] {
-        opacity: 0.28;
-        filter: saturate(0.6);
+        display: none;
     }
     .theme-card {
-        transition: opacity 240ms ease, filter 240ms ease, border-color 200ms ease;
+        transition: border-color 200ms ease;
     }
 
     .grid {
