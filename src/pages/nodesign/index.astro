@@ -1,0 +1,320 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ComponentShowcase from "../../components/shared/ComponentShowcase.astro";
+import EmailSignup from "../../components/shared/EmailSignup.astro";
+import NodesignChrome from "../../components/nodesign/NodesignChrome.astro";
+import {
+    NODESIGN_COMPONENTS,
+    getComponentCode,
+    generateComponentPrompt,
+    generateThemeBlock,
+} from "../../utils/generate-prompts";
+
+import {
+    ButtonDemo,
+    InputDemo,
+    TextareaDemo,
+    SelectDemo,
+    CardDemo,
+    BadgeDemo,
+    DialogDemo,
+    TabsDemo,
+    SwitchDemo,
+    ToastDemo,
+} from "../../components/nodesign/demos";
+
+type ComponentName = (typeof NODESIGN_COMPONENTS)[number];
+
+const blurbs: Record<ComponentName, string> = {
+    Button:
+        "Text-only. No box, no fill — just label and a thin underline that brightens on hover. Primary keeps the line solid, ghost drops it entirely.",
+    Input:
+        "Border-bottom only. Label sits above in 10px CAPS at 40% opacity. Focus deepens the underline.",
+    Textarea:
+        "Same border-bottom treatment, taller. No resize handle. Reads as a continuation of the page, not a box.",
+    Select:
+        "Same border-bottom shell. Native chevron — minimal styling so the OS picker takes over.",
+    Card:
+        "1px hairline border or a soft surface tint. Padding is the only frame. Used to delineate without enclosing.",
+    Badge:
+        "Small CAPS chip. Default is hairline, solid inverts to ink/paper, soft just fades the text.",
+    Dialog:
+        "White-on-white with a 70%-opacity backdrop and 8px blur. Title in CAPS at 14px. Esc + outside-click both close.",
+    Tabs:
+        "Underline strip. Inactive labels at 40% opacity, active gets the line and full ink. No animation — just the line moving.",
+    Switch:
+        "A 1px line with a 8px ink dot that slides 36px when on. Quietest toggle in the system.",
+    Toast:
+        "Hairline-bordered card. CAPS title, soft body. Success/error each pick a single inked side-line.",
+};
+
+const themeBlock = generateThemeBlock("nodesign");
+const componentBlocks = NODESIGN_COMPONENTS.map((name) => ({
+    name,
+    code: getComponentCode(name, "nodesign"),
+    prompt: generateComponentPrompt(name, "nodesign"),
+    blurb: blurbs[name],
+}));
+---
+
+<Layout
+    title="Nodesign — Wardrobe"
+    description="Almost-invisible minimalism. The absence is the design."
+    system="nodesign"
+    chrome="nodesign"
+>
+    <NodesignChrome hideBrand={true} />
+
+    <main class="nds-overview">
+        <section class="nds-hero">
+            <span class="nds-hero__eyebrow">Wardrobe / Nodesign</span>
+            <h1 class="nds-hero__title">N O D E S I G N</h1>
+            <p class="nds-hero__lede">
+                Almost-invisible minimalism. The absence is the design.
+                White space is the canvas, the cursor is the only ink.
+            </p>
+            <div class="nds-hero__cta">
+                <a class="nds-btn nds-btn--primary nds-btn--lg" href="/nodesign/install">
+                    Install in 30 seconds →
+                </a>
+                <a class="nds-btn nds-btn--ghost nds-btn--lg" href="/nodesign/essence">
+                    See Essence →
+                </a>
+            </div>
+        </section>
+
+        <section class="nds-section">
+            <span class="nds-section__label">— Tokens</span>
+            <h2 class="nds-section__title">Three values. The rest is restraint.</h2>
+            <div class="nds-token-row">
+                <div class="nds-token">
+                    <span class="nds-token__swatch" style="background: #ffffff; border: 1px solid rgba(0,0,0,0.08);"></span>
+                    <span class="nds-token__name">--bg</span>
+                    <span class="nds-token__value">#ffffff</span>
+                </div>
+                <div class="nds-token">
+                    <span class="nds-token__swatch" style="background: #000000;"></span>
+                    <span class="nds-token__name">--fg</span>
+                    <span class="nds-token__value">#000000</span>
+                </div>
+                <div class="nds-token">
+                    <span class="nds-token__swatch" style="background: #f5f5f5;"></span>
+                    <span class="nds-token__name">image placeholder</span>
+                    <span class="nds-token__value">#f5f5f5</span>
+                </div>
+                <div class="nds-token">
+                    <span class="nds-token__swatch" style="background: #1a1a1a;"></span>
+                    <span class="nds-token__name">deep ink (mix-blend)</span>
+                    <span class="nds-token__value">#1a1a1a</span>
+                </div>
+            </div>
+            <ul class="nds-type-list">
+                <li><span class="nds-type-list__label">Display / body</span> Inter — 11–14px, weights 400/500</li>
+                <li><span class="nds-type-list__label">Padding</span> 2.5vw desktop · 30px mobile</li>
+                <li><span class="nds-type-list__label">Easing</span> cubic-bezier(0.16, 1, 0.3, 1)</li>
+            </ul>
+        </section>
+
+        <section class="nds-section">
+            <span class="nds-section__label">— Components</span>
+            <h2 class="nds-section__title">10 components. Mostly absence.</h2>
+        </section>
+
+        {componentBlocks.map(({ name, blurb }) => (
+            <ComponentShowcase name={name} blurb={blurb}>
+                <div slot="preview" class="nds-preview">
+                    {name === "Button" && <ButtonDemo client:load />}
+                    {name === "Input" && <InputDemo client:load />}
+                    {name === "Textarea" && <TextareaDemo client:load />}
+                    {name === "Select" && <SelectDemo client:load />}
+                    {name === "Card" && <CardDemo client:load />}
+                    {name === "Badge" && <BadgeDemo client:load />}
+                    {name === "Dialog" && <DialogDemo client:load />}
+                    {name === "Tabs" && <TabsDemo client:load />}
+                    {name === "Switch" && <SwitchDemo client:load />}
+                    {name === "Toast" && <ToastDemo client:load />}
+                </div>
+            </ComponentShowcase>
+        ))}
+
+        <section class="nds-section nds-signup-section">
+            <div class="nds-signup-box">
+                <EmailSignup
+                    variant="nodesign"
+                    size="default"
+                    placement="install"
+                    heading="Stay close to the absence."
+                    subheading="One email per theme drop. Nothing in between."
+                />
+            </div>
+        </section>
+    </main>
+</Layout>
+
+<style>
+    .nds-overview {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 120px var(--pad, 30px) 100px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .nds-hero { margin-bottom: 140px; max-width: 720px; }
+    .nds-hero__eyebrow {
+        display: block;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: rgba(0, 0, 0, 0.4);
+        margin-bottom: 60px;
+    }
+    .nds-hero__title {
+        font-size: clamp(36px, 6vw, 64px);
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        line-height: 1.1;
+        margin: 0 0 32px;
+    }
+    .nds-hero__lede {
+        font-size: 18px;
+        line-height: 1.6;
+        max-width: 540px;
+        margin: 0 0 48px;
+        font-weight: 400;
+    }
+    .nds-hero__cta {
+        display: flex;
+        gap: 40px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .nds-section { margin-bottom: 100px; }
+    .nds-section__label {
+        display: block;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: rgba(0, 0, 0, 0.4);
+        margin-bottom: 32px;
+    }
+    .nds-section__title {
+        font-size: 28px;
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        line-height: 1.3;
+        margin: 0 0 56px;
+        max-width: 640px;
+    }
+    .nds-token-row {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 28px;
+        margin-bottom: 64px;
+    }
+    .nds-token {
+        display: grid;
+        grid-template-columns: 28px 1fr auto;
+        gap: 16px;
+        align-items: center;
+        padding: 14px 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+    .nds-token__swatch {
+        width: 28px;
+        height: 28px;
+        border-radius: 1px;
+    }
+    .nds-token__name {
+        font-size: 13px;
+        font-weight: 500;
+    }
+    .nds-token__value {
+        font-size: 11px;
+        color: rgba(0, 0, 0, 0.5);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    .nds-type-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 14px;
+    }
+    .nds-type-list li {
+        font-size: 13px;
+        line-height: 1.6;
+        display: grid;
+        grid-template-columns: 180px 1fr;
+        gap: 24px;
+    }
+    .nds-type-list__label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: rgba(0, 0, 0, 0.4);
+    }
+
+    .nds-preview {
+        background: #ffffff;
+        padding: 40px;
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        min-height: 120px;
+        display: flex;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 24px;
+        position: relative;
+    }
+
+    .nds-signup-section { margin-top: 120px; }
+    .nds-signup-box {
+        max-width: 440px;
+        padding-top: 40px;
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    /* Tame ComponentShowcase chrome to fit Nodesign — borders are ours */
+    .nds-overview :global(.showcase) {
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+        padding: 60px 0;
+        gap: 40px;
+        color: #000000;
+    }
+    .nds-overview :global(.showcase__title) {
+        font-family: "Inter", -apple-system, sans-serif;
+        font-size: 32px;
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+        text-transform: none;
+    }
+    .nds-overview :global(.showcase__blurb) {
+        font-family: "Inter", -apple-system, sans-serif;
+        font-size: 14px;
+        line-height: 1.6;
+        color: rgba(0, 0, 0, 0.6);
+        max-width: 580px;
+    }
+    .nds-overview :global(.showcase__preview) {
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        padding: 0;
+        min-height: auto;
+    }
+
+    @media (max-width: 720px) {
+        .nds-overview { padding-top: 80px; }
+        .nds-token-row { grid-template-columns: 1fr; }
+        .nds-type-list li { grid-template-columns: 1fr; gap: 4px; }
+    }
+</style>
+
+<script>
+    if (typeof window !== "undefined") {
+        (window as any).wardrobeTrack?.("wardrobe_system_view", { system: "nodesign" });
+    }
+</script>

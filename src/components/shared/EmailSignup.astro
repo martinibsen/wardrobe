@@ -10,7 +10,7 @@
  * Variants pick the visual sphere; sizes pick the density. Copy can be
  * overridden per instance.
  */
-type Variant = "neutral" | "hyper" | "system" | "brick" | "bluey" | "pascal";
+type Variant = "neutral" | "hyper" | "system" | "brick" | "bluey" | "pascal" | "nodesign";
 type Size = "compact" | "default" | "hero";
 type Placement = "hero" | "sticky" | "install" | "footer";
 
@@ -692,6 +692,85 @@ const uid = `signup-${Math.random().toString(36).slice(2, 9)}`;
     .es--pascal.es--compact .es__form { gap: 6px; }
     .es--pascal.es--compact .es__input { padding: 8px 10px; font-size: 12px; }
     .es--pascal.es--compact .es__btn { padding: 8px 14px; font-size: 10px; }
+
+    /* ===========================
+       NODESIGN VARIANT (almost-invisible minimalism)
+       =========================== */
+    .es--nodesign .es__heading {
+        font-family: "Inter", -apple-system, sans-serif;
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 1.3;
+        letter-spacing: -0.01em;
+        color: #000000;
+        margin: 0 0 12px;
+    }
+    .es--nodesign .es__subheading {
+        font-family: "Inter", -apple-system, sans-serif;
+        font-size: 13px;
+        line-height: 1.6;
+        color: rgba(0, 0, 0, 0.55);
+        margin: 0 0 24px;
+    }
+    .es--nodesign .es__input {
+        padding: 8px 0;
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 0;
+        color: #000000;
+        font-family: "Inter", -apple-system, sans-serif;
+        font-size: 13px;
+    }
+    .es--nodesign .es__input::placeholder {
+        color: rgba(0, 0, 0, 0.35);
+    }
+    .es--nodesign .es__input:focus {
+        outline: none;
+        border-bottom-color: rgba(0, 0, 0, 0.8);
+    }
+    .es--nodesign .es__btn {
+        padding: 8px 0;
+        background: transparent;
+        color: #000000;
+        border: none;
+        border-bottom: 1px solid #000000;
+        border-radius: 0;
+        font-family: "Inter", -apple-system, sans-serif;
+        font-weight: 500;
+        font-size: 12px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        transition: opacity 0.3s ease;
+    }
+    .es--nodesign .es__btn:hover {
+        opacity: 0.55;
+    }
+    .es--nodesign .es__msg {
+        font-family: "Inter", -apple-system, sans-serif;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: rgba(0, 0, 0, 0.5);
+    }
+    .es--nodesign .es__msg.is-success { color: #000000; }
+    .es--nodesign .es__msg.is-error { color: #000000; }
+    .es--nodesign .es__helper,
+    .es--nodesign .es__consent {
+        font-family: "Inter", -apple-system, sans-serif;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: rgba(0, 0, 0, 0.4);
+    }
+
+    .es--nodesign.es--hero .es__heading { font-size: 22px; }
+    .es--nodesign.es--hero .es__input { padding: 10px 0; font-size: 14px; }
+    .es--nodesign.es--hero .es__btn { padding: 10px 0; font-size: 13px; }
+
+    .es--nodesign.es--compact .es__form { gap: 16px; }
+    .es--nodesign.es--compact .es__input { padding: 6px 0; font-size: 12px; }
+    .es--nodesign.es--compact .es__btn { padding: 6px 0; font-size: 11px; }
 
     /* ===========================
        PLACEMENT-SPECIFIC TWEAKS

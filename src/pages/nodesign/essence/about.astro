@@ -1,0 +1,80 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import NodesignChrome from "../../../components/nodesign/NodesignChrome.astro";
+
+const team = [
+    { name: "Marcus Chen", role: "Principal Architect" },
+    { name: "Elena Rossi", role: "Lead Designer" },
+    { name: "Julian Vane", role: "Technical Director" },
+    { name: "Sarah Miller", role: "Interior Architect" },
+];
+
+const awards = [
+    { year: "2024", title: "AIA National Architecture Award", status: "Won" },
+    { year: "2023", title: "Dezeen Awards — Emerging Studio of the Year", status: "Shortlist" },
+    { year: "2022", title: "Mies van der Rohe Pavilion Award", status: "Nominee" },
+    { year: "2021", title: "Architectural Review Future Projects", status: "Won" },
+];
+---
+
+<Layout
+    title="Essence — About"
+    description="Nodesign habitat — manifesto + team."
+    system="nodesign"
+    chrome="hidden"
+>
+    <NodesignChrome hideBrand={false} brandHref="/nodesign/essence" brandLabel="Essence">
+        <a class="nds-text nds-peripheral nds-magnetic nds-top-center" data-strength="20" href="/nodesign/essence/work">
+            <span>Work</span>
+        </a>
+        <a class="nds-text nds-peripheral nds-magnetic nds-top-right is-active" data-strength="20" href="/nodesign/essence/about">
+            <span>About</span>
+        </a>
+    </NodesignChrome>
+
+    <main class="nds-about">
+        <section class="nds-manifesto">
+            <div class="nds-editorial-image" style="background:#ececec"></div>
+            <div class="nds-manifesto-text">
+                <span class="nds-section-label">Our Manifesto</span>
+                <p class="nds-manifesto-content">
+                    We believe in the power of negative space. Our practice is dedicated
+                    to the reduction of form to its essential truth, creating environments
+                    that breathe, inspire, and endure beyond the constraints of contemporary
+                    trends.
+                </p>
+            </div>
+        </section>
+
+        <h2 class="nds-section-header">— Team</h2>
+        <section class="nds-team">
+            {team.map((m) => (
+                <div>
+                    <div class="nds-team-photo"></div>
+                    <span class="nds-team-name">{m.name}</span>
+                    <span class="nds-team-role">{m.role}</span>
+                </div>
+            ))}
+        </section>
+
+        <h2 class="nds-section-header">— Awards</h2>
+        <section class="nds-awards">
+            {awards.map((a) => (
+                <div class="nds-award-row">
+                    <span class="nds-award-year">{a.year}</span>
+                    <span>{a.title}</span>
+                    <span class="nds-award-status">{a.status}</span>
+                </div>
+            ))}
+        </section>
+    </main>
+</Layout>
+
+<script>
+    if (typeof window !== "undefined") {
+        (window as any).wardrobeTrack?.("wardrobe_demo_view", {
+            system: "nodesign",
+            page: "about",
+        });
+    }
+</script>

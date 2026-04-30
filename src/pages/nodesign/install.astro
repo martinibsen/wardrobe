@@ -1,0 +1,291 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import EmailSignup from "../../components/shared/EmailSignup.astro";
+import InstallGate from "../../components/shared/InstallGate.astro";
+import NodesignChrome from "../../components/nodesign/NodesignChrome.astro";
+import { generateFullInstallPrompt } from "../../utils/generate-prompts";
+
+const prompts = {
+    "claude-code": generateFullInstallPrompt("claude-code", "nodesign"),
+    v0: generateFullInstallPrompt("v0", "nodesign"),
+    lovable: generateFullInstallPrompt("lovable", "nodesign"),
+};
+---
+
+<Layout
+    title="Install Nodesign — Wardrobe"
+    description="One paste. 30 seconds. Almost-invisible minimalism."
+    system="nodesign"
+    chrome="nodesign"
+>
+    <NodesignChrome hideBrand={true} />
+
+    <main class="nds-install">
+        <section class="nds-hero">
+            <span class="nds-hero__eyebrow">Wardrobe / Nodesign / Install</span>
+            <h1 class="nds-hero__title">Install in<br/>30 seconds.</h1>
+            <p class="nds-hero__lede">
+                Pick your AI tool. Hit copy. Paste it into a fresh chat.
+                Watch the cursor become the most active thing on screen.
+            </p>
+        </section>
+
+        <section class="nds-section">
+            <div class="nds-targets" role="tablist">
+                <button type="button" role="tab" class="nds-target is-active" data-target="claude-code" aria-selected="true">
+                    Claude Code / Cursor
+                </button>
+                <button type="button" role="tab" class="nds-target" data-target="v0" aria-selected="false">
+                    v0
+                </button>
+                <button type="button" role="tab" class="nds-target" data-target="lovable" aria-selected="false">
+                    Lovable
+                </button>
+            </div>
+
+            <div class="nds-copy-bar">
+                <button type="button" id="copy-full" class="nds-btn nds-btn--primary nds-btn--lg">
+                    Copy entire prompt →
+                </button>
+                <span id="copy-status" class="nds-copy-status"></span>
+            </div>
+
+            <div class="nds-pane" data-pane="claude-code" data-active="true">
+                <pre><code>{prompts["claude-code"]}</code></pre>
+            </div>
+            <div class="nds-pane" data-pane="v0" data-active="false">
+                <pre><code>{prompts.v0}</code></pre>
+            </div>
+            <div class="nds-pane" data-pane="lovable" data-active="false">
+                <pre><code>{prompts.lovable}</code></pre>
+            </div>
+        </section>
+
+        <section class="nds-section">
+            <span class="nds-section__label">— Activate</span>
+            <p class="nds-foot__lede">Once installed, wrap whichever section you want themed:</p>
+            <pre class="nds-snippet"><code>{`<div data-system="nodesign">
+    <Button variant="primary">Send →</Button>
+    <Card>Almost nothing</Card>
+</div>`}</code></pre>
+            <p class="nds-foot__lede">
+                See it in the wild → <a class="nds-foot__link" href="/nodesign/essence">Essence →</a>
+            </p>
+        </section>
+
+        <section class="nds-section nds-signup-section">
+            <div class="nds-signup-box">
+                <EmailSignup
+                    variant="nodesign"
+                    size="default"
+                    placement="install"
+                    heading="Got it working?"
+                    subheading="Drop your email — get the next theme + occasional builder notes."
+                />
+            </div>
+        </section>
+    </main>
+
+    <InstallGate />
+</Layout>
+
+<style>
+    .nds-install {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 120px var(--pad, 30px) 100px;
+        position: relative;
+        z-index: 2;
+    }
+    .nds-hero { margin-bottom: 100px; max-width: 720px; }
+    .nds-hero__eyebrow {
+        display: block;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: rgba(0, 0, 0, 0.4);
+        margin-bottom: 60px;
+    }
+    .nds-hero__title {
+        font-size: clamp(40px, 7vw, 72px);
+        font-weight: 500;
+        letter-spacing: -0.03em;
+        line-height: 1;
+        margin: 0 0 32px;
+    }
+    .nds-hero__lede {
+        font-size: 17px;
+        line-height: 1.6;
+        max-width: 520px;
+        margin: 0;
+    }
+
+    .nds-section { margin-bottom: 80px; }
+    .nds-section__label {
+        display: block;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: rgba(0, 0, 0, 0.4);
+        margin-bottom: 24px;
+    }
+
+    .nds-targets {
+        display: flex;
+        gap: 32px;
+        margin-bottom: 32px;
+        flex-wrap: wrap;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        padding-bottom: 16px;
+    }
+    .nds-target {
+        background: none;
+        border: none;
+        font-family: "Inter", -apple-system, sans-serif;
+        font-size: 13px;
+        color: rgba(0, 0, 0, 0.4);
+        padding: 0;
+        margin: 0;
+        position: relative;
+        cursor: none;
+    }
+    .nds-target:hover { color: rgba(0, 0, 0, 0.7); }
+    .nds-target.is-active { color: #000000; }
+    .nds-target.is-active::after {
+        content: "";
+        position: absolute;
+        bottom: -17px;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: #000000;
+    }
+
+    .nds-copy-bar {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        margin-bottom: 24px;
+    }
+    .nds-copy-status {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: rgba(0, 0, 0, 0.4);
+    }
+    .nds-copy-status[data-state="copied"] {
+        color: #000000;
+    }
+
+    .nds-pane {
+        display: none;
+        background: #fafafa;
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        padding: 24px;
+        max-height: 540px;
+        overflow: auto;
+    }
+    .nds-pane[data-active="true"] { display: block; }
+    .nds-pane pre {
+        margin: 0;
+        font-family: ui-monospace, "JetBrains Mono", SFMono-Regular, Menlo, monospace;
+        font-size: 12px;
+        line-height: 1.55;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+    .nds-pane code { font-family: inherit; }
+
+    .nds-foot__lede {
+        font-size: 14px;
+        line-height: 1.6;
+        margin: 0 0 16px;
+    }
+    .nds-snippet {
+        background: #fafafa;
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        padding: 20px 24px;
+        font-family: ui-monospace, "JetBrains Mono", monospace;
+        font-size: 13px;
+        line-height: 1.55;
+        margin: 0 0 24px;
+        overflow-x: auto;
+    }
+    .nds-foot__link {
+        color: #000000;
+        text-decoration: underline;
+        text-underline-offset: 4px;
+    }
+    .nds-signup-section { margin-top: 100px; }
+    .nds-signup-box {
+        max-width: 440px;
+        padding-top: 40px;
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    @media (max-width: 720px) {
+        .nds-install { padding-top: 80px; }
+    }
+</style>
+
+<script>
+    (function () {
+        const targets = document.querySelectorAll<HTMLButtonElement>("[data-target]");
+        const panes = document.querySelectorAll<HTMLElement>("[data-pane]");
+        const copyBtn = document.getElementById("copy-full") as HTMLButtonElement | null;
+        const status = document.getElementById("copy-status");
+        const GATE_KEY = "wardrobe-install-unlocked";
+
+        function activate(target: string) {
+            targets.forEach((t) => {
+                const isActive = t.dataset.target === target;
+                t.classList.toggle("is-active", isActive);
+                t.setAttribute("aria-selected", String(isActive));
+            });
+            panes.forEach((p) => {
+                p.dataset.active = p.dataset.pane === target ? "true" : "false";
+            });
+        }
+
+        targets.forEach((t) =>
+            t.addEventListener("click", () => activate(t.dataset.target ?? "claude-code"))
+        );
+
+        async function runCopy() {
+            if (!status) return;
+            const active = document.querySelector<HTMLElement>('[data-pane][data-active="true"]');
+            const text = active?.querySelector("code")?.textContent ?? "";
+            try {
+                await navigator.clipboard.writeText(text);
+                status.textContent = "Copied ✓";
+                status.dataset.state = "copied";
+                (window as any).wardrobeTrack?.("wardrobe_copy_install_full", {
+                    system: "nodesign",
+                    target: active?.dataset.pane ?? "claude-code",
+                });
+                setTimeout(() => {
+                    status.textContent = "";
+                    status.dataset.state = "";
+                }, 2000);
+            } catch (_) {
+                status.textContent = "Copy failed";
+            }
+        }
+
+        if (copyBtn && status) {
+            copyBtn.addEventListener("click", () => {
+                let unlocked = false;
+                try { unlocked = localStorage.getItem(GATE_KEY) === "true"; } catch (_) {}
+                if (unlocked) {
+                    runCopy();
+                } else {
+                    window.dispatchEvent(new CustomEvent("install-gate-open"));
+                }
+            });
+
+            window.addEventListener("install-gate-passed", () => runCopy());
+        }
+
+        (window as any).wardrobeTrack?.("wardrobe_install_view", { system: "nodesign" });
+    })();
+</script>

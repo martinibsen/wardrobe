@@ -1,0 +1,137 @@
+---
+/**
+ * NodesignChrome — the always-on chrome for Nodesign habitat pages.
+ *
+ * Bundles three things that define the theme's character and have to
+ * exist on every habitat page:
+ *
+ *   1. Custom cursor (4px dot + 24px follower-ring, lerp-smoothed,
+ *      mix-blend-mode: difference on the dot, body.hovering swap).
+ *   2. Magnetic-hover wiring — any element with class "nds-magnetic"
+ *      gets its inner <span> translated by mouse position * data-strength.
+ *   3. Blueprint background SVG (faint geometric guide-lines) at opacity 0.04.
+ *
+ * Peripherals (top-left brand, top-center focal label, top-right link)
+ * are rendered by the parent page using <a class="nds-text nds-peripheral …">,
+ * because each habitat page wants different active states. NodesignChrome
+ * just provides the cursor + magnetic JS that wires them up.
+ */
+interface Props {
+    /** Tag the brand mark (top-left) link */
+    brandHref?: string;
+    brandLabel?: string;
+    /** Hide the brand mark entirely (overview page where the focal point is the headline) */
+    hideBrand?: boolean;
+}
+const {
+    brandHref = "/nodesign/essence",
+    brandLabel = "Essence",
+    hideBrand = false,
+} = Astro.props;
+---
+
+<!-- Custom cursor -->
+<div class="nds-cursor-dot" id="nds-cursor-dot" aria-hidden="true"></div>
+<div class="nds-cursor-follower" id="nds-cursor-follower" aria-hidden="true"></div>
+
+<!-- Background blueprint SVG (faint, fixed, behind everything) -->
+<div class="nds-blueprint" aria-hidden="true">
+    <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="currentColor" stroke-width="0.4" fill="none">
+            <line x1="0" y1="450" x2="1440" y2="450" />
+            <line x1="720" y1="0" x2="720" y2="900" />
+            <line x1="0" y1="0" x2="1440" y2="900" />
+            <line x1="1440" y1="0" x2="0" y2="900" />
+            <circle cx="720" cy="450" r="220" stroke-width="0.3" />
+            <circle cx="720" cy="450" r="380" stroke-width="0.2" />
+            <rect x="120" y="120" width="1200" height="660" stroke-width="0.4" />
+            <line x1="120" y1="240" x2="1320" y2="240" stroke-width="0.2" />
+            <line x1="120" y1="660" x2="1320" y2="660" stroke-width="0.2" />
+        </g>
+    </svg>
+</div>
+
+{!hideBrand && (
+    <a class="nds-text nds-peripheral nds-magnetic nds-top-left" data-strength="20" href={brandHref}>
+        <span>{brandLabel}</span>
+    </a>
+)}
+
+<!-- The page provides additional peripherals (top-center focal label, top-right link) inline. -->
+<slot />
+
+<script is:inline>
+    (function () {
+        if (typeof window === "undefined") return;
+
+        // ===== Custom cursor (lerp-smoothed) =====
+        const dot = document.getElementById("nds-cursor-dot");
+        const follower = document.getElementById("nds-cursor-follower");
+        if (!dot || !follower) return;
+
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let dotX = mouseX;
+        let dotY = mouseY;
+        let followerX = mouseX;
+        let followerY = mouseY;
+
+        const lerp = function (a, b, t) { return a + (b - a) * t; };
+
+        window.addEventListener("mousemove", function (e) {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function render() {
+            dotX = lerp(dotX, mouseX, 0.2);
+            dotY = lerp(dotY, mouseY, 0.2);
+            followerX = lerp(followerX, mouseX, 0.1);
+            followerY = lerp(followerY, mouseY, 0.1);
+            dot.style.transform = "translate(" + dotX + "px, " + dotY + "px)";
+            follower.style.transform = "translate(" + followerX + "px, " + followerY + "px)";
+            requestAnimationFrame(render);
+        }
+        requestAnimationFrame(render);
+
+        // ===== Magnetic hover =====
+        function wireMagnetics() {
+            const magnetics = document.querySelectorAll(".nds-magnetic");
+            magnetics.forEach(function (elem) {
+                if (elem.dataset.ndsWired === "true") return;
+                elem.dataset.ndsWired = "true";
+                const innerSpan = elem.querySelector("span");
+                if (!innerSpan) return;
+
+                elem.addEventListener("mousemove", function (e) {
+                    const rect = elem.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+                    const strength = parseFloat(elem.dataset.strength || "20");
+                    innerSpan.style.transform =
+                        "translate(" +
+                        (x / rect.width) * strength +
+                        "px, " +
+                        (y / rect.height) * strength +
+                        "px)";
+                    innerSpan.style.transition = "transform 0.1s linear";
+                });
+
+                elem.addEventListener("mouseenter", function () {
+                    document.body.classList.add("hovering");
+                });
+
+                elem.addEventListener("mouseleave", function () {
+                    innerSpan.style.transform = "translate(0px, 0px)";
+                    innerSpan.style.transition =
+                        "transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)";
+                    document.body.classList.remove("hovering");
+                });
+            });
+        }
+        wireMagnetics();
+        // Re-wire if any magnetics get added later (e.g. via SPA-style nav)
+        const observer = new MutationObserver(wireMagnetics);
+        observer.observe(document.body, { childList: true, subtree: true });
+    })();
+</script>

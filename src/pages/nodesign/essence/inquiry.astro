@@ -1,0 +1,50 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import NodesignChrome from "../../../components/nodesign/NodesignChrome.astro";
+---
+
+<Layout
+    title="Essence — Inquiry"
+    description="Nodesign habitat — start a conversation."
+    system="nodesign"
+    chrome="hidden"
+>
+    <NodesignChrome hideBrand={false} brandHref="/nodesign/essence" brandLabel="Essence">
+        <a class="nds-text nds-peripheral nds-magnetic nds-top-center" data-strength="20" href="/nodesign/essence/work">
+            <span>Work</span>
+        </a>
+        <a class="nds-text nds-peripheral nds-magnetic nds-top-right" data-strength="20" href="/nodesign/essence/about">
+            <span>About</span>
+        </a>
+
+        <span class="nds-text nds-peripheral"
+              style="bottom: var(--pad); left: var(--pad); top: auto; opacity: 0.4;">
+            <span>Office hours · Tuesday 10–12 CET</span>
+        </span>
+    </NodesignChrome>
+
+    <form class="nds-form" method="post" action="#">
+        <div class="nds-field">
+            <label for="inq-name">Name</label>
+            <input id="inq-name" type="text" name="name" autocomplete="name" />
+        </div>
+        <div class="nds-field">
+            <label for="inq-email">Email</label>
+            <input id="inq-email" type="email" name="email" autocomplete="email" />
+        </div>
+        <div class="nds-field">
+            <label for="inq-message">Message</label>
+            <textarea id="inq-message" name="message" placeholder="Brief context, please."></textarea>
+        </div>
+        <button type="submit" class="nds-send">Send →</button>
+    </form>
+</Layout>
+
+<script>
+    if (typeof window !== "undefined") {
+        (window as any).wardrobeTrack?.("wardrobe_demo_view", {
+            system: "nodesign",
+            page: "inquiry",
+        });
+    }
+</script>

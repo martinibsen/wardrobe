@@ -76,6 +76,21 @@ import pascalCnSrc from "../components/pascal/cn.ts?raw";
 import pascalTokensCssSrc from "../components/pascal/tokens.css?raw";
 import pascalGlobalsCssSrc from "../components/pascal/globals.css?raw";
 
+// ===== NODESIGN =====
+import nodesignButtonSrc from "../components/nodesign/Button.tsx?raw";
+import nodesignInputSrc from "../components/nodesign/Input.tsx?raw";
+import nodesignTextareaSrc from "../components/nodesign/Textarea.tsx?raw";
+import nodesignSelectSrc from "../components/nodesign/Select.tsx?raw";
+import nodesignCardSrc from "../components/nodesign/Card.tsx?raw";
+import nodesignBadgeSrc from "../components/nodesign/Badge.tsx?raw";
+import nodesignDialogSrc from "../components/nodesign/Dialog.tsx?raw";
+import nodesignTabsSrc from "../components/nodesign/Tabs.tsx?raw";
+import nodesignSwitchSrc from "../components/nodesign/Switch.tsx?raw";
+import nodesignToastSrc from "../components/nodesign/Toast.tsx?raw";
+import nodesignCnSrc from "../components/nodesign/cn.ts?raw";
+import nodesignTokensCssSrc from "../components/nodesign/tokens.css?raw";
+import nodesignGlobalsCssSrc from "../components/nodesign/globals.css?raw";
+
 export type ComponentName =
     | "Button"
     | "Input"
@@ -112,8 +127,10 @@ export type BlueyComponentName = ComponentName;
 export const BLUEY_COMPONENTS = COMPONENT_NAMES;
 export type PascalComponentName = ComponentName;
 export const PASCAL_COMPONENTS = COMPONENT_NAMES;
+export type NodesignComponentName = ComponentName;
+export const NODESIGN_COMPONENTS = COMPONENT_NAMES;
 
-export type ThemeName = "hyper" | "system" | "brick" | "bluey" | "pascal";
+export type ThemeName = "hyper" | "system" | "brick" | "bluey" | "pascal" | "nodesign";
 
 type ThemeBundle = {
     name: ThemeName;
@@ -291,12 +308,46 @@ const PASCAL: ThemeBundle = {
     },
 };
 
+const NODESIGN: ThemeBundle = {
+    name: "nodesign",
+    sources: {
+        Button: nodesignButtonSrc,
+        Input: nodesignInputSrc,
+        Textarea: nodesignTextareaSrc,
+        Select: nodesignSelectSrc,
+        Card: nodesignCardSrc,
+        Badge: nodesignBadgeSrc,
+        Dialog: nodesignDialogSrc,
+        Tabs: nodesignTabsSrc,
+        Switch: nodesignSwitchSrc,
+        Toast: nodesignToastSrc,
+    },
+    cn: nodesignCnSrc,
+    tokens: nodesignTokensCssSrc,
+    globals: nodesignGlobalsCssSrc,
+    fontImport: `@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap");`,
+    activationHint: `<div data-system="nodesign">`,
+    tokenHints: {
+        Button: ["--color-fg", "--color-fg-faint", "--font-main"],
+        Input: ["--color-fg", "--color-fg-soft", "--color-fg-faint", "--font-main"],
+        Textarea: ["--color-fg", "--color-fg-faint", "--font-main"],
+        Select: ["--color-fg", "--color-fg-faint", "--font-main"],
+        Card: ["--color-fg-faint", "--color-fg-trace", "--color-image-placeholder"],
+        Badge: ["--color-fg", "--color-fg-faint", "--color-fg-soft", "--color-bg"],
+        Dialog: ["--color-bg", "--color-fg", "--color-fg-faint", "--font-main"],
+        Tabs: ["--color-fg", "--color-fg-soft", "--color-fg-faint"],
+        Switch: ["--color-fg", "--color-fg-faint", "--color-fg-soft"],
+        Toast: ["--color-bg", "--color-fg", "--color-fg-faint", "--color-fg-soft"],
+    },
+};
+
 const THEMES: Record<ThemeName, ThemeBundle> = {
     hyper: HYPER,
     system: SYSTEM,
     brick: BRICK,
     bluey: BLUEY,
     pascal: PASCAL,
+    nodesign: NODESIGN,
 };
 
 function bundle(theme: ThemeName): ThemeBundle {
@@ -340,6 +391,10 @@ export function getPascalComponentCode(name: ComponentName): string {
     return getComponentCode(name, "pascal");
 }
 
+export function getNodesignComponentCode(name: ComponentName): string {
+    return getComponentCode(name, "nodesign");
+}
+
 export function generateComponentPrompt(
     name: ComponentName,
     theme: ThemeName = "hyper",
@@ -357,7 +412,8 @@ export function generateComponentPrompt(
         : theme === "system" ? "System"
         : theme === "brick" ? "Brick"
         : theme === "bluey" ? "Bluey"
-        : "Pascal";
+        : theme === "pascal" ? "Pascal"
+        : "Nodesign";
 
     return `Add this Wardrobe ${themeLabel} ${name} to my project.
 

@@ -1,0 +1,560 @@
+/* =========================================================
+   Wardrobe — NODESIGN globals
+   Loads Inter, applies cursor:none + decorations only inside
+   [data-system="nodesign"]. Other pages keep native cursor.
+   ========================================================= */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap");
+
+@import "./tokens.css";
+
+[data-system="nodesign"] *,
+[data-system="nodesign"] *::before,
+[data-system="nodesign"] *::after {
+    box-sizing: border-box;
+}
+
+/* The whole point: hide the native cursor and replace it with
+   .nds-cursor-dot + .nds-cursor-follower (see NodesignChrome.astro). */
+[data-system="nodesign"],
+[data-system="nodesign"] * {
+    cursor: none;
+}
+
+[data-system="nodesign"] {
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-main);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    min-height: 100vh;
+}
+
+/* Body fade-in on entering Nodesign pages. We tag <body data-system="nodesign">
+   in the layout, so the animation runs once on first paint. */
+body[data-system="nodesign"] {
+    opacity: 0;
+    animation: nds-fade-in 1.6s var(--ease-soft) forwards;
+}
+@keyframes nds-fade-in {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/* ===========================
+   CUSTOM CURSOR
+   =========================== */
+.nds-cursor-dot {
+    width: 4px;
+    height: 4px;
+    background-color: var(--color-fg);
+    border-radius: 50%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s, background-color 0.3s;
+    mix-blend-mode: difference;
+}
+.nds-cursor-follower {
+    width: 24px;
+    height: 24px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s, border-color 0.3s, background-color 0.3s;
+}
+body.hovering .nds-cursor-dot {
+    width: 0;
+    height: 0;
+}
+body.hovering .nds-cursor-follower {
+    width: 44px;
+    height: 44px;
+    border-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.03);
+}
+@media (hover: none) {
+    /* Touch devices: hide custom cursor, restore native interaction. */
+    .nds-cursor-dot,
+    .nds-cursor-follower { display: none; }
+    [data-system="nodesign"],
+    [data-system="nodesign"] * { cursor: auto; }
+}
+
+/* ===========================
+   PERIPHERAL NAV
+   (top-left / top-center / top-right text-elements)
+   =========================== */
+.nds-text {
+    position: absolute;
+    white-space: nowrap;
+    will-change: transform;
+    backface-visibility: hidden;
+    display: inline-block;
+    text-decoration: none;
+    color: inherit;
+}
+.nds-peripheral {
+    font-size: 11px;
+    font-weight: var(--weight-regular);
+    letter-spacing: var(--peripheral-tracking);
+    text-transform: capitalize;
+    /* padding-trick for larger hit area without visual change */
+    padding: 20px;
+    margin: -20px;
+    z-index: 5;
+}
+.nds-peripheral.is-active span {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+.nds-top-left { top: var(--pad); left: var(--pad); }
+.nds-top-center { top: var(--pad); left: 50%; transform: translateX(-50%); }
+.nds-top-right { top: var(--pad); right: var(--pad); }
+
+/* magnetic inner span — JS adjusts transform on mousemove */
+.nds-magnetic span {
+    display: inline-block;
+    transition: transform 0.4s var(--ease-soft);
+    pointer-events: none;
+}
+
+/* ===========================
+   FOCAL POINT
+   (V O I D — letter-spaced display text in the middle)
+   =========================== */
+.nds-focal {
+    font-size: 14px;
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--focal-tracking);
+    padding: 40px;
+    margin: -40px;
+}
+.nds-center-absolute {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.nds-focal--display {
+    /* Used on overview hero — bigger than habitat focal points. */
+    font-size: 64px;
+    letter-spacing: 0.08em;
+    font-weight: var(--weight-medium);
+}
+
+/* ===========================
+   BLUEPRINT BACKGROUND SVG
+   (faint geometric guide-lines behind content)
+   =========================== */
+.nds-blueprint {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    opacity: 0.04;
+    z-index: 0;
+}
+.nds-blueprint svg { width: 100%; height: 100%; }
+
+/* ===========================
+   PROJECT GRID (work page)
+   =========================== */
+.nds-work {
+    margin-top: 150px;
+    padding: 0 var(--pad) 100px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4vw;
+    position: relative;
+    z-index: 2;
+}
+.nds-project {
+    position: relative;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: nds-slide-up 1.2s var(--ease-soft) forwards;
+}
+.nds-project:nth-child(2n) { margin-top: 80px; }
+.nds-project:nth-child(2) { animation-delay: 0.15s; }
+.nds-project:nth-child(3) { animation-delay: 0.3s; }
+.nds-project:nth-child(4) { animation-delay: 0.45s; }
+@keyframes nds-slide-up {
+    to { opacity: 1; transform: translateY(0); }
+}
+.nds-project-image {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    background: var(--color-image-placeholder);
+    overflow: hidden;
+    margin-bottom: 20px;
+    transition: transform 1.2s var(--ease-soft);
+}
+.nds-project:hover .nds-project-image { transform: scale(1.02); }
+.nds-project-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+.nds-project-title {
+    font-size: 13px;
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tight-tracking);
+    text-transform: uppercase;
+}
+.nds-project-year {
+    font-size: 11px;
+    color: var(--color-fg-soft);
+}
+
+/* ===========================
+   ABOUT — manifesto + team + awards
+   =========================== */
+.nds-about {
+    margin-top: 150px;
+    padding: 0 var(--pad) 100px;
+    position: relative;
+    z-index: 2;
+}
+.nds-manifesto {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4vw;
+    margin-bottom: 120px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: nds-slide-up 1.2s var(--ease-soft) forwards;
+}
+.nds-editorial-image {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    background: var(--color-image-placeholder);
+    overflow: hidden;
+}
+.nds-manifesto-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 40px;
+}
+.nds-section-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: var(--label-tracking);
+    color: var(--color-fg-soft);
+    margin-bottom: 40px;
+}
+.nds-manifesto-content {
+    font-size: 24px;
+    line-height: 1.4;
+    letter-spacing: var(--tighter-tracking);
+    font-weight: var(--weight-regular);
+    max-width: 90%;
+}
+.nds-section-header {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: var(--label-tracking);
+    color: var(--color-fg-soft);
+    margin-bottom: 60px;
+    border-top: 1px solid var(--color-fg-faint);
+    padding-top: 20px;
+}
+
+.nds-team {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2vw;
+    margin-bottom: 120px;
+}
+.nds-team-photo {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: var(--color-image-placeholder);
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+.nds-team-name {
+    font-size: 13px;
+    font-weight: var(--weight-medium);
+    display: block;
+}
+.nds-team-role {
+    font-size: 11px;
+    color: var(--color-fg-soft);
+}
+
+.nds-awards {
+    max-width: 100%;
+}
+.nds-award-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--color-fg-trace);
+    font-size: 13px;
+    transition: opacity 0.3s ease;
+}
+.nds-award-row:hover { opacity: 0.5; }
+.nds-award-year { color: var(--color-fg-soft); }
+.nds-award-status {
+    text-align: right;
+    color: var(--color-fg-soft);
+}
+
+/* ===========================
+   INQUIRY FORM
+   =========================== */
+.nds-form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(420px, 90vw);
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+    z-index: 3;
+}
+.nds-field { position: relative; width: 100%; }
+.nds-field label {
+    display: block;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: var(--label-tracking);
+    margin-bottom: 8px;
+    color: var(--color-fg-soft);
+}
+.nds-field input,
+.nds-field textarea,
+.nds-field select {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--color-fg-faint);
+    background: transparent;
+    padding: 8px 0;
+    font-family: var(--font-main);
+    font-size: 13px;
+    color: var(--color-fg);
+    outline: none;
+    transition: border-color 0.4s ease;
+    border-radius: 0;
+}
+.nds-field input:focus,
+.nds-field textarea:focus,
+.nds-field select:focus {
+    border-bottom-color: rgba(0, 0, 0, 0.8);
+}
+.nds-field textarea {
+    resize: none;
+    height: 70px;
+    font-family: var(--font-main);
+}
+.nds-send {
+    align-self: flex-start;
+    font-size: 12px;
+    font-weight: var(--weight-medium);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: none;
+    border: none;
+    padding: 10px 0;
+    margin-top: 10px;
+    color: inherit;
+    transition: opacity 0.3s ease;
+}
+.nds-send:hover { opacity: 0.6; }
+
+/* ===========================
+   STANDARD COMPONENT CLASSES
+   (Button / Badge / Card / Tabs / Switch / Toast / Dialog —
+   minimal Nodesign treatment for the install contract)
+   =========================== */
+.nds-btn {
+    font-family: var(--font-main);
+    font-weight: var(--weight-medium);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: none;
+    border: none;
+    padding: 10px 0;
+    color: var(--color-fg);
+    transition: opacity 0.3s ease;
+    border-bottom: 1px solid var(--color-fg-faint);
+    border-radius: 0;
+    line-height: 1.2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+}
+.nds-btn:hover { opacity: 0.55; border-bottom-color: var(--color-fg); }
+.nds-btn:disabled { opacity: 0.25; }
+.nds-btn--primary {
+    border-bottom-color: var(--color-fg);
+}
+.nds-btn--secondary {
+    border-bottom-color: var(--color-fg-faint);
+}
+.nds-btn--ghost {
+    border-bottom-color: transparent;
+}
+.nds-btn--destructive {
+    color: var(--color-fg);
+    border-bottom-color: var(--color-fg);
+}
+.nds-btn--sm { font-size: 10px; padding: 6px 0; }
+.nds-btn--lg { font-size: 14px; padding: 14px 0; }
+
+.nds-card {
+    background: transparent;
+    border: 1px solid var(--color-fg-faint);
+    padding: 32px;
+    color: var(--color-fg);
+}
+.nds-card--ghost { border-color: var(--color-fg-trace); }
+.nds-card--solid { background: var(--color-image-placeholder); border-color: transparent; }
+
+.nds-badge {
+    display: inline-block;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: var(--label-tracking);
+    padding: 4px 10px;
+    border: 1px solid var(--color-fg-faint);
+    color: var(--color-fg);
+    line-height: 1.2;
+    background: transparent;
+}
+.nds-badge--solid {
+    background: var(--color-fg);
+    color: var(--color-bg);
+    border-color: var(--color-fg);
+}
+.nds-badge--soft { color: var(--color-fg-soft); }
+
+.nds-tabs {
+    display: flex;
+    gap: 28px;
+    border-bottom: 1px solid var(--color-fg-faint);
+}
+.nds-tab {
+    background: none;
+    border: none;
+    padding: 12px 0;
+    font-family: var(--font-main);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: var(--label-tracking);
+    color: var(--color-fg-soft);
+    margin-bottom: -1px;
+    border-bottom: 1px solid transparent;
+    transition: color 200ms ease, border-color 200ms ease;
+}
+.nds-tab.is-active {
+    color: var(--color-fg);
+    border-bottom-color: var(--color-fg);
+}
+.nds-tab:hover { color: var(--color-fg); }
+
+.nds-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: var(--label-tracking);
+    color: var(--color-fg-soft);
+}
+.nds-switch__track {
+    width: 36px;
+    height: 1px;
+    background: var(--color-fg-faint);
+    position: relative;
+}
+.nds-switch__thumb {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 8px;
+    height: 8px;
+    background: var(--color-fg);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: left 240ms var(--ease-soft);
+}
+.nds-switch[data-checked="true"] .nds-switch__thumb { left: 36px; }
+.nds-switch[data-checked="true"] { color: var(--color-fg); }
+
+.nds-toast {
+    background: var(--color-bg);
+    border: 1px solid var(--color-fg-faint);
+    padding: 14px 18px;
+    color: var(--color-fg);
+    font-family: var(--font-main);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 240px;
+}
+.nds-toast__title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: var(--label-tracking);
+}
+.nds-toast__desc {
+    font-size: 12px;
+    color: var(--color-fg-soft);
+}
+.nds-toast--success { border-left: 1px solid var(--color-fg); }
+.nds-toast--error { border-left: 1px solid var(--color-fg); }
+
+.nds-dialog-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+.nds-dialog {
+    background: var(--color-bg);
+    border: 1px solid var(--color-fg-faint);
+    padding: 40px;
+    max-width: 480px;
+    width: 100%;
+    color: var(--color-fg);
+}
+.nds-dialog__title {
+    font-size: 14px;
+    font-weight: var(--weight-medium);
+    text-transform: uppercase;
+    letter-spacing: var(--label-tracking);
+    margin: 0 0 18px;
+}
+
+/* ===========================
+   RESPONSIVE
+   =========================== */
+@media (max-width: 720px) {
+    [data-system="nodesign"] { --pad: var(--pad-mobile); }
+    .nds-work { grid-template-columns: 1fr; gap: 30px; }
+    .nds-project:nth-child(2n) { margin-top: 0; }
+    .nds-manifesto { grid-template-columns: 1fr; gap: 30px; }
+    .nds-team { grid-template-columns: 1fr 1fr; gap: 20px; }
+    .nds-focal--display { font-size: 36px; }
+    .nds-form { width: calc(100vw - 60px); }
+}

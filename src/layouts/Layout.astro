@@ -4,14 +4,15 @@ import "../components/system/globals.css";
 import "../components/brick/globals.css";
 import "../components/bluey/globals.css";
 import "../components/pascal/globals.css";
+import "../components/nodesign/globals.css";
 import EmailSignup from "../components/shared/EmailSignup.astro";
 import CookieBanner from "../components/shared/CookieBanner.astro";
 
 interface Props {
     title: string;
     description?: string;
-    system?: "hyper" | "system" | "brick" | "bluey" | "pascal" | null;
-    chrome?: "neutral" | "hyper" | "system" | "brick" | "bluey" | "pascal" | "hidden";
+    system?: "hyper" | "system" | "brick" | "bluey" | "pascal" | "nodesign" | null;
+    chrome?: "neutral" | "hyper" | "system" | "brick" | "bluey" | "pascal" | "nodesign" | "hidden";
 }
 
 const {
@@ -28,7 +29,9 @@ const {
               ? "bluey"
               : system === "pascal"
                 ? "pascal"
-                : "neutral",
+                : system === "nodesign"
+                  ? "nodesign"
+                  : "neutral",
 } = Astro.props;
 
 const MARTIN_URL = "https://martinibsen.dk";
@@ -72,6 +75,11 @@ const isPascalInstall = path === "/pascal/install";
 const isPascalDemo = path.startsWith("/pascal/archive-node");
 const isPascalHome = path === "/pascal";
 
+// Nodesign nav active states
+const isNodesignInstall = path === "/nodesign/install";
+const isNodesignDemo = path.startsWith("/nodesign/essence");
+const isNodesignHome = path === "/nodesign";
+
 // Sticky CTA: only on the "browsing" pages where someone is reading a system
 // or considering an install. Not on the forsiden (hero already covers it) and
 // not on demos (immersion).
@@ -81,14 +89,16 @@ const stickyRoutes = [
     "/brick",
     "/bluey",
     "/pascal",
+    "/nodesign",
     "/hyper/install",
     "/system/install",
     "/brick/install",
     "/bluey/install",
     "/pascal/install",
+    "/nodesign/install",
 ];
 const showStickyCta = stickyRoutes.includes(path);
-const stickyVariant: "hyper" | "system" | "brick" | "bluey" | "pascal" = path.startsWith("/system")
+const stickyVariant: "hyper" | "system" | "brick" | "bluey" | "pascal" | "nodesign" = path.startsWith("/system")
     ? "system"
     : path.startsWith("/brick")
       ? "brick"
@@ -96,7 +106,9 @@ const stickyVariant: "hyper" | "system" | "brick" | "bluey" | "pascal" = path.st
         ? "bluey"
         : path.startsWith("/pascal")
           ? "pascal"
-          : "hyper";
+          : path.startsWith("/nodesign")
+            ? "nodesign"
+            : "hyper";
 
 // "Built with..." pill — depends on which sphere we're in when chrome="hidden"
 const builtWith =
@@ -128,16 +140,23 @@ const builtWith =
                     suffix: "/ FILE FOR DROPS",
                     cls: "built--pascal",
                 }
-              : {
-                    href: "/hyper#signup",
-                    label: "← Built with Hyper",
-                    suffix: "· get drops →",
-                    cls: "built--hyper",
-                };
+              : system === "nodesign"
+                ? {
+                      href: "/nodesign#signup",
+                      label: "← Built with Nodesign",
+                      suffix: "Get drops",
+                      cls: "built--nodesign",
+                  }
+                : {
+                      href: "/hyper#signup",
+                      label: "← Built with Hyper",
+                      suffix: "· get drops →",
+                      cls: "built--hyper",
+                  };
 
 // Footer signup is shown on every chrome except "hidden" (demo immersion).
 const showFooterSignup = chrome !== "hidden";
-const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" | "bluey" | "pascal" =
+const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" | "bluey" | "pascal" | "nodesign" =
     chrome === "hyper"
         ? "hyper"
         : chrome === "system"
@@ -148,7 +167,9 @@ const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" | "bluey" | 
               ? "bluey"
               : chrome === "pascal"
                 ? "pascal"
-                : "neutral";
+                : chrome === "nodesign"
+                  ? "nodesign"
+                  : "neutral";
 ---
 
 <!DOCTYPE html>
@@ -318,6 +339,34 @@ const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" | "bluey" | 
                     class:list={[isPascalHome && "is-active"]}
                 >
                     PASCAL
+                </a>
+            </nav>
+        </header>
+    )}
+
+    {chrome === "nodesign" && (
+        <header class="nav nav--nodesign">
+            <a class="nav__brand nav__brand--nodesign" href="/">
+                Wardrobe / Nodesign
+            </a>
+            <nav class="nav__links nav__links--nodesign" aria-label="Nodesign">
+                <a
+                    href="/nodesign/install"
+                    class:list={[isNodesignInstall && "is-active"]}
+                >
+                    Install
+                </a>
+                <a
+                    href="/nodesign/essence"
+                    class:list={[isNodesignDemo && "is-active"]}
+                >
+                    Demo
+                </a>
+                <a
+                    href="/nodesign"
+                    class:list={[isNodesignHome && "is-active"]}
+                >
+                    Nodesign
                 </a>
             </nav>
         </header>
@@ -588,6 +637,38 @@ const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" | "bluey" | 
             padding: 4px 10px;
         }
 
+        /* ===== Sphere B — nodesign (almost-invisible minimalism) ===== */
+        .nav--nodesign {
+            background: #ffffff;
+            color: #000000;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        .nav__brand--nodesign {
+            font-family: "Inter", -apple-system, sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+        }
+        .nav--nodesign .nav__links {
+            font-family: "Inter", -apple-system, sans-serif;
+            gap: 28px;
+        }
+        .nav--nodesign .nav__links a {
+            font-size: 12px;
+            font-weight: 400;
+            color: #000000;
+            opacity: 0.45;
+            border-bottom: none;
+            padding-bottom: 2px;
+            transition: opacity 200ms ease;
+        }
+        .nav--nodesign .nav__links a:hover { opacity: 0.85; }
+        .nav--nodesign .nav__links a.is-active {
+            opacity: 1;
+            border-bottom: 1px solid #000000;
+        }
+
         /* ===== Built-with pill — chrome="hidden" ===== */
         .built {
             position: fixed;
@@ -705,6 +786,33 @@ const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" | "bluey" | 
             font-size: 9px;
             color: #000000;
             opacity: 0.7;
+        }
+
+        .built--nodesign {
+            /* Nodesign habitat fills the top edge with peripheral
+               nav — move the built-with pill to bottom-right so it
+               doesn't collide with the "About" / "Inquiry" links. */
+            top: auto;
+            bottom: 16px;
+            right: 16px;
+            background: #ffffff;
+            color: #000000;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 0;
+            padding: 8px 14px;
+            font-family: "Inter", -apple-system, sans-serif;
+            font-size: 11px;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            text-transform: capitalize;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+        }
+        .built--nodesign .built__suffix {
+            font-family: "Inter", -apple-system, sans-serif;
+            font-size: 10px;
+            color: rgba(0, 0, 0, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
 
         /* ===== STICKY CTA ===== */
@@ -825,6 +933,20 @@ const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" | "bluey" | 
             letter-spacing: 0.08em;
             font-weight: 600;
             font-size: 11px;
+        }
+
+        .sticky-cta--nodesign {
+            background: #ffffff;
+            color: #000000;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 0;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+        }
+        .sticky-cta--nodesign .sticky-cta__copy {
+            font-family: "Inter", -apple-system, sans-serif;
+            font-weight: 400;
+            font-size: 12px;
+            letter-spacing: 0.02em;
         }
 
         @media (max-width: 720px) {
@@ -957,6 +1079,24 @@ const footerSignupVariant: "neutral" | "hyper" | "system" | "brick" | "bluey" | 
             font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 0.08em;
+            opacity: 1;
+        }
+        .foot--nodesign {
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+            background: #ffffff;
+            color: rgba(0, 0, 0, 0.5);
+            font-family: "Inter", -apple-system, sans-serif;
+            font-size: 12px;
+            letter-spacing: 0.02em;
+        }
+        .foot--nodesign .foot__sep { opacity: 0.4; }
+        body[data-system="nodesign"] .foot--hidden {
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+            background: transparent;
+            color: rgba(0, 0, 0, 0.45);
+            font-family: "Inter", -apple-system, sans-serif;
+            font-size: 11px;
+            letter-spacing: 0.02em;
             opacity: 1;
         }
 

@@ -1,0 +1,49 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import NodesignChrome from "../../../components/nodesign/NodesignChrome.astro";
+
+type Project = { title: string; year: string; tone: string };
+const projects: Project[] = [
+    { title: "Void House", year: "2023", tone: "#e8e8e8" },
+    { title: "Monolith Pavilion", year: "2022", tone: "#dcdcdc" },
+    { title: "Linear Dwelling", year: "2022", tone: "#efefef" },
+    { title: "Aperture Studio", year: "2021", tone: "#e2e2e2" },
+];
+---
+
+<Layout
+    title="Essence — Work"
+    description="Nodesign habitat — selected projects."
+    system="nodesign"
+    chrome="hidden"
+>
+    <NodesignChrome hideBrand={false} brandHref="/nodesign/essence" brandLabel="Essence">
+        <a class="nds-text nds-peripheral nds-magnetic nds-top-center is-active" data-strength="20" href="/nodesign/essence/work">
+            <span>Work</span>
+        </a>
+        <a class="nds-text nds-peripheral nds-magnetic nds-top-right" data-strength="20" href="/nodesign/essence/about">
+            <span>About</span>
+        </a>
+    </NodesignChrome>
+
+    <main class="nds-work">
+        {projects.map((p) => (
+            <a class="nds-project" href="/nodesign/essence/work">
+                <div class="nds-project-image" style={`background:${p.tone}`}></div>
+                <div class="nds-project-meta">
+                    <span class="nds-project-title">{p.title}</span>
+                    <span class="nds-project-year">{p.year}</span>
+                </div>
+            </a>
+        ))}
+    </main>
+</Layout>
+
+<script>
+    if (typeof window !== "undefined") {
+        (window as any).wardrobeTrack?.("wardrobe_demo_view", {
+            system: "nodesign",
+            page: "work",
+        });
+    }
+</script>

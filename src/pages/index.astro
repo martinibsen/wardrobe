@@ -171,12 +171,30 @@ import EmailSignup from "../components/shared/EmailSignup.astro";
                     </div>
                 </a>
 
+                <a class="theme-card theme-card--nodesign" href="/nodesign" data-tags="minimal calm editorial composed mono">
+                    <div class="theme-card__preview theme-card__preview--nodesign" aria-hidden="true">
+                        <span class="nds-prev-tl">Work</span>
+                        <span class="nds-prev-tc">Studio Architecture</span>
+                        <span class="nds-prev-tr">About</span>
+                        <span class="nds-prev-focal">N O D E S I G N</span>
+                        <span class="nds-prev-cursor"></span>
+                        <span class="nds-prev-cursor-ring"></span>
+                    </div>
+                    <div class="theme-card__meta">
+                        <span class="theme-card__name">Nodesign</span>
+                        <span class="theme-card__vibe">
+                            The absence is the design.
+                        </span>
+                        <span class="theme-card__cta">See Nodesign →</span>
+                    </div>
+                </a>
+
                 <div class="theme-card theme-card--soon">
                     <div class="theme-card__preview theme-card__preview--soon">
                         <span class="theme-card__soon-mark">SOON</span>
                     </div>
                     <div class="theme-card__meta theme-card__meta--soon">
-                        <span class="theme-card__soon-label">Theme 06 — In the works</span>
+                        <span class="theme-card__soon-label">Theme 07 — In the works</span>
                         <span class="theme-card__soon-blurb">Sign up below to hear when it drops.</span>
                     </div>
                 </div>
@@ -709,6 +727,14 @@ import EmailSignup from "../components/shared/EmailSignup.astro";
         color: #000000;
     }
     .theme-card--pascal .theme-card__name::after { content: "."; }
+    .theme-card--nodesign .theme-card__name {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 32px;
+        font-weight: 500;
+        line-height: 1;
+        letter-spacing: -0.02em;
+        color: #000000;
+    }
 
     .theme-card__vibe {
         font-size: 14px;
@@ -873,6 +899,79 @@ import EmailSignup from "../components/shared/EmailSignup.astro";
     @keyframes psc-prev-scroll {
         0%   { transform: translateX(0); }
         100% { transform: translateX(-100%); }
+    }
+
+    /* ===== NODESIGN card preview =====
+       Tiny peripheral nav + centered focal point, mimicking the
+       habitat home (V O I D / N O D E S I G N). Subtle cursor dot
+       in the corner. The whole point is white space. */
+    .theme-card__preview--nodesign {
+        background: #ffffff;
+        position: relative;
+        align-items: stretch;
+        justify-content: stretch;
+        padding: 0;
+        font-family: "Inter", -apple-system, sans-serif;
+        overflow: hidden;
+    }
+    .nds-prev-tl,
+    .nds-prev-tc,
+    .nds-prev-tr {
+        position: absolute;
+        top: 18px;
+        font-size: 9px;
+        font-weight: 400;
+        letter-spacing: 0.02em;
+        color: #000000;
+    }
+    .nds-prev-tl { left: 18px; }
+    .nds-prev-tc {
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0.6;
+    }
+    .nds-prev-tr { right: 18px; }
+    .nds-prev-focal {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.18em;
+        color: #000000;
+    }
+    .nds-prev-cursor,
+    .nds-prev-cursor-ring {
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+        top: 70%;
+        left: 70%;
+    }
+    .nds-prev-cursor {
+        width: 3px;
+        height: 3px;
+        background: #000000;
+        transform: translate(-50%, -50%);
+    }
+    .nds-prev-cursor-ring {
+        width: 18px;
+        height: 18px;
+        border: 1px solid rgba(0, 0, 0, 0.18);
+        transform: translate(-50%, -50%);
+    }
+    .theme-card--nodesign:hover .nds-prev-cursor-ring {
+        width: 32px;
+        height: 32px;
+        border-color: rgba(0, 0, 0, 0.4);
+        background: rgba(0, 0, 0, 0.03);
+        transition: all 240ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .theme-card--nodesign:hover .nds-prev-cursor {
+        width: 0;
+        height: 0;
+        transition: all 240ms cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     /* ===== SOON tile (theme #6) =====
