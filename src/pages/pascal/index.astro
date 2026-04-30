@@ -282,9 +282,54 @@ const componentBlocks = PASCAL_COMPONENTS.map((name) => ({
     .pas-copyblock-wrap { padding: 0; }
 
     .pas-preview {
+        background: transparent;
+        padding: 0;
+        border: none;
+    }
+
+    /* ===== Override ComponentShowcase styles =====
+       The shared component is built around Hyper-style tokens
+       (--color-fg, --color-surface, --radius-md, --font-body),
+       which Pascal doesn't define. On Pascal, body bg = body color
+       = ink (#000), so default showcase text would render black on
+       black. Scope each showcase as a paper cell instead. */
+    .pas-shell .showcase {
         background: var(--color-paper);
-        padding: 32px;
+        color: var(--color-ink);
+        padding: 40px 32px;
+        border-top: none;
+        gap: 24px;
+    }
+    .pas-shell .showcase__title {
+        font-family: var(--font-display);
+        color: var(--color-ink);
+        font-size: 48px;
+        line-height: 0.9;
+        letter-spacing: var(--tight-tracking);
+        text-transform: uppercase;
+        font-weight: 700;
+    }
+    .pas-shell .showcase__blurb {
+        font-family: var(--font-mono);
+        color: var(--color-ink);
+        font-size: 13px;
+        line-height: 1.6;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        opacity: 0.78;
+        max-width: 640px;
+    }
+    .pas-shell .showcase__preview {
+        background: var(--color-paper-soft);
         border: 2px solid var(--color-ink);
+        border-radius: 0;
+        padding: 32px;
+        min-height: auto;
+    }
+    @media (max-width: 720px) {
+        .pas-shell .showcase { padding: 28px 20px; gap: 18px; }
+        .pas-shell .showcase__title { font-size: 36px; }
+        .pas-shell .showcase__preview { padding: 20px; }
     }
 
     .pas-signup-grid { grid-template-columns: 1fr; }
