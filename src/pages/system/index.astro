@@ -134,17 +134,6 @@ const componentBlocks = COMPONENT_NAMES.map((name) => ({
                         {c.name === "Switch" && <SwitchDemo client:load />}
                         {c.name === "Toast" && <ToastDemo client:load />}
                     </Fragment>
-                    <Fragment slot="copy">
-                        <CopyBlock
-                            code={c.code}
-                            prompt={c.prompt}
-                            theme={themeBlock}
-                            label={`${c.name}.tsx`}
-                            component={c.name}
-                            system="system"
-                            defaultTab="prompt"
-                        />
-                    </Fragment>
                 </ComponentShowcase>
             ))}
         </section>

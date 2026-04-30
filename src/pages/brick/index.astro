@@ -189,17 +189,6 @@ const componentBlocks = BRICK_COMPONENTS.map((name) => ({
                         {c.name === "Switch" && <SwitchDemo client:load />}
                         {c.name === "Toast" && <ToastDemo client:load />}
                     </Fragment>
-                    <Fragment slot="copy">
-                        <CopyBlock
-                            code={c.code}
-                            prompt={c.prompt}
-                            theme={themeBlock}
-                            label={`${c.name}.tsx`}
-                            component={c.name}
-                            system="brick"
-                            defaultTab="prompt"
-                        />
-                    </Fragment>
                 </ComponentShowcase>
             ))}
         </section>

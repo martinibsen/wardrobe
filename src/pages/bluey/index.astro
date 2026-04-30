@@ -144,16 +144,6 @@ const componentBlocks = BLUEY_COMPONENTS.map((name) => ({
                     {name === "Switch" && <SwitchDemo client:load />}
                     {name === "Toast" && <ToastDemo client:load />}
                 </div>
-                <div slot="copy">
-                    <CopyBlock
-                        code={code}
-                        prompt={prompt}
-                        theme={themeBlock}
-                        component={name}
-                        label={`${name}.tsx`}
-                        system="bluey"
-                    />
-                </div>
             </ComponentShowcase>
         ))}
 
